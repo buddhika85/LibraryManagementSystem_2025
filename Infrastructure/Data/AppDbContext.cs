@@ -11,6 +11,8 @@ using Microsoft.EntityFrameworkCore;
 
 // apply migration =>                           dotnet-ef database update -s API -p Infrastructure
 // revert last applied migration from DB =>     dotnet ef database update 0 -s API -p Infrastructure
+
+// DROP DB - dotnet ef database drop -p Infrastructure -s API
 namespace Infrastructure.Data
 {
     public class AppDbContext : DbContext

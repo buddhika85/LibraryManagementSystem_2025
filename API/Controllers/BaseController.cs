@@ -3,8 +3,8 @@
 namespace API.Controllers
 {
     [Route("api/[controller]")]
-    [ApiController]
-    public class BaseController : ControllerBase
+    [ApiController]                                         // gives automatic model bindning, if param is an object you do not need [FromBody] it will automatically look for http request bodys
+    public class BaseController : ControllerBase            
     {
     }
 }
