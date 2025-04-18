@@ -14,7 +14,7 @@ namespace Infrastructure.Config
         {
             builder.Property(x => x.Name).HasColumnType("nvarchar(200)");
             builder.Property(x => x.Country).HasColumnType("nvarchar(200)");
-            builder.Property(x => x.Country).HasColumnType("nvarchar(max)");
+            builder.Property(x => x.Biography).HasColumnType("nvarchar(max)");
         }
     }
 }

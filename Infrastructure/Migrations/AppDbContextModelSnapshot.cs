@@ -51,7 +51,7 @@ namespace Infrastructure.Migrations
 
                     b.Property<string>("Country")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<DateTime>("DateOfBirth")
                         .HasColumnType("datetime2");

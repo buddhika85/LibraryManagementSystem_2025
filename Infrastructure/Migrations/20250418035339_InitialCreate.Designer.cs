@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250418032818_InitialCreate")]
+    [Migration("20250418035339_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -54,7 +54,7 @@ namespace Infrastructure.Migrations
 
                     b.Property<string>("Country")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<DateTime>("DateOfBirth")
                         .HasColumnType("datetime2");
