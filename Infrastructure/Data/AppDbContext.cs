@@ -1,6 +1,12 @@
 ﻿using Core.Entities;
+using Infrastructure.Config;
 using Microsoft.EntityFrameworkCore;
 
+
+// dotnet-ef migrations add InitialCreate -s API -p Infrastructure 
+// dotnet ef migrations remove --startup-project API --project Infrastructure --context AppDbContext
+
+// dotnet-ef migrations remove -s API -p Infrastructure
 namespace Infrastructure.Data
 {
     public class AppDbContext : DbContext
@@ -13,5 +19,18 @@ namespace Infrastructure.Data
         // Tables
         public DbSet<Author> Authors { get; set; }
         public DbSet<Book> Books { get; set; }
+
+
+        // On model creation (before creating DB table) do below
+        // you can specify exact column name
+        // exact precision of data type
+        // null ness ...etc
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(AuthorConfigurations).Assembly);
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(BookConfigurations).Assembly);
+        }
     }
 }
