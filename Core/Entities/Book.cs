@@ -6,7 +6,7 @@ namespace Core.Entities
     {      
         public required string Title { get; set; }
         public required BookGenre Genre { get; set; }
-        public required IEnumerable<Author> Authors { get; set; } = new List<Author>();
+        public required ICollection<Author> Authors { get; set; } = new List<Author>();
         public required DateTime PublishedDate { get; set; }
         public required string PictureUrl { get; set; }
     }
