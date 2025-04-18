@@ -16,9 +16,13 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+// Middleware code below
+// is software that executes in the request/response pipeline,
+// either before the request reaches the application logic,
+// or after the response leaves the application.
 app.UseHttpsRedirection();
 
-app.UseAuthorization();
+//app.UseAuthorization();
 
 app.MapControllers();
 
