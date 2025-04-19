@@ -9,6 +9,6 @@ select * from AuthorBook;
 select * from [__EFMigrationsHistory];
 
 
-select * from AuthorBook t 
-	inner join Authors a on t.AuthorId = a.Id
-	inner join Books b on t.BookId = b.Id;
+select b.Title, a.Name  from AuthorBook t 
+	inner join Authors a on t.AuthorsId = a.Id
+	inner join Books b on t.BooksId = b.Id;
