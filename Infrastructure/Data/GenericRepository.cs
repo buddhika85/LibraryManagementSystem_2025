@@ -38,10 +38,5 @@ namespace Infrastructure.Data
         {
             return context.Set<T>().Any(x => x.Id == id);
         }
-
-        public async Task<bool> SaveAllAsync()
-        {
-            return await context.SaveChangesAsync() > 0;
-        }
     }
 }

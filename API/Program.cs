@@ -22,6 +22,8 @@ builder.Services.AddDbContext<AppDbContext>(opt => {
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 builder.Services.AddScoped<IBooksRepository, BooksRepository>();
 
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
 //// services
 builder.Services.AddAutoMapper(typeof(AutoMapperProfiles).Assembly);
 builder.Services.AddScoped<ILibraryService, LibraryService>();

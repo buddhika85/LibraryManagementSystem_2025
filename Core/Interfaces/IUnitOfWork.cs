@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Core.Entities;
 
 namespace Core.Interfaces
 {
-    public class IUnitOfWork
+    public interface IUnitOfWork
     {
+        IBooksRepository BookRepository { get; }
+        IGenericRepository<Author> AuthorRepository { get; }
 
+
+        public Task<bool> SaveAllAsync();
     }
 }

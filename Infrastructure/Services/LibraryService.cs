@@ -11,11 +11,11 @@ namespace Infrastructure.Services
         private readonly IGenericRepository<Author> authorRepo;
         private readonly IBooksRepository booksRepository;
 
-        public LibraryService(IMapper mapper, IGenericRepository<Author> authorRepo, IBooksRepository booksRepository)
+        public LibraryService(IMapper mapper, IUnitOfWork unitOfWork)
         {
             this.mapper = mapper;
-            this.authorRepo = authorRepo;
-            this.booksRepository = booksRepository;
+            this.authorRepo = unitOfWork.AuthorRepository;
+            this.booksRepository = unitOfWork.BookRepository;
         }
 
         public async Task<IReadOnlyList<AuthorDto>> GetAuthorsAsync()
