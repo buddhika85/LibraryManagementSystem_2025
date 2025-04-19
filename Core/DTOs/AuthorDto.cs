@@ -6,5 +6,6 @@
         public required string Country { get; set; }
         public required string Biography { get; set; }
         public DateTime DateOfBirth { get; set; }
+        public string DateOfBirthStr { get; set; } = string.Empty;
     }
 }

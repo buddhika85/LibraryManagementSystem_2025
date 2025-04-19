@@ -1,5 +1,6 @@
 using Core.Interfaces;
 using Infrastructure.Data;
+using Infrastructure.Helpers;
 using Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -17,7 +18,12 @@ builder.Services.AddDbContext<AppDbContext>(opt => {
 
 
 // Scoped only to HTTP Request
+//// Repos
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+builder.Services.AddScoped<IBooksRepository, BooksRepository>();
+
+//// services
+builder.Services.AddAutoMapper(typeof(AutoMapperProfiles).Assembly);
 builder.Services.AddScoped<ILibraryService, LibraryService>();
 
 // CORS support
