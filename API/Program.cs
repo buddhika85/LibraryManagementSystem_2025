@@ -36,4 +36,24 @@ app.UseHttpsRedirection();
 
 app.MapControllers();
 
+
+// seeding
+try
+{
+    //  service locator pattern
+    // manualy creating an object of AppDbContext outside of DI container
+    using var scope = app.Services.CreateScope();
+    var services = scope.ServiceProvider;
+    var context = services.GetRequiredService<AppDbContext>();
+    await context.Database.MigrateAsync();          // create DB if not availbale, and apply pending migrations
+    await LmsContextSeed.SeedAsync(context);
+}
+catch (Exception ex)
+{
+    Console.WriteLine(ex);
+    throw;
+}
+
+
+
 app.Run();

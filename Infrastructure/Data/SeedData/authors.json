@@ -1,0 +1,37 @@
+[
+  {
+    "Name": "Dr. Seuss",
+    "Country": "United States",
+    "Biography": "Dr. Seuss, born Theodor Seuss Geisel, was a beloved author and illustrator, known for his whimsical rhymes and imaginative stories like 'The Cat in the Hat' and 'Green Eggs and Ham'.",
+    "DateOfBirth": "1904-03-02",
+    "Books": []
+  },
+  {
+    "Name": "Roald Dahl",
+    "Country": "United Kingdom",
+    "Biography": "Roald Dahl was a British author known for his iconic children's books, including 'Charlie and the Chocolate Factory' and 'Matilda'.",
+    "DateOfBirth": "1916-09-13",
+    "Books": []
+  },
+  {
+    "Name": "Enid Blyton",
+    "Country": "United Kingdom",
+    "Biography": "Enid Blyton was a prolific British author of children's books, famous for series like 'The Famous Five' and 'The Secret Seven'.",
+    "DateOfBirth": "1897-08-11",
+    "Books": []
+  },
+  {
+    "Name": "Eric Carle",
+    "Country": "United States",
+    "Biography": "Eric Carle was a celebrated author and illustrator, known for his colorful and creative books, including 'The Very Hungry Caterpillar'.",
+    "DateOfBirth": "1929-06-25",
+    "Books": []
+  },
+  {
+    "Name": "Julia Donaldson",
+    "Country": "United Kingdom",
+    "Biography": "Julia Donaldson is a renowned British author famous for her rhyming stories, including 'The Gruffalo' and 'Room on the Broom'.",
+    "DateOfBirth": "1948-09-16",
+    "Books": []
+  }
+]

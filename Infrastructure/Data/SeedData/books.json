@@ -1,0 +1,152 @@
+[
+  {    
+    "Title": "The Cat in the Hat",
+    "Genre": 1,
+    "Authors": [
+      {
+        "Name": "Dr. Seuss",
+        "Country": "",
+        "Biography": "",
+        "DateOfBirth": "1900-01-01",
+        "Books": []
+      }
+    ],
+    "PublishedDate": "1957-03-12",
+    "PictureUrl": ""
+  },
+  {    
+    "Title": "Green Eggs and Ham",
+    "Genre": 1,
+    "Authors": [
+      {
+        "Name": "Dr. Seuss",
+        "Country": "",
+        "Biography": "",
+        "DateOfBirth": "1900-01-01",
+        "Books": []
+      }
+    ],
+    "PublishedDate": "1960-08-12",
+    "PictureUrl": ""
+  },
+  {   
+    "Title": "Charlie and the Chocolate Factory",
+    "Genre": 4,
+    "Authors": [
+      {
+        "Name": "Roald Dahl",
+        "Country": "",
+        "Biography": "",
+        "DateOfBirth": "1900-01-01",
+        "Books": []
+      }
+    ],
+    "PublishedDate": "1964-01-01",
+    "PictureUrl": ""
+  },
+  {  
+    "Title": "Matilda",
+    "Genre": 6,
+    "Authors": [
+      {
+        "Name": "Roald Dahl",
+        "Country": "",
+        "Biography": "",
+        "DateOfBirth": "1900-01-01",
+        "Books": []
+      }
+    ],
+    "PublishedDate": "1988-01-01",
+    "PictureUrl": ""
+  },
+  {   
+    "Title": "The Famous Five: Five on a Treasure Island",
+    "Genre": 4,
+    "Authors": [
+      {
+        "Name": "Enid Blyton",
+        "Country": "",
+        "Biography": "",
+        "DateOfBirth": "1900-01-01",
+        "Books": []
+      }
+    ],
+    "PublishedDate": "1942-01-01",
+    "PictureUrl": ""
+  },
+  {  
+    "Title": "The Secret Seven",
+    "Genre": 8,
+    "Authors": [
+      {
+        "Name": "Enid Blyton",
+        "Country": "",
+        "Biography": "",
+        "DateOfBirth": "1900-01-01",
+        "Books": []
+      }
+    ],
+    "PublishedDate": "1949-01-01",
+    "PictureUrl": ""
+  },
+  {  
+    "Title": "The Very Hungry Caterpillar",
+    "Genre": 1,
+    "Authors": [
+      {
+        "Name": "Eric Carle",
+        "Country": "",
+        "Biography": "",
+        "DateOfBirth": "1900-01-01",
+        "Books": []
+      }
+    ],
+    "PublishedDate": "1969-06-03",
+    "PictureUrl": ""
+  },
+  {  
+    "Title": "Brown Bear, Brown Bear, What Do You See?",
+    "Genre": 1,
+    "Authors": [
+      {
+        "Name": "Eric Carle",
+        "Country": "",
+        "Biography": "",
+        "DateOfBirth": "1900-01-01",
+        "Books": []
+      }
+    ],
+    "PublishedDate": "1967-01-01",
+    "PictureUrl": ""
+  },
+  {
+    "Title": "The Gruffalo",
+    "Genre": 6,
+    "Authors": [
+      {
+        "Name": "Julia Donaldson",
+        "Country": "",
+        "Biography": "",
+        "DateOfBirth": "1900-01-01",
+        "Books": []
+      }
+    ],
+    "PublishedDate": "1999-03-23",
+    "PictureUrl": ""
+  },
+  {
+    "Title": "Room on the Broom",
+    "Genre": 6,
+    "Authors": [
+      {
+        "Name": "Julia Donaldson",
+        "Country": "",
+        "Biography": "",
+        "DateOfBirth": "1900-01-01",
+        "Books": []
+      }
+    ],
+    "PublishedDate": "2001-01-01",
+    "PictureUrl": ""
+  }
+]
