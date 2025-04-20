@@ -2,7 +2,6 @@
 using Core.DTOs;
 using Core.Entities;
 using Core.Interfaces;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace Infrastructure.Services
 {
@@ -67,27 +66,21 @@ namespace Infrastructure.Services
             if (bookSaveDto.Id == 0)
             {
                 // add mode
-                model = mapper.Map<Book>(bookSaveDto);
-                booksRepository.Add(model);  
-                model.Authors = authorEntities;
+                model = AddBook(bookSaveDto, authorEntities);
             }
             else
             {
                 // edit mode
-                model = await booksRepository.GetBookByIdAsync(bookSaveDto.Id);
+                model = await booksRepository.GetBookByIdAsync(bookSaveDto.Id);     // get tracked book object
                 if (model == null)
                 {
                     result.ErrorMessage = $"Book with such ID {bookSaveDto.Id} unavailable in DB for editing";
                     return result;
                 }
-                model = mapper.Map(bookSaveDto, model);
-                model.Authors.Clear();                      // Clear existing authors
-                foreach (var author in authorEntities)
-                {
-                    model.Authors.Add(author);              // Add tracked authors
-                }               
-            }            
-           
+
+                model = UpdateBook(bookSaveDto, authorEntities, model);
+            }
+
             if (!await unitOfWork.SaveAllAsync())
             {
                 result.ErrorMessage = "Could not save book.";                
@@ -96,6 +89,8 @@ namespace Infrastructure.Services
             result.EntityId = model.Id;
             return result;
         }
+
+        
 
         /// <summary>
         /// Returns true / false if a book with id exists in database
@@ -106,5 +101,48 @@ namespace Infrastructure.Services
         {
             return await booksRepository.GetByIdAsync(id) != null;
         }
+
+        /// <summary>
+        /// Delete a book by Id
+        /// </summary>
+        /// <param name="id">Id of the book to delete</param>
+        /// <returns>The data transfer object containing info on book deleted or not</returns>
+        public async Task<ResultDto> DeleteAsync(int id)
+        {
+            var result = new ResultDto();
+            var entity = await booksRepository.GetByIdAsync(id);
+            if (entity == null)
+            {
+                result.ErrorMessage = $"Book with such ID {id} unavailable in DB for deletion";
+                return result;
+            }
+            booksRepository.Remove(entity);
+            if (!await unitOfWork.SaveAllAsync())
+            {
+                result.ErrorMessage = "Could not delete book.";
+            }
+            return result;
+        }
+
+        #region Helpers
+        private Book AddBook(BookSaveDto bookSaveDto, IList<Author> authorEntities)
+        {
+            Book? model = mapper.Map<Book>(bookSaveDto);
+            booksRepository.Add(model);
+            model.Authors = authorEntities;
+            return model;
+        }
+
+        private Book UpdateBook(BookSaveDto bookSaveDto, IList<Author> authorEntities, Book trackedModel)
+        {
+            trackedModel = mapper.Map(bookSaveDto, trackedModel);
+            trackedModel.Authors.Clear();                      // Clear existing authors
+            foreach (var author in authorEntities)
+            {
+                trackedModel.Authors.Add(author);              // Add tracked authors
+            }
+            return trackedModel;
+        }        
+        #endregion
     }
 }

@@ -8,7 +8,12 @@ namespace Core.Interfaces
         public Task<BookWithAuthorListDto> GetBooksWithAuthorsAsync();
         public Task<BookWithAuthorsDto?> GetBookById(int id);
 
-        public Task<InsertUpdateResultDto> SaveBookAsync(BookSaveDto bookSaveDto);          // insert / update
+        // insert / update
+        public Task<InsertUpdateResultDto> SaveBookAsync(BookSaveDto bookSaveDto);          
+        // deletion
+        Task<ResultDto> DeleteAsync(int id);
+
+        // available in DB?
         public Task<bool> IsExistsAsync(int id);
     }
 }

@@ -48,7 +48,7 @@ namespace API.Controllers
 
             var exists = await bookService.IsExistsAsync(id);
             if (!exists)
-                return NotFound();
+                return NotFound($"Book with ID {id} not found.");
 
             var result = await bookService.SaveBookAsync(item);
             if (result.IsSuccess)
@@ -60,6 +60,21 @@ namespace API.Controllers
             // logger.LogError(result.ErrorMessage); // assuming logging
 
             return StatusCode(500, "An error occurred while updating the item.");
+        }
+
+        [HttpDelete("{id:int}")]
+        public async Task<ActionResult<BookWithAuthorListDto>> Delete(int id)
+        {
+            var exists = await bookService.IsExistsAsync(id);
+            if (!exists)
+                return NotFound($"Book with ID {id} not found.");
+
+            var result = await bookService.DeleteAsync(id);
+            if (result.IsSuccess)
+            {
+                return NoContent();
+            }
+            return StatusCode(500, $"An error occurred while deleting the item with Id {id}.");
         }
     }
 }
