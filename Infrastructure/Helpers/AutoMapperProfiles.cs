@@ -18,6 +18,7 @@ namespace Infrastructure.Helpers
                     .ForMember(dest => dest.BookPublishedDateStr, opt => opt.MapFrom(src => FindShortDateString(src.PublishedDate)))
                     .ForMember(dest => dest.BookPictureUrl, opt => opt.MapFrom(src => src.PictureUrl))
                     .ForMember(dest => dest.AuthorList, opt => opt.MapFrom(src => src.Authors));
+            CreateMap<BookSaveDto, Book>();
         }
 
        

@@ -7,9 +7,10 @@ namespace Infrastructure.Data
     {
         private readonly AppDbContext context;
 
-        public UnitOfWork(AppDbContext context, 
+        public UnitOfWork(AppDbContext context,
+                // IGenericRepository<Author> authorRepository,
                 IBooksRepository booksRepository,
-                IGenericRepository<Author> authorRepository)
+                IAuthorRepository authorRepository)
         {
             this.context = context;
             BookRepository = booksRepository;
@@ -18,7 +19,9 @@ namespace Infrastructure.Data
 
         public IBooksRepository BookRepository { get; }
 
-        public IGenericRepository<Author> AuthorRepository { get; }
+        public IAuthorRepository AuthorRepository { get; }
+
+        //public IGenericRepository<Author> AuthorRepository { get; }
 
 
 

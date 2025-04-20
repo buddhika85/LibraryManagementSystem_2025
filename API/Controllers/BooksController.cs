@@ -4,74 +4,62 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {    
-    public class BooksController(ILibraryService libraryService) : BaseController
+    public class BooksController(IBookService bookService) : BaseController
     {
-        private readonly ILibraryService libraryService = libraryService;
+      
+        private readonly IBookService bookService = bookService;
 
         [HttpGet]
         public async Task<ActionResult<BookWithAuthorListDto>> GetAll()
         {
-            return await libraryService.GetBooksWithAuthorsAsync();
+            return Ok(await bookService.GetBooksWithAuthorsAsync());
         }
 
-        //private readonly AppDbContext context = context;
+        [HttpGet("{id:int}")]
+        public async Task<ActionResult<BookWithAuthorListDto>> GetById(int id)
+        {
+            var result = await bookService.GetBookById(id);
+            if (result == null) 
+            {
+                return NotFound($"Book with ID {id} not found.");
+            }
+            return Ok(result);
+        }
 
-        //[HttpGet]
-        //public async Task<ActionResult<IEnumerable<Book>>> GetAll()
-        //{
-        //    return await context.Books.ToListAsync();
-        //}
+        [HttpPost]
+        public async Task<ActionResult<ResultDto>> Create(BookSaveDto item)
+        {
+            if (item.Id != 0)
+                return BadRequest("ID should be zero for a insert.");
 
+            var result = await bookService.SaveBookAsync(item);
+            if (result == null || !result.IsSuccess)
+            {
+                return StatusCode(500, "An error occurred while inserting the book."); ;
+            }
+            return CreatedAtAction(nameof(GetById), new { id = result.EntityId }, null);
+        }
 
-        //[HttpGet("{id:int}")]
-        //public async Task<ActionResult<Book>> GetById(int id)
-        //{
-        //    var item = await context.Books.FindAsync(id);
-        //    if (item == null)
-        //        return NotFound();
-        //    return item;
-        //}
+        [HttpPut("{id:int}")]
+        public async Task<ActionResult<ResultDto>> Update(int id, BookSaveDto item)
+        {
+            if (item.Id != id)
+                return BadRequest("ID in URL does not match ID in body.");
 
-        //[HttpPost]
-        //public async Task<ActionResult<Book>> Create(Book item)
-        //{ 
-        //    context.Books.Add(item);
-        //    await context.SaveChangesAsync();
-        //    return item;
-        //}
+            var exists = await bookService.IsExistsAsync(id);
+            if (!exists)
+                return NotFound();
 
-        //[HttpPut("{id:int}")]
-        //public async Task<ActionResult> Update(int id, Book item)
-        //{
-        //    if (!await ItemExistsAsync(id) || item.Id != id)
-        //        return BadRequest("Cannot update this item");
+            var result = await bookService.SaveBookAsync(item);
+            if (result.IsSuccess)
+            {
+                return NoContent();
+            }
 
-        //    context.Entry(item).State = EntityState.Modified;
-        //    await context.SaveChangesAsync();
-        //    return NoContent();
-        //}
+            // Log the result.ErrorMessage internally
+            // logger.LogError(result.ErrorMessage); // assuming logging
 
-        //[HttpDelete("{id:int}")]
-        //public async Task<ActionResult<Book>> Delete(int id)
-        //{
-        //    var item = await GetItemAsync(id);
-        //    if (item == null)
-        //        return NotFound($"Item not found for deletion");
-
-
-        //    context.Books.Remove(item);
-        //    await context.SaveChangesAsync();
-        //    return NoContent();
-        //}
-
-        //private async Task<Book?> GetItemAsync(int id)
-        //{
-        //    return await context.Books.FindAsync(id);
-        //}
-
-        //private async Task<bool> ItemExistsAsync(int id)
-        //{
-        //    return await context.Books.AnyAsync(x => x.Id == id);
-        //}
+            return StatusCode(500, "An error occurred while updating the item.");
+        }
     }
 }

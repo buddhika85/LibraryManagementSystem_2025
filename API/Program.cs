@@ -20,6 +20,7 @@ builder.Services.AddDbContext<AppDbContext>(opt => {
 // Scoped only to HTTP Request
 //// Repos
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+builder.Services.AddScoped<IAuthorRepository, AuthorRepository>();
 builder.Services.AddScoped<IBooksRepository, BooksRepository>();
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
@@ -27,6 +28,7 @@ builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 //// services
 builder.Services.AddAutoMapper(typeof(AutoMapperProfiles).Assembly);
 builder.Services.AddScoped<ILibraryService, LibraryService>();
+builder.Services.AddScoped<IBookService, BookService>();
 
 // CORS support
 // CORS configuration below

@@ -27,9 +27,19 @@ namespace Infrastructure.Data
         }
         public void Update(T entity)
         {
-            context.Set<T>().Attach(entity);
-            context.Entry(entity).State = EntityState.Modified;
+            //var local = context.Set<T>().Local.FirstOrDefault(entry => entry.Id == entity.Id);
+            //if (local != null)
+            //{
+            //    // Detach the already tracked entity
+            //    context.Entry(local).State = EntityState.Detached;
+            //}
+
+            //context.Set<T>().Attach(entity);
+            //context.Entry(entity).State = EntityState.Modified;
+
+            context.Update(entity); // this will handle the navigation collections correctly
         }
+
         public void Remove(T entity)
         {
             context.Set<T>().Remove(entity);

@@ -1,8 +1,10 @@
-﻿using Core.Entities;
+﻿using Core.DTOs;
+using Core.Entities;
 namespace Core.Interfaces
 {
     public interface IBooksRepository : IGenericRepository<Book>
     {
-        public Task<IReadOnlyList<Book>> GetBooksIncludingAuthorsAsync();
+        public Task<IList<Book>> GetBooksIncludingAuthorsAsync();
+        public Task<Book?> GetBookByIdAsync(int id);
     }
 }

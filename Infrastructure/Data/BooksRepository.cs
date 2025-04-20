@@ -1,4 +1,5 @@
-﻿using Core.Entities;
+﻿using Core.DTOs;
+using Core.Entities;
 using Core.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,7 +11,12 @@ namespace Infrastructure.Data
         {
         }
 
-        public async Task<IReadOnlyList<Book>> GetBooksIncludingAuthorsAsync()
+        public async Task<Book?> GetBookByIdAsync(int id)
+        {
+            return await context.Books.Include(x => x.Authors).SingleOrDefaultAsync(x => x.Id == id);
+        }
+
+        public async Task<IList<Book>> GetBooksIncludingAuthorsAsync()
         {
             return await context.Books.Include(x => x.Authors).ToListAsync();
         }

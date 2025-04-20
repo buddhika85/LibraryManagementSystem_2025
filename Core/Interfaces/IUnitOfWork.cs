@@ -4,8 +4,10 @@ namespace Core.Interfaces
 {
     public interface IUnitOfWork
     {
-        IBooksRepository BookRepository { get; }
-        IGenericRepository<Author> AuthorRepository { get; }
+        //IGenericRepository<Author> AuthorRepository { get; }
+
+        IBooksRepository BookRepository { get; }       
+        IAuthorRepository AuthorRepository { get; }
 
 
         public Task<bool> SaveAllAsync();

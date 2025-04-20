@@ -8,7 +8,7 @@ namespace Infrastructure.Services
     public class LibraryService : ILibraryService
     {
         private readonly IMapper mapper;
-        private readonly IGenericRepository<Author> authorRepo;
+        private readonly IAuthorRepository authorRepo;
         private readonly IBooksRepository booksRepository;
 
         public LibraryService(IMapper mapper, IUnitOfWork unitOfWork)
@@ -25,11 +25,6 @@ namespace Infrastructure.Services
             return dtos;
         }
 
-        public async Task<BookWithAuthorListDto> GetBooksWithAuthorsAsync()
-        {
-            var entities = await booksRepository.GetBooksIncludingAuthorsAsync();
-            var dtos = mapper.Map<IReadOnlyList<BookWithAuthorsDto>>(entities);
-            return new BookWithAuthorListDto { BookWithAuthorList = dtos };
-        }
+        
     }
 }
