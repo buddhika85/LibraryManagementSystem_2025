@@ -1,9 +1,11 @@
+import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [],
+  imports: [ MatIcon, CommonModule],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss'
 })
