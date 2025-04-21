@@ -1,8 +1,8 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { HeaderComponent } from "./layout/header/header.component";
-import { HttpClient } from '@angular/common/http';
 import { BookWithAuthorListDto } from './shared/models/book-with-author-list-dto';
+import { BookService } from './core/services/book.service';
 
 @Component({
   selector: 'app-root',
@@ -15,16 +15,16 @@ export class AppComponent implements OnInit
 {
  
   title = 'LMS-Client';
-  baseUrl = 'https://localhost:5001/api/';
-  private http = inject(HttpClient);
+  private bookService = inject(BookService);
 
   booksWithAuthorList: BookWithAuthorListDto = {
     bookWithAuthorList: [], 
     count: 0
   };    
 
-  ngOnInit(): void {
-    this.http.get<BookWithAuthorListDto>(this.baseUrl + 'books').subscribe({
+  ngOnInit(): void 
+  {
+    this.bookService.getAllBooksWithAuthors().subscribe({
       next: data => {
         this.booksWithAuthorList = data;
         console.log(this.booksWithAuthorList);
