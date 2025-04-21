@@ -1,3 +1,9 @@
+@for (book of booksWithAuthorList.bookWithAuthorList; track book.bookId)
+    {
+        <h3>{{ book.bookTitle }}</h3>
+    }
+
+
 <mat-form-field>
     <mat-label>Filter</mat-label>
     <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Mia" #input>

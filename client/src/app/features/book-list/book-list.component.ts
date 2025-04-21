@@ -1,9 +1,11 @@
-import {AfterViewInit, Component, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, inject, ViewChild} from '@angular/core';
 import {MatPaginator, MatPaginatorModule} from '@angular/material/paginator';
 import {MatSort, MatSortModule} from '@angular/material/sort';
 import {MatTableDataSource, MatTableModule} from '@angular/material/table';
 import {MatInputModule} from '@angular/material/input';
 import {MatFormFieldModule} from '@angular/material/form-field';
+import { BookService } from '../../core/services/book.service';
+import { BookWithAuthorListDto } from '../../shared/models/book-with-author-list-dto';
 
 @Component({
   selector: 'app-book-list',
@@ -19,6 +21,27 @@ export class BookListComponent {
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
+
+
+  private bookService = inject(BookService);
+
+  booksWithAuthorList: BookWithAuthorListDto = {
+    bookWithAuthorList: [], 
+    count: 0
+  };    
+
+  ngOnInit(): void 
+  {
+    this.bookService.getAllBooksWithAuthors().subscribe({
+      next: data => {
+        this.booksWithAuthorList = data;
+        console.log(this.booksWithAuthorList);
+      },
+      error: error => console.error('There was an error!', error),
+      complete: () => console.log('Request complete')
+    });
+  }
+
 
   constructor() {
     // Create 100 users
