@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
-    public class AuthorsController(ILibraryService libraryService) : BaseController
+    public class AuthorsController(ILibraryService libraryService) : BaseApiController
     {
         private readonly ILibraryService libraryService = libraryService;
 

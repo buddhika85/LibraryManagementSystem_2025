@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {    
-    public class BooksController(IBookService bookService) : BaseController
+    public class BooksController(IBookService bookService) : BaseApiController
     {
       
         private readonly IBookService bookService = bookService;
