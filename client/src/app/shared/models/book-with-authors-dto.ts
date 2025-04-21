@@ -4,9 +4,9 @@ import { BookGenre } from './book-genre';
 export interface BookWithAuthorsDto {
   bookId: number;
   bookTitle: string;
-  bookGenre: BookGenre;       // or `number` if not deserialized as string
+  bookGenre: BookGenre;      
   bookGenreStr: string;
-  bookPublishedDate: string;  // ISO string from .NET DateTime
+  bookPublishedDate: string;  
   bookPublishedDateStr: string;
   bookPictureUrl: string;
   authorList: AuthorDto[];

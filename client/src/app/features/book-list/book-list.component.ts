@@ -1,15 +1,18 @@
-import {AfterViewInit, Component, inject, OnInit, ViewChild} from '@angular/core';
-import {MatPaginator, MatPaginatorModule} from '@angular/material/paginator';
-import {MatSort, MatSortModule} from '@angular/material/sort';
-import {MatTableDataSource, MatTableModule} from '@angular/material/table';
-import {MatInputModule} from '@angular/material/input';
-import {MatFormFieldModule} from '@angular/material/form-field';
+import { Component, inject, OnInit, ViewChild } from '@angular/core';
+import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { MatSort, MatSortModule } from '@angular/material/sort';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
 import { BookService } from '../../core/services/book.service';
 import { BookWithAuthorListDto } from '../../shared/models/book-with-author-list-dto';
 import { BookWithAuthorsDto } from '../../shared/models/book-with-authors-dto';
-import {MatDividerModule} from '@angular/material/divider';
-import {MatButtonModule} from '@angular/material/button';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatButtonModule } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
+import { MatDialog } from '@angular/material/dialog';
+import { AddEditBookDialogComponent } from './add-edit-book-dialog/add-edit-book-dialog.component';
+import { BookGenre } from '../../shared/models/book-genre';
 
 @Component({
   selector: 'app-book-list',
@@ -40,6 +43,9 @@ export class BookListComponent implements OnInit {
     count: 0
   };    
 
+  // dialog
+  readonly dialog = inject(MatDialog);
+
   ngOnInit(): void 
   {
     this.bookService.getAllBooksWithAuthors().subscribe({
@@ -67,7 +73,35 @@ export class BookListComponent implements OnInit {
   }
 
   addBook() {
-    alert('Add book button clicked!');
+    // alert('Add book button clicked!');
+    const dialogRef = this.dialog.open(AddEditBookDialogComponent, {
+      width: '600px',
+      data: {
+        authors: [], // Array<{ id: number, name: string }>
+        book: {
+          id: 1,
+          title: 'The Time Machine',
+          genre: BookGenre.Fantasy,
+          publishedDate: new Date('1895-05-07'),
+          pictureUrl: 'the-time-machine.jpg',
+          authors: [
+            {
+              id: 101,
+              name: 'H.G. Wells',
+              country: 'UK',
+              biography: 'English writer known for science fiction works.',
+              dateOfBirth: new Date('1866-09-21'),
+              dateOfBirthStr: '21/09/1866'
+            }
+          ]
+        }
+      }
+    }).afterClosed().subscribe(result => {
+      if (result) {
+        // Save book logic here
+      }
+    });
+
   }
     
   deleteBook(bookId: number) {

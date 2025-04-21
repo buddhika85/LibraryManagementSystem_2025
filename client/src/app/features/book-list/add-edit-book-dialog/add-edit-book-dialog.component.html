@@ -1,0 +1,57 @@
+<h2 mat-dialog-title>{{ data.book ? 'Edit Book' : 'Add Book' }}</h2>
+
+<form [formGroup]="form" (ngSubmit)="onSave()">
+  <mat-dialog-content>
+    <div class="form-grid">
+      <!-- ID (hidden) -->
+      <input type="hidden" formControlName="id" />
+
+      <!-- Title -->
+      <mat-form-field appearance="fill">
+        <mat-label>Title</mat-label>
+        <input matInput formControlName="title" required />
+      </mat-form-field>
+
+      <!-- Genre -->
+      <mat-form-field appearance="fill">
+        <mat-label>Genre</mat-label>
+        <mat-select formControlName="genre" required>
+          <mat-option *ngFor="let g of genres" [value]="g">{{ g }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <!-- Authors -->
+      <mat-form-field appearance="fill">
+        <mat-label>Authors</mat-label>
+        <mat-select formControlName="authorIds" multiple required>
+          <mat-option *ngFor="let author of authors" [value]="author.id">
+            {{ author.name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <!-- Published Date -->
+      <mat-form-field appearance="fill">
+        <mat-label>Published Date</mat-label>
+        <input matInput [matDatepicker]="picker" formControlName="publishedDate" required />
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+
+      <!-- Picture Upload -->
+      <div class="upload-field">
+        <label>Picture Upload (optional)</label>
+        <input type="file" (change)="onFileSelected($event)" />
+        <span *ngIf="form.value.pictureUrl">{{ form.value.pictureUrl }}</span>
+      </div>
+    </div>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button mat-button type="button" (click)="onCancel()">Cancel</button>
+    <button mat-flat-button color="primary" type="submit" [disabled]="form.invalid">
+      Save
+    </button>
+  </mat-dialog-actions>
+</form>
+
