@@ -7,18 +7,26 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import { BookService } from '../../core/services/book.service';
 import { BookWithAuthorListDto } from '../../shared/models/book-with-author-list-dto';
 import { BookWithAuthorsDto } from '../../shared/models/book-with-authors-dto';
+import {MatDividerModule} from '@angular/material/divider';
+import {MatButtonModule} from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
   selector: 'app-book-list',
   standalone: true,
-  imports: [MatFormFieldModule, MatInputModule, MatTableModule, MatSortModule, MatPaginatorModule],
+  imports: [MatFormFieldModule, MatInputModule, MatTableModule, MatSortModule, MatPaginatorModule, 
+      MatDividerModule, MatButtonModule, MatIcon],
   templateUrl: './book-list.component.html',
   styleUrl: './book-list.component.scss'
 })
 export class BookListComponent implements OnInit {
 
+
+  // page labels
+  pageTitle = 'Books List';
+
   // Mat-table 
-  displayedColumns: string[] = ['bookId', 'bookTitle', 'bookGenreStr', 'bookPublishedDateStr'];
+  displayedColumns: string[] = ['bookId', 'bookTitle', 'bookGenreStr', 'bookPublishedDateStr', 'edit', 'delete'];
   dataSource!: MatTableDataSource<BookWithAuthorsDto>;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -56,5 +64,17 @@ export class BookListComponent implements OnInit {
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
+  }
+
+  addBook() {
+    alert('Add book button clicked!');
+  }
+    
+  deleteBook(bookId: number) {
+    alert('Delete book button clicked! BookId: ' + bookId);
+  }
+  
+  editBook(bookId: number) {
+    alert('Edit book button clicked! BookId: ' + bookId);
   }
 }
