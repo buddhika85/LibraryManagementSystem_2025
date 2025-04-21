@@ -55,6 +55,15 @@ app.UseHttpsRedirection();
 
 //app.UseAuthorization();
 
+var allowedOrigins = builder.Configuration
+    .GetSection("AllowedCorsClients")
+    .Get<string[]>() ?? Array.Empty<string>();
+
+app.UseCors(x =>
+    x.AllowAnyHeader()
+     .AllowAnyMethod()
+     .WithOrigins(allowedOrigins));
+
 app.MapControllers();
 
 
