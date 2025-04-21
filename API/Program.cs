@@ -1,3 +1,4 @@
+using API.Middleware;
 using Core.Interfaces;
 using Infrastructure.Data;
 using Infrastructure.Helpers;
@@ -54,6 +55,8 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 //app.UseAuthorization();
+
+app.UseMiddleware<ExceptionMiddleware>();
 
 var allowedOrigins = builder.Configuration
     .GetSection("AllowedCorsClients")
