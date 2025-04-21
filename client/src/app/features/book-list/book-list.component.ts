@@ -78,6 +78,27 @@ export class BookListComponent implements OnInit {
       width: '600px',
       data: {
         authors: [], // Array<{ id: number, name: string }>
+        book: null
+      }
+    }).afterClosed().subscribe(result => {
+      if (result) {
+        // Save book logic here
+      }
+    });
+
+  }
+    
+  deleteBook(bookId: number) {
+    alert('Delete book button clicked! BookId: ' + bookId);
+  }
+  
+  editBook(bookId: number) {
+    // alert('Edit book button clicked! BookId: ' + bookId);
+
+    const dialogRef = this.dialog.open(AddEditBookDialogComponent, {
+      width: '600px',
+      data: {
+        authors: [], // Array<{ id: number, name: string }>
         book: {
           id: 1,
           title: 'The Time Machine',
@@ -101,14 +122,5 @@ export class BookListComponent implements OnInit {
         // Save book logic here
       }
     });
-
-  }
-    
-  deleteBook(bookId: number) {
-    alert('Delete book button clicked! BookId: ' + bookId);
-  }
-  
-  editBook(bookId: number) {
-    alert('Edit book button clicked! BookId: ' + bookId);
   }
 }
