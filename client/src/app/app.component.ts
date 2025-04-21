@@ -17,9 +17,14 @@ export class AppComponent implements OnInit
   baseUrl = 'https://localhost:5001/api/';
   private http = inject(HttpClient);
 
+  books: any;    
+
   ngOnInit(): void {
     this.http.get(this.baseUrl + 'books').subscribe({
-      next: data => console.log(data),
+      next: data => {
+        this.books = data;
+        console.log(this.books);
+      },
       error: error => console.error('There was an error!', error),
       complete: () => console.log('Request complete')
     });

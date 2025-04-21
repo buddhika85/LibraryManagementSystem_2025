@@ -1,3 +1,8 @@
 <app-header></app-header>
 
-<h2 class="text-3xl font-bold underline">Welcome to LMS {{title}}</h2>
+<div class ="container mt-6">
+    @for (book of books?.bookWithAuthorList; track book.bookId)
+    {
+        <h3>{{ book.bookTitle }}</h3>
+    }
+</div>
