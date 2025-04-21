@@ -1,7 +1,7 @@
 <app-header></app-header>
 
 <div class ="container mt-6">
-    @for (book of books?.bookWithAuthorList; track book.bookId)
+    @for (book of booksWithAuthorList.bookWithAuthorList; track book.bookId)
     {
         <h3>{{ book.bookTitle }}</h3>
     }

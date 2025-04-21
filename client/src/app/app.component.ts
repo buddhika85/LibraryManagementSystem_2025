@@ -2,6 +2,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { HeaderComponent } from "./layout/header/header.component";
 import { HttpClient } from '@angular/common/http';
+import { BookWithAuthorListDto } from './shared/models/book-with-author-list-dto';
 
 @Component({
   selector: 'app-root',
@@ -17,13 +18,16 @@ export class AppComponent implements OnInit
   baseUrl = 'https://localhost:5001/api/';
   private http = inject(HttpClient);
 
-  books: any;    
+  booksWithAuthorList: BookWithAuthorListDto = {
+    bookWithAuthorList: [], 
+    count: 0
+  };    
 
   ngOnInit(): void {
-    this.http.get(this.baseUrl + 'books').subscribe({
+    this.http.get<BookWithAuthorListDto>(this.baseUrl + 'books').subscribe({
       next: data => {
-        this.books = data;
-        console.log(this.books);
+        this.booksWithAuthorList = data;
+        console.log(this.booksWithAuthorList);
       },
       error: error => console.error('There was an error!', error),
       complete: () => console.log('Request complete')
