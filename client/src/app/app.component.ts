@@ -3,11 +3,12 @@ import { RouterOutlet } from '@angular/router';
 import { HeaderComponent } from "./layout/header/header.component";
 import { BookWithAuthorListDto } from './shared/models/book-with-author-list-dto';
 import { BookService } from './core/services/book.service';
+import { BookListComponent } from "./features/book-list/book-list.component";
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, HeaderComponent],
+  imports: [RouterOutlet, HeaderComponent, BookListComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
