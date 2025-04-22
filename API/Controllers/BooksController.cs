@@ -15,13 +15,24 @@ namespace API.Controllers
             return Ok(await bookService.GetBooksWithAuthorsAsync());
         }
 
-        [HttpGet("{id:int}")]
+        [HttpGet("{id:int}")]           // GET /api/books/5
         public async Task<ActionResult<BookWithAuthorListDto>> GetById(int id)
         {
             var result = await bookService.GetBookById(id);
             if (result == null) 
             {
                 return NotFound($"Book with ID {id} not found.");
+            }
+            return Ok(result);
+        }
+
+        [HttpGet("edit/{id:int}")]       // GET /api/books/edit/5
+        public async Task<ActionResult<BookForEditDto>> GetForEdit(int id)
+        {
+            BookForEditDto result = await bookService.GetBookForEditingById(id);
+            if (!result.IsSuccess)
+            {
+                return NotFound($"{result.ErrorMessage}");
             }
             return Ok(result);
         }
@@ -76,5 +87,7 @@ namespace API.Controllers
             }
             return StatusCode(500, $"An error occurred while deleting the item with Id {id}.");
         }
+    
+        
     }
 }

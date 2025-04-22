@@ -44,6 +44,34 @@ namespace Infrastructure.Services
             return mapper.Map<BookWithAuthorsDto>(entity);
         }
 
+        /// <summary>
+        /// Returns book with its author info and all authors list for editing purposes
+        /// </summary>
+        /// <param name="id">book id</param>
+        /// <returns>A DTO containing Book info, all authors for update purposes</returns>
+        public async Task<BookForEditDto> GetBookForEditingById(int id)
+        {
+            var dto = new BookForEditDto();
+            if (id > 0)
+            {
+                // edit mode request
+                var entity = await booksRepository.GetBookByIdAsync(id);
+                if (entity == null)
+                {
+                    dto.ErrorMessage = $"Book with ID {id} unavailable for editing purposes.";
+                    return dto;
+                }
+                dto.Book = mapper.Map<BookSaveDto>(entity);
+            }
+
+            // add mode
+            dto.Book = null;
+
+            // add / edit both
+            var authorEntities = await authorRepository.ListAllAsync();
+            dto.AllAuthors = mapper.Map<IReadOnlyList<AuthorDto>>(authorEntities);
+            return dto;
+        }
 
         /// <summary>
         /// Creates or updates a book along with its related authors.
@@ -142,7 +170,7 @@ namespace Infrastructure.Services
                 trackedModel.Authors.Add(author);              // Add tracked authors
             }
             return trackedModel;
-        }        
+        }       
         #endregion
     }
 }

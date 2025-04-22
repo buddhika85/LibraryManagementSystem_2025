@@ -105,16 +105,7 @@ export class BookListComponent implements OnInit {
           genre: BookGenre.Fantasy,
           publishedDate: new Date('1895-05-07'),
           pictureUrl: 'the-time-machine.jpg',
-          authors: [
-            {
-              id: 101,
-              name: 'H.G. Wells',
-              country: 'UK',
-              biography: 'English writer known for science fiction works.',
-              dateOfBirth: new Date('1866-09-21'),
-              dateOfBirthStr: '21/09/1866'
-            }
-          ]
+          authorIds: [1, 2] // Example author IDs
         }
       }
     }).afterClosed().subscribe(result => {
