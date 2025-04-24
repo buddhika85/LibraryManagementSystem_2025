@@ -27,7 +27,8 @@ namespace Infrastructure.Data
 
         public async Task<bool> SaveAllAsync()
         {
-            return await context.SaveChangesAsync() > 0;
+            var count = await context.SaveChangesAsync();
+            return count > 0;
         }
 
         public void Dispose() => context.Dispose();

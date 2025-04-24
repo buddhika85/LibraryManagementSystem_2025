@@ -46,13 +46,15 @@ export class AddEditBookDialogComponent implements OnInit
   {
     this.book = data.book;
     this.authors = data.authors;
+
+    //console.log(this.book);
   }
 
   ngOnInit(): void {
     this.form = this.fb.group({
       id: [this.book?.id || 0],
       title: [this.book?.title || '', Validators.required],
-      genre: [this.book == null ? BookGenre.None : EnumUtils.convertToBookGenre(this.book.genre) || '', Validators.required],
+      genre: [this.book == null ? BookGenre.None : EnumUtils.convertToBookGenre(this.book.genre), Validators.required],
       authorIds: [this.book?.authorIds || [], Validators.required],
       publishedDate: [this.book?.publishedDate || '', Validators.required],
       pictureUrl: [this.book?.pictureUrl || ''],

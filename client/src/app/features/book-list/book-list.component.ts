@@ -82,7 +82,7 @@ export class BookListComponent implements OnInit {
 
           // blur active element to avoid aria-hidden warning
           (document.activeElement as HTMLElement)?.blur();
-
+          
           const dialogRef = this.dialog.open(AddEditBookDialogComponent, {
             width: '600px',
             data: {
