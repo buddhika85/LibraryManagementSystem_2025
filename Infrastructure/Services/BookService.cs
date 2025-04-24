@@ -63,9 +63,11 @@ namespace Infrastructure.Services
                 }
                 dto.Book = mapper.Map<BookSaveDto>(entity);
             }
-
-            // add mode
-            dto.Book = null;
+            else
+            {
+                // add mode
+                dto.Book = null;
+            }
 
             // add / edit both
             var authorEntities = await authorRepository.ListAllAsync();

@@ -9,6 +9,7 @@ namespace Infrastructure.Helpers
         public AutoMapperProfiles()
         {
             CreateMap<Author, AuthorDto>().ForMember(dest => dest.DateOfBirthStr, opt => opt.MapFrom(src => FindShortDateString(src.DateOfBirth)));
+
             CreateMap<Book, BookWithAuthorsDto>()
                     .ForMember(dest => dest.BookId, opt => opt.MapFrom(src => src.Id))
                     .ForMember(dest => dest.BookTitle, opt => opt.MapFrom(src => src.Title))
@@ -18,7 +19,9 @@ namespace Infrastructure.Helpers
                     .ForMember(dest => dest.BookPublishedDateStr, opt => opt.MapFrom(src => FindShortDateString(src.PublishedDate)))
                     .ForMember(dest => dest.BookPictureUrl, opt => opt.MapFrom(src => src.PictureUrl))
                     .ForMember(dest => dest.AuthorList, opt => opt.MapFrom(src => src.Authors));
+
             CreateMap<BookSaveDto, Book>();
+            CreateMap<Book, BookSaveDto>().ForMember(dest => dest.AuthorIds, opt => opt.MapFrom(src => src.Authors.Select(x => x.Id)));
         }
 
        
