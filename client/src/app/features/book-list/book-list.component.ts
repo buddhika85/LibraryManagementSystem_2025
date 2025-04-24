@@ -73,19 +73,7 @@ export class BookListComponent implements OnInit {
   }
 
   addBook() {
-    // alert('Add book button clicked!');
-    const dialogRef = this.dialog.open(AddEditBookDialogComponent, {
-      width: '600px',
-      data: {
-        authors: [], // Array<{ id: number, name: string }>
-        book: null
-      }
-    }).afterClosed().subscribe(result => {
-      if (result) {
-        // Save book logic here
-      }
-    });
-
+    this.openAddEditBookDialog(0);
   }
     
   deleteBook(bookId: number) {
@@ -94,24 +82,28 @@ export class BookListComponent implements OnInit {
   
   editBook(bookId: number) {
     // alert('Edit book button clicked! BookId: ' + bookId);
+    this.openAddEditBookDialog(bookId);    
+  }
 
-    const dialogRef = this.dialog.open(AddEditBookDialogComponent, {
-      width: '600px',
-      data: {
-        authors: [], // Array<{ id: number, name: string }>
-        book: {
-          id: 1,
-          title: 'The Time Machine',
-          genre: BookGenre.Fantasy,
-          publishedDate: new Date('1895-05-07'),
-          pictureUrl: 'the-time-machine.jpg',
-          authorIds: [1, 2] // Example author IDs
-        }
+  private openAddEditBookDialog(bookId: number) {
+    this.bookService.getBookForEditOrInsert(bookId).subscribe(
+      {
+        next: data => {
+          const dialogRef = this.dialog.open(AddEditBookDialogComponent, {
+            width: '600px',
+            data: {
+              authors: data.allAuthors,
+              book: data.book
+            }
+          }).afterClosed().subscribe(result => {
+            if (result) {
+              // Save book logic here
+            }
+          });
+        },
+        error: error => console.error('There was an error!', error),
+        complete: () => console.log('Request complete')
       }
-    }).afterClosed().subscribe(result => {
-      if (result) {
-        // Save book logic here
-      }
-    });
+    );    
   }
 }
