@@ -15,6 +15,7 @@ import { MatOptionModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatButtonModule } from '@angular/material/button';
+import { EnumUtils } from '../../../core/utils/enum.utils';
 
 
 @Component({
@@ -29,23 +30,32 @@ import { MatButtonModule } from '@angular/material/button';
 export class AddEditBookDialogComponent implements OnInit 
 {
   form!: FormGroup;
-  genres = Object.values(BookGenre);
+  
+  genres = Object.keys(BookGenre)
+    .filter(key => isNaN(Number(key))) // filter out numeric keys
+    .map(key => ({
+      label: key,
+      value: BookGenre[key as keyof typeof BookGenre]
+    }));
+
   authors: AuthorDto[] = [];
+  book?: BookSaveDto;
 
   constructor(private fb: FormBuilder, private dialogRef: MatDialogRef<AddEditBookDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: { book?: BookSaveDto, authors: AuthorDto[] }) 
   {
+    this.book = data.book;
     this.authors = data.authors;
   }
 
   ngOnInit(): void {
     this.form = this.fb.group({
-      id: [this.data.book?.id || 0],
-      title: [this.data.book?.title || '', Validators.required],
-      genre: [this.data.book?.genre || '', Validators.required],
-      authorIds: [this.data.book?.authorIds || [], Validators.required],
-      publishedDate: [this.data.book?.publishedDate || '', Validators.required],
-      pictureUrl: [this.data.book?.pictureUrl || ''],
+      id: [this.book?.id || 0],
+      title: [this.book?.title || '', Validators.required],
+      genre: [this.book == null ? BookGenre.None : EnumUtils.convertToBookGenre(this.book.genre) || '', Validators.required],
+      authorIds: [this.book?.authorIds || [], Validators.required],
+      publishedDate: [this.book?.publishedDate || '', Validators.required],
+      pictureUrl: [this.book?.pictureUrl || ''],
     });
   }
 

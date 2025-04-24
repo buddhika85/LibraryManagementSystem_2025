@@ -13,6 +13,7 @@ import { MatIcon } from '@angular/material/icon';
 import { MatDialog } from '@angular/material/dialog';
 import { AddEditBookDialogComponent } from './add-edit-book-dialog/add-edit-book-dialog.component';
 import { BookGenre } from '../../shared/models/book-genre';
+import { BookSaveDto } from '../../shared/models/book-save-dto';
 
 @Component({
   selector: 'app-book-list',
@@ -48,18 +49,7 @@ export class BookListComponent implements OnInit {
 
   ngOnInit(): void 
   {
-    this.bookService.getAllBooksWithAuthors().subscribe({
-      next: data => {
-        this.booksWithAuthorList = data;
-        // Assign the data to the data source for the table to render
-        this.dataSource = new MatTableDataSource(this.booksWithAuthorList.bookWithAuthorList);
-        this.dataSource.paginator = this.paginator;
-        this.dataSource.sort = this.sort;
-        console.log(this.booksWithAuthorList);
-      },
-      error: error => console.error('There was an error!', error),
-      complete: () => console.log('Request complete')
-    });
+    this.loadBooksGridData();
   }
 
   // seach filter on top of the table
@@ -89,6 +79,10 @@ export class BookListComponent implements OnInit {
     this.bookService.getBookForEditOrInsert(bookId).subscribe(
       {
         next: data => {
+
+          // blur active element to avoid aria-hidden warning
+          (document.activeElement as HTMLElement)?.blur();
+
           const dialogRef = this.dialog.open(AddEditBookDialogComponent, {
             width: '600px',
             data: {
@@ -97,13 +91,52 @@ export class BookListComponent implements OnInit {
             }
           }).afterClosed().subscribe(result => {
             if (result) {
-              // Save book logic here
+              if (result.id === 0) {
+                this.insertBook(result);
+                return;
+              }
+              this.updateBook(result);
             }
           });
         },
-        error: error => console.error('There was an error!', error),
-        complete: () => console.log('Request complete')
+        error: error => console.error(`There was an error when finding book with ID ${bookId}`, error),
+        complete: () => {}
       }
     );    
+  }
+
+  private insertBook(book: BookSaveDto) {
+    this.bookService.insertBook(book).subscribe(
+      {
+        next: data => { this.loadBooksGridData(); },
+        error: error => console.error(`There was an error when inserting book`, error),
+        complete: () => { }
+      }
+    );
+  }
+
+  private updateBook(book: BookSaveDto) {
+    this.bookService.updateBook(book).subscribe(
+      {
+        next: data => { this.loadBooksGridData(); },
+        error: error => console.error(`There was an error when updating book with ID ${book.id}`, error),
+        complete: () => { }
+      }
+    );
+  }
+
+  private loadBooksGridData() {
+    this.bookService.getAllBooksWithAuthors().subscribe({
+      next: data => {
+        this.booksWithAuthorList = data;
+        // Assign the data to the data source for the table to render
+        this.dataSource = new MatTableDataSource(this.booksWithAuthorList.bookWithAuthorList);
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
+        console.log(this.booksWithAuthorList);
+      },
+      error: error => console.error('There was an error when loaging books table!', error),
+      complete: () => {}
+    });
   }
 }

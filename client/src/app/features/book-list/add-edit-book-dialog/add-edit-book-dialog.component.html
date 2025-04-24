@@ -14,10 +14,12 @@
 
       <!-- Genre -->
       <mat-form-field appearance="fill">
-        <mat-label>Genre</mat-label>
+        <mat-label>Genre</mat-label>        
         <mat-select formControlName="genre" required>
-          <mat-option *ngFor="let genre of genres" [value]="genre">{{ genre }}</mat-option>
-        </mat-select>
+          <mat-option *ngFor="let genre of genres" [value]="genre.value">
+            {{ genre.label }}
+          </mat-option>
+        </mat-select>     
       </mat-form-field>
 
       <!-- Authors -->
