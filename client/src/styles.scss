@@ -5,3 +5,19 @@
 .container {
   @apply mx-auto max-w-screen-2xl;
 }
+
+
+.error-div-dialog
+{
+  height: 20px; 
+  margin: 0 24px 8px;
+  
+  .error-span-dialog
+  {
+    color: #f44336; 
+    font-size: 14px; 
+    font-weight: 500;
+  }
+}
+
+

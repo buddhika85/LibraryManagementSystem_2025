@@ -54,23 +54,24 @@ namespace API.Controllers
         [HttpPut("{id:int}")]
         public async Task<ActionResult> Update(int id, BookSaveDto item)
         {
-            if (item.Id != id)
-                return BadRequest("ID in URL does not match ID in body.");
+            //if (item.Id != id)
+            //    return BadRequest("ID in URL does not match ID in body.");
 
-            var exists = await bookService.IsExistsAsync(id);
-            if (!exists)
-                return NotFound($"Book with ID {id} not found.");
+            //var exists = await bookService.IsExistsAsync(id);
+            //if (!exists)
+            //    return NotFound($"Book with ID {id} not found.");
 
-            var result = await bookService.SaveBookAsync(item);
-            if (result.IsSuccess)
-            {
-                return NoContent();
-            }
+            //var result = await bookService.SaveBookAsync(item);
+            //if (result.IsSuccess)
+            //{
+            //    return NoContent();
+            //}
 
-            // Log the result.ErrorMessage internally
-            // logger.LogError(result.ErrorMessage); // assuming logging
+            //// Log the result.ErrorMessage internally
+            //// logger.LogError(result.ErrorMessage); // assuming logging
 
-            return StatusCode(500, "An error occurred while updating the item.");
+            //return StatusCode(500, "An error occurred while updating the item.");
+            throw new NotImplementedException();
         }
 
         [HttpDelete("{id:int}")]
