@@ -26,6 +26,11 @@
         <td mat-cell *matCellDef="let row"> {{row.bookTitle}} </td>
       </ng-container>
        
+      <ng-container matColumnDef="authorListStr">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Authors </th>
+        <td mat-cell *matCellDef="let row"> {{row.authorListStr}} </td>
+      </ng-container>
+
       <ng-container matColumnDef="bookGenreStr">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> Genre </th>
         <td mat-cell *matCellDef="let row"> {{row.bookGenreStr}} </td>

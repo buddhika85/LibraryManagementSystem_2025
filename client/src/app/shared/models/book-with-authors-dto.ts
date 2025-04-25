@@ -10,4 +10,5 @@ export interface BookWithAuthorsDto {
   bookPublishedDateStr: string;
   bookPictureUrl: string;
   authorList: AuthorDto[];
+  authorListStr: string;
 }

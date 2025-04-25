@@ -30,7 +30,7 @@ export class BookListComponent implements OnInit {
   pageTitle = 'Books List';
 
   // Mat-table 
-  displayedColumns: string[] = ['bookId', 'bookTitle', 'bookGenreStr', 'bookPublishedDateStr', 'edit', 'delete'];
+  displayedColumns: string[] = ['bookId', 'bookTitle', 'authorListStr', 'bookGenreStr', 'bookPublishedDateStr', 'edit', 'delete'];
   dataSource!: MatTableDataSource<BookWithAuthorsDto>;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;

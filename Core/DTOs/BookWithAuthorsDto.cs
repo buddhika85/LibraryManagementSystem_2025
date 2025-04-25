@@ -15,5 +15,7 @@ namespace Core.DTOs
 
         // authors
         public IReadOnlyList<AuthorDto> AuthorList { get; set; } = [];
+
+        public string AuthorListStr => string.Join(", ", AuthorList.Select(x => x.Name));
     }
 }
