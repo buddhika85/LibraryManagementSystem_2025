@@ -1,4 +1,5 @@
 ﻿using API.Extensions;
+using AutoMapper;
 using Core.DTOs;
 using Core.Entities;
 using Microsoft.AspNetCore.Authorization;
@@ -10,10 +11,12 @@ namespace API.Controllers
     public class AccountController : BaseApiController
     {
         private readonly SignInManager<AppUser> signInManager;
+        private readonly IMapper mapper;
 
-        public AccountController(SignInManager<AppUser> signInManager)
+        public AccountController(SignInManager<AppUser> signInManager, IMapper mapper)
         {
             this.signInManager = signInManager;
+            this.mapper = mapper;
         }
 
         [HttpPost("register")]
@@ -49,29 +52,47 @@ namespace API.Controllers
             return NoContent();
         }
 
-        //[Authorize]
+        [AllowAnonymous]
         [HttpGet("userinfo")]
         public async Task<ActionResult> GetUserInfo()
         {
             if (User.Identity?.IsAuthenticated == false)
-                return NoContent();
+                return NoContent();     // anonymous will return NoContent
 
-            var user = await signInManager.UserManager.GetUserByEmail(User);
+            var user = await signInManager.UserManager.GetUserByEmailWithAddress(User);
             if (user == null)
                 return Unauthorized();
 
-            return Ok(new { 
-                user.FirstName,
-                user.LastName,
-                user.Email
-            });
+            return Ok(mapper.Map<UserInfoDto>(user));
         }
 
+        [AllowAnonymous]
         [HttpGet]
         public ActionResult GetAuthState()
         {
+            // anonymous will return false
             return Ok(new { IsAuthenticated = User.Identity?.IsAuthenticated ?? false});
         }
 
+        [Authorize]
+        [HttpPost("address")]
+        public async Task<ActionResult<AddressDto>> CreateOrUpdateAddress(AddressDto addressDto)
+        {
+            var user = await signInManager.UserManager.GetUserByEmailWithAddress(User);
+            if (user.Address == null)
+            {
+                user.Address = mapper.Map<Address>(addressDto);
+            }
+            else
+            {
+                user.Address = mapper.Map(addressDto, user.Address);
+            }
+            var result = await signInManager.UserManager.UpdateAsync(user);
+            if (!result.Succeeded)
+            {
+                return BadRequest("Problem updating user address");
+            }
+            return Ok(mapper.Map<AddressDto>(user.Address));
+        }
     }
 }

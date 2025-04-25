@@ -22,6 +22,9 @@ namespace Infrastructure.Helpers
 
             CreateMap<BookSaveDto, Book>();
             CreateMap<Book, BookSaveDto>().ForMember(dest => dest.AuthorIds, opt => opt.MapFrom(src => src.Authors.Select(x => x.Id)));
+
+            CreateMap<AppUser, UserInfoDto>().ReverseMap();
+            CreateMap<Address, AddressDto>().ReverseMap();
         }
 
        
