@@ -1,7 +1,10 @@
 ﻿using Core.DTOs;
 using Core.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace API.Controllers
 {
@@ -31,5 +34,38 @@ namespace API.Controllers
 
             return Ok();
         }
+
+        [Authorize]
+        [HttpPost("logout")]
+        public async Task<ActionResult> Logout()
+        {
+            await signInManager.SignOutAsync();
+            return NoContent();
+        }
+
+        //[Authorize]
+        [HttpGet("userinfo")]
+        public async Task<ActionResult> GetUserInfo()
+        {
+            if (User.Identity?.IsAuthenticated == false)
+                return NoContent();
+
+            var user = await signInManager.UserManager.Users.FirstOrDefaultAsync(x => x.Email == User.FindFirstValue(ClaimTypes.Email));
+            if (user == null)
+                return Unauthorized();
+
+            return Ok(new { 
+                user.FirstName,
+                user.LastName,
+                user.Email
+            });
+        }
+
+        [HttpGet]
+        public ActionResult GetAuthState()
+        {
+            return Ok(new { IsAuthenticated = User.Identity?.IsAuthenticated ?? false});
+        }
+
     }
 }
