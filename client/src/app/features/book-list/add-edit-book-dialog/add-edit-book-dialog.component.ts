@@ -74,8 +74,8 @@ export class AddEditBookDialogComponent implements OnInit
   }
 
   onSave() {
-    if (this.form.valid) {
-      const book: BookSaveDto = { ...this.form.value };
+    if (this.form.valid) {      
+      const book: BookSaveDto = { ...this.form.value };  
       if (book) {
         this.insertOrUpdateBook(book, book.id > 0, (result: boolean) => {
           if(result) {

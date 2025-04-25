@@ -43,6 +43,7 @@ namespace API.Controllers
             if (item.Id != 0)
                 return BadRequest("ID should be zero for a insert.");
 
+            item.PublishedDate = item.PublishedDate.ToLocalTime();
             var result = await bookService.SaveBookAsync(item);
             if (result == null || !result.IsSuccess)
             {
@@ -56,11 +57,12 @@ namespace API.Controllers
         {
             if (item.Id != id)
                 return BadRequest("ID in URL does not match ID in body.");
-
+            
             var exists = await bookService.IsExistsAsync(id);
             if (!exists)
                 return NotFound($"Book with ID {id} not found.");
 
+            item.PublishedDate = item.PublishedDate.ToLocalTime();
             var result = await bookService.SaveBookAsync(item);
             if (result.IsSuccess)
             {
