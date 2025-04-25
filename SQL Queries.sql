@@ -13,3 +13,13 @@ select b.Id 'BookId', b.Title, a.Id 'AuthorId', a.Name 'Author'  from AuthorBook
 	inner join Authors a on t.AuthorsId = a.Id
 	inner join Books b on t.BooksId = b.Id
 	order by b.Id desc;
+
+-- identity
+select * from AspNetUsers;
+select * from AspNetUserLogins;
+select * from AspNetRoles;
+select * from AspNetUserRoles;
+select * from AspNetUserClaims;
+select * from AspNetRoleClaims;
+select * from AspNetUserTokens;
+

@@ -1,4 +1,5 @@
 using API.Middleware;
+using Core.Entities;
 using Core.Interfaces;
 using Infrastructure.Data;
 using Infrastructure.Helpers;
@@ -25,6 +26,10 @@ builder.Services.AddScoped<IAuthorRepository, AuthorRepository>();
 builder.Services.AddScoped<IBooksRepository, BooksRepository>();
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+//// Identity services
+builder.Services.AddAuthorization();
+builder.Services.AddIdentityApiEndpoints<AppUser>().AddEntityFrameworkStores<AppDbContext>();
 
 //// services
 builder.Services.AddAutoMapper(typeof(AutoMapperProfiles).Assembly);
@@ -68,7 +73,7 @@ app.UseCors(x =>
      .WithOrigins(allowedOrigins));
 
 app.MapControllers();
-
+app.MapIdentityApi<AppUser>();
 
 // seeding
 try

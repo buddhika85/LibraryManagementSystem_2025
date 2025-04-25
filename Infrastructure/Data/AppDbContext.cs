@@ -1,5 +1,6 @@
 ﻿using Core.Entities;
 using Infrastructure.Config;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 
@@ -15,7 +16,7 @@ using Microsoft.EntityFrameworkCore;
 // DROP DB - dotnet ef database drop -p Infrastructure -s API
 namespace Infrastructure.Data
 {
-    public class AppDbContext : DbContext
+    public class AppDbContext : IdentityDbContext<AppUser>
     {
         // SQL server connectin string comes in using options parameter
         public AppDbContext(DbContextOptions options) : base(options)
