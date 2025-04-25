@@ -67,7 +67,16 @@ export class BookListComponent implements OnInit {
   }
     
   deleteBook(bookId: number) {
-    alert('Delete book button clicked! BookId: ' + bookId);
+    //alert('Delete book button clicked! BookId: ' + bookId);
+    this.bookService.deleteBook(bookId).subscribe(
+      {
+        next: () => {
+          this.loadBooksGridData();
+        },
+        error: error => console.error(`There was an error when deleting book with ID ${bookId}`, error),
+        complete: () => {}
+      }
+    );
   }
   
   editBook(bookId: number) {

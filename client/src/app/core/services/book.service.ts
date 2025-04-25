@@ -36,5 +36,8 @@ export class BookService {
     return this.http.put<any>(`${this.baseUrl}books/${book.id}`, book);
   }
 
-
+  deleteBook(id: number): Observable<any>
+  {
+    return this.http.delete<any>(`${this.baseUrl}books/${id}`); 
+  }
 }
