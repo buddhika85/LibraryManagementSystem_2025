@@ -73,7 +73,7 @@ app.UseCors(x =>
      .WithOrigins(allowedOrigins));
 
 app.MapControllers();
-app.MapIdentityApi<AppUser>();
+app.MapGroup("api").MapIdentityApi<AppUser>();          // asp.net identity
 
 // seeding
 try
