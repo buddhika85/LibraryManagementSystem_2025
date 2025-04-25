@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, inject, Inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialogModule } from '@angular/material/dialog';
@@ -16,6 +16,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatButtonModule } from '@angular/material/button';
 import { EnumUtils } from '../../../core/utils/enum.utils';
+import { BookService } from '../../../core/services/book.service';
 
 
 @Component({
@@ -30,6 +31,7 @@ import { EnumUtils } from '../../../core/utils/enum.utils';
 export class AddEditBookDialogComponent implements OnInit 
 {
   form!: FormGroup;
+  errorMessage: string = '';
   
   genres = Object.keys(BookGenre)
     .filter(key => isNaN(Number(key))) // filter out numeric keys
@@ -40,6 +42,8 @@ export class AddEditBookDialogComponent implements OnInit
 
   authors: AuthorDto[] = [];
   book?: BookSaveDto;
+
+  private bookService = inject(BookService);
 
   constructor(private fb: FormBuilder, private dialogRef: MatDialogRef<AddEditBookDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: { book?: BookSaveDto, authors: AuthorDto[] }) 
@@ -71,11 +75,42 @@ export class AddEditBookDialogComponent implements OnInit
 
   onSave() {
     if (this.form.valid) {
-      this.dialogRef.close(this.form.value);
+      const book: BookSaveDto = { ...this.form.value };
+      if (book) {
+        this.insertOrUpdateBook(book, book.id > 0, (result: boolean) => {
+          if(result) {
+            this.dialogRef.close(true);
+          }
+          else {
+            this.errorMessage = 'Error inserting/updating book!';
+          }
+        });
+      }
     }
   }
 
   onCancel() {
-    this.dialogRef.close();
+    this.dialogRef.close(false);
+  }
+  
+  // callback is a way of returning a result back to caller
+  private insertOrUpdateBook(book: BookSaveDto, isUpdate: boolean, callback: (result: boolean) => void): void 
+  {
+    const operation = isUpdate ? this.bookService.updateBook(book) : this.bookService.insertBook(book);
+    const errorMessage = isUpdate ? `There was an error when updating book with ID ${book.id}` : 'There was an error when inserting book';
+    operation.subscribe(
+      {
+        next: () => 
+        { 
+          callback(true); // Success
+        },
+        error: error => 
+        {         
+          console.error(errorMessage, error)
+          callback(false); // Error
+        },
+        complete: () => { }
+      }
+    );    
   }
 }

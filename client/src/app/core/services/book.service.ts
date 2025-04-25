@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { BookForEditDto } from '../../shared/models/book-for-edit-dto';
 import { BookSaveDto } from '../../shared/models/book-save-dto';
-import { ResultDto } from '../../shared/models/result-dto';
+import { InsertResultDto, ResultDto } from '../../shared/models/result-dto';
 
 @Injectable({
   providedIn: 'root'
@@ -26,13 +26,15 @@ export class BookService {
     return this.http.get<BookForEditDto>(`${this.baseUrl}books/edit/${id}`);
   }
 
-  insertBook(book: BookSaveDto): Observable<ResultDto>
+  insertBook(book: BookSaveDto): Observable<InsertResultDto>
   {
-    return this.http.post<ResultDto>(`${this.baseUrl}books`, book);
+    return this.http.post<InsertResultDto>(`${this.baseUrl}books`, book);
   }
 
-  updateBook(book: BookSaveDto): Observable<ResultDto>
+  updateBook(book: BookSaveDto): Observable<any>
   {
-    return this.http.put<ResultDto>(`${this.baseUrl}books/${book.id}`, book);
+    return this.http.put<any>(`${this.baseUrl}books/${book.id}`, book);
   }
+
+
 }

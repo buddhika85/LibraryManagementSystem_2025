@@ -4,7 +4,7 @@ export interface ResultDto
     IsSuccess: boolean;
 }
 
-export interface InsertUpdateResultDto extends ResultDto
+export interface InsertResultDto extends ResultDto
 {
     EntityId: number;
 }

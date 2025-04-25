@@ -38,7 +38,7 @@ namespace API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<ResultDto>> Create(BookSaveDto item)
+        public async Task<ActionResult<InsertUpdateResultDto>> Create(BookSaveDto item)
         {
             if (item.Id != 0)
                 return BadRequest("ID should be zero for a insert.");
@@ -48,11 +48,11 @@ namespace API.Controllers
             {
                 return StatusCode(500, "An error occurred while inserting the book."); ;
             }
-            return CreatedAtAction(nameof(GetById), new { id = result.EntityId }, null);
+            return CreatedAtAction(nameof(GetById), new { id = result.EntityId }, result);
         }
 
         [HttpPut("{id:int}")]
-        public async Task<ActionResult<ResultDto>> Update(int id, BookSaveDto item)
+        public async Task<ActionResult> Update(int id, BookSaveDto item)
         {
             if (item.Id != id)
                 return BadRequest("ID in URL does not match ID in body.");
@@ -74,7 +74,7 @@ namespace API.Controllers
         }
 
         [HttpDelete("{id:int}")]
-        public async Task<ActionResult<BookWithAuthorListDto>> Delete(int id)
+        public async Task<ActionResult> Delete(int id)
         {
             var exists = await bookService.IsExistsAsync(id);
             if (!exists)

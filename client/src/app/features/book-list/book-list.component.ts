@@ -91,11 +91,7 @@ export class BookListComponent implements OnInit {
             }
           }).afterClosed().subscribe(result => {
             if (result) {
-              if (result.id === 0) {
-                this.insertBook(result);
-                return;
-              }
-              this.updateBook(result);
+              this.loadBooksGridData();
             }
           });
         },
@@ -105,25 +101,7 @@ export class BookListComponent implements OnInit {
     );    
   }
 
-  private insertBook(book: BookSaveDto) {
-    this.bookService.insertBook(book).subscribe(
-      {
-        next: data => { this.loadBooksGridData(); },
-        error: error => console.error(`There was an error when inserting book`, error),
-        complete: () => { }
-      }
-    );
-  }
-
-  private updateBook(book: BookSaveDto) {
-    this.bookService.updateBook(book).subscribe(
-      {
-        next: data => { this.loadBooksGridData(); },
-        error: error => console.error(`There was an error when updating book with ID ${book.id}`, error),
-        complete: () => { }
-      }
-    );
-  }
+  
 
   private loadBooksGridData() {
     this.bookService.getAllBooksWithAuthors().subscribe({
