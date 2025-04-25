@@ -26,6 +26,7 @@ namespace Infrastructure.Data
         // Tables
         public DbSet<Author> Authors { get; set; }
         public DbSet<Book> Books { get; set; }
+        public DbSet<Address> Addresses { get; set; }
 
 
         // On model creation (before creating DB table) do below

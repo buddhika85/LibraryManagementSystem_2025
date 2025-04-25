@@ -16,6 +16,7 @@ select b.Id 'BookId', b.Title, a.Id 'AuthorId', a.Name 'Author'  from AuthorBook
 
 -- identity
 select * from AspNetUsers;
+select * from Addresses;
 select * from AspNetUserLogins;
 select * from AspNetRoles;
 select * from AspNetUserRoles;
