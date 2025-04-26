@@ -21,6 +21,13 @@ namespace API.Controllers
             this.mapper = mapper;
         }
 
+        // Admin can create/register staff, members
+        // Admin can delete staff/members
+        // Staff can create/register members
+        // Staf can delete members
+
+
+
         /// <summary>
         /// Creates a new user along and assigns the requested role. 
         /// </summary>
@@ -34,8 +41,9 @@ namespace API.Controllers
                 FirstName = registerDto.FirstName,
                 LastName = registerDto.LastName,
                 Email = registerDto.Email,
+                PhoneNumber = registerDto.PhoneNumber,
                 UserName = registerDto.Email,
-                Address = mapper.Map<Address>(registerDto.Address)
+                Address = mapper.Map<Address>(registerDto.Address),
             };
 
             // add user along with address

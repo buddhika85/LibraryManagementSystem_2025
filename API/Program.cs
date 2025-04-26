@@ -29,10 +29,18 @@ builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 //// Identity services
 builder.Services.AddAuthorization();
-//builder.Services.AddIdentityApiEndpoints<AppUser>().AddEntityFrameworkStores<AppDbContext>();
 builder.Services.AddIdentity<AppUser, IdentityRole>()
     .AddEntityFrameworkStores<AppDbContext>()
     .AddDefaultTokenProviders();
+
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.Events.OnRedirectToLogin = ctx =>
+    {
+        ctx.Response.StatusCode = StatusCodes.Status401Unauthorized;
+        return Task.CompletedTask;
+    };
+});
 
 
 //// services
@@ -63,7 +71,8 @@ if (app.Environment.IsDevelopment())
 // or after the response leaves the application.
 app.UseHttpsRedirection();
 
-//app.UseAuthorization();
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.UseMiddleware<ExceptionMiddleware>();
 

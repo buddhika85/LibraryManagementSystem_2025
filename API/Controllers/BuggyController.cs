@@ -41,9 +41,36 @@ namespace API.Controllers
         [HttpGet("secret")]
         public IActionResult GetSecret()
         {
+            return FindUserAndRoleInfo();
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpGet("amIAdmin")]
+        public IActionResult AmIAdmin()
+        {
+            return FindUserAndRoleInfo();
+        }        
+
+        [Authorize(Roles = "Admin,Staff")]
+        [HttpGet("amIAdminOrStaff")]
+        public IActionResult AmIAdminOrStaff()
+        {
+            return FindUserAndRoleInfo();
+        }
+
+        [Authorize(Roles = "Admin,Staff,Member")]
+        [HttpGet("amIAdminOrStaffOrMember")]
+        public IActionResult AmIAdminOrStaffOrMember()
+        {
+            return FindUserAndRoleInfo();
+        }
+
+        private IActionResult FindUserAndRoleInfo()
+        {
             var name = User.FindFirst(ClaimTypes.Name)?.Value;
             var id = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            return Ok($"Hello {name} with id of {id}");
+            var role = User.FindFirst(ClaimTypes.Role)?.Value;
+            return Ok($"Hello {name} with id of {id} - {role}");
         }
     }
 }

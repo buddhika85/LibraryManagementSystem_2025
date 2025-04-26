@@ -20,8 +20,12 @@ select * from Addresses;
 select * from AspNetRoles;
 
 select * from AspNetUsers;
-select * from AspNetUserLogins;
 select * from AspNetUserRoles;
+
+select t.FirstName, r.[Name] as 'Role', a.Line1 'Address Line 1' from AspNetUsers t 
+	left join AspNetUserRoles ur on t.Id = ur.UserId
+	left join AspNetRoles r on ur.RoleId = r.Id
+	left join Addresses a on t.AddressId = a.Id;
 
 --select * from AspNetUserClaims;
 --select * from AspNetRoleClaims;
