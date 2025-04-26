@@ -2,12 +2,15 @@
 using AutoMapper;
 using Core.DTOs;
 using Core.Entities;
+using Core.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Rewrite;
 
 namespace API.Controllers
 {
+    [Authorize]
     public class AccountController : BaseApiController
     {
         private readonly SignInManager<AppUser> signInManager;
@@ -21,20 +24,38 @@ namespace API.Controllers
             this.mapper = mapper;
         }
 
-        // Admin can create/register staff, members
-        // Admin can delete staff/members
-        // Staff can create/register members
-        // Staf can delete members
+        /// <summary>
+        /// Member registration.
+        /// Any role and guest can create/register members
+        /// </summary>
+        /// <param name="registerDto">User, address information and role to assign</param>
+        /// <returns>Returns registration request was successful or not</returns>
+        [AllowAnonymous]
+        [HttpPost("registerMember")]
+        public async Task<ActionResult> RegisterMember(MemberRegisterDto memberRegisterDto)
+        {
+            if (memberRegisterDto.Role != UserRoles.Member)
+            {
+                return BadRequest("Role must be Member for MemberRegisterDto.");
+            }
 
-
+            return await RegisterHelper(memberRegisterDto);
+        }        
 
         /// <summary>
         /// Creates a new user along and assigns the requested role. 
+        /// Admin Only - can create/register staff, members
         /// </summary>
-        /// <param name="registerDto"></param>
+        /// <param name="registerDto">User, address information and role to assign</param>
         /// <returns>Returns registration request was successful or not</returns>
+        [Authorize(Roles = "Admin")]
         [HttpPost("register")]
         public async Task<ActionResult> Register(RegisterDto registerDto)
+        {
+            return await RegisterHelper(registerDto);
+        }
+
+        private async Task<ActionResult> RegisterHelper(RegisterDto registerDto)
         {
             var user = new AppUser
             {
@@ -54,20 +75,36 @@ namespace API.Controllers
             {
                 result = await signInManager.UserManager.AddToRoleAsync(user, registerDto.Role.ToString());
             }
+            else
+            {
+                AddErrorsToModelState(result);
+                return ValidationProblem();
+            }
 
             if (!result.Succeeded)
             {
-                // return BadRequest(result.Errors);
-                foreach (var error in result.Errors)
-                {
-                    ModelState.AddModelError(error.Code, error.Description);
-                }
+                AddErrorsToModelState(result);
                 return ValidationProblem();
             }
 
             return Ok();
         }
 
+        private void AddErrorsToModelState(IdentityResult result)
+        {
+            foreach (var error in result.Errors)
+            {
+                ModelState.AddModelError(error.Code, error.Description);
+            }
+        }
+
+        // TO DO: Admin can edit staff/members
+        // TO DO: Staf can edit members
+
+        // TO DO: Admin can delete staff/members
+        // TO DO: Staf can delete members
+
+        [AllowAnonymous]
         [HttpPost("login")]
         public async Task<IActionResult> Login(LoginRequest loginRequest)
         {
