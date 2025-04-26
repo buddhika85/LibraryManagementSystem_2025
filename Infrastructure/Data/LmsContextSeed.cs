@@ -1,8 +1,8 @@
 ﻿using Core.Entities;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Text.Json;
-using static System.Reflection.Metadata.BlobBuilder;
 
 
 namespace Infrastructure.Data
@@ -14,13 +14,14 @@ namespace Infrastructure.Data
 
         private static AppDbContext appDbContext = null!;
 
+        #region BusinessDomainSeeding
         public static async Task SeedAsync(AppDbContext context)
         {
             appDbContext = context;
             await SeedAsyncHelper(context.Authors, authorsSeedJson);
            
             if (await context.Authors.AnyAsync()) 
-                await SeedAsyncHelper(context.Books, booksSeedJson);
+                await SeedAsyncHelper(context.Books, booksSeedJson);            
         }
 
 
@@ -63,5 +64,33 @@ namespace Infrastructure.Data
                 book.Authors = matchedAuthors;
             }
         }
+
+        #endregion
+
+        #region IdentitySeeding
+
+        private static RoleManager<IdentityRole> roleManager = null!;
+
+        public static async Task SeedIdentiyAsync(RoleManager<IdentityRole> roleMngr)
+        {
+            roleManager = roleMngr;
+            await SeedRoles();
+        }
+
+        private static async Task SeedRoles()
+        {
+            if (!await roleManager.Roles.AnyAsync())
+            {
+                var roleNames = new[] { "Admin", "Staff", "Member" };
+                foreach (var roleName in roleNames)
+                {
+                    if (!await roleManager.RoleExistsAsync(roleName))
+                    {
+                        await roleManager.CreateAsync(new IdentityRole(roleName));
+                    }
+                }
+            }
+        }
+        #endregion
     }
 }

@@ -14,13 +14,16 @@ select b.Id 'BookId', b.Title, a.Id 'AuthorId', a.Name 'Author'  from AuthorBook
 	inner join Books b on t.BooksId = b.Id
 	order by b.Id desc;
 
+
 -- identity
-select * from AspNetUsers;
 select * from Addresses;
-select * from AspNetUserLogins;
 select * from AspNetRoles;
+
+select * from AspNetUsers;
+select * from AspNetUserLogins;
 select * from AspNetUserRoles;
-select * from AspNetUserClaims;
-select * from AspNetRoleClaims;
-select * from AspNetUserTokens;
+
+--select * from AspNetUserClaims;
+--select * from AspNetRoleClaims;
+--select * from AspNetUserTokens;
 

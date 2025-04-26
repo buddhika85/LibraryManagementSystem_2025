@@ -4,8 +4,8 @@ using Core.Interfaces;
 using Infrastructure.Data;
 using Infrastructure.Helpers;
 using Infrastructure.Services;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using System;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,7 +29,11 @@ builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 //// Identity services
 builder.Services.AddAuthorization();
-builder.Services.AddIdentityApiEndpoints<AppUser>().AddEntityFrameworkStores<AppDbContext>();
+//builder.Services.AddIdentityApiEndpoints<AppUser>().AddEntityFrameworkStores<AppDbContext>();
+builder.Services.AddIdentity<AppUser, IdentityRole>()
+    .AddEntityFrameworkStores<AppDbContext>()
+    .AddDefaultTokenProviders();
+
 
 //// services
 builder.Services.AddAutoMapper(typeof(AutoMapperProfiles).Assembly);
@@ -70,10 +74,11 @@ var allowedOrigins = builder.Configuration
 app.UseCors(x =>
     x.AllowAnyHeader()
      .AllowAnyMethod()
+     .AllowCredentials()                                // accepting identity cookie from these clients
      .WithOrigins(allowedOrigins));
 
+
 app.MapControllers();
-app.MapGroup("api").MapIdentityApi<AppUser>();          // asp.net identity
 
 // seeding
 try
@@ -85,6 +90,9 @@ try
     var context = services.GetRequiredService<AppDbContext>();
     await context.Database.MigrateAsync();          // create DB if not availbale, and apply pending migrations
     await LmsContextSeed.SeedAsync(context);
+
+    var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+    await LmsContextSeed.SeedIdentiyAsync(roleManager);
 }
 catch (Exception ex)
 {

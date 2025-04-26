@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Core.Enums;
+using System.ComponentModel.DataAnnotations;
 
 namespace Core.DTOs
 {
@@ -15,5 +16,11 @@ namespace Core.DTOs
 
         [Required]
         public string Password { get; set; } = string.Empty;
+
+        [Required]
+        public UserRoles Role { get; set; }
+
+        [Required]
+        public AddressDto? Address { get; set; }
     }
 }

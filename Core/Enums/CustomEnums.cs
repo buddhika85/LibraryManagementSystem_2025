@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Core.Enums
+﻿namespace Core.Enums
 {
     public enum BookGenre
     {
@@ -19,5 +13,12 @@ namespace Core.Enums
         Mystery,
         Historical,
         Poetry
+    }
+
+    public enum UserRoles
+    {
+        Admin = 100,
+        Staff = 1,
+        Member = 2
     }
 }

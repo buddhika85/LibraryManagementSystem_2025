@@ -11,14 +11,21 @@ namespace API.Controllers
     public class AccountController : BaseApiController
     {
         private readonly SignInManager<AppUser> signInManager;
+        private readonly UserManager<AppUser> userManager;
         private readonly IMapper mapper;
 
-        public AccountController(SignInManager<AppUser> signInManager, IMapper mapper)
+        public AccountController(SignInManager<AppUser> signInManager, UserManager<AppUser> userManager, IMapper mapper)
         {
             this.signInManager = signInManager;
+            this.userManager = userManager;
             this.mapper = mapper;
         }
 
+        /// <summary>
+        /// Creates a new user along and assigns the requested role. 
+        /// </summary>
+        /// <param name="registerDto"></param>
+        /// <returns>Returns registration request was successful or not</returns>
         [HttpPost("register")]
         public async Task<ActionResult> Register(RegisterDto registerDto)
         {
@@ -27,10 +34,19 @@ namespace API.Controllers
                 FirstName = registerDto.FirstName,
                 LastName = registerDto.LastName,
                 Email = registerDto.Email,
-                UserName = registerDto.Email
+                UserName = registerDto.Email,
+                Address = mapper.Map<Address>(registerDto.Address)
             };
 
+            // add user along with address
             var result = await signInManager.UserManager.CreateAsync(user, registerDto.Password);
+
+            // add user to Role
+            if (result.Succeeded)
+            {
+                result = await signInManager.UserManager.AddToRoleAsync(user, registerDto.Role.ToString());
+            }
+
             if (!result.Succeeded)
             {
                 // return BadRequest(result.Errors);
@@ -44,6 +60,25 @@ namespace API.Controllers
             return Ok();
         }
 
+        [HttpPost("login")]
+        public async Task<IActionResult> Login(LoginRequest loginRequest)
+        {
+            var user = await userManager.FindByEmailAsync(loginRequest.Email);
+            if (user == null)
+                return Unauthorized("Invalid credentials");
+
+            var result = await signInManager.PasswordSignInAsync(
+                user, loginRequest.Password, loginRequest.RememberMe, lockoutOnFailure: false);
+
+            if (result.Succeeded)
+            {
+                return Ok("Login successful");
+            }
+
+            return Unauthorized("Invalid credentials");
+        }
+
+
         [Authorize]
         [HttpPost("logout")]
         public async Task<ActionResult> Logout()
@@ -52,6 +87,10 @@ namespace API.Controllers
             return NoContent();
         }
 
+        /// <summary>
+        /// Returns logged in users information
+        /// </summary>
+        /// <returns>UserInfoDto containing logged in users information</returns>
         [AllowAnonymous]
         [HttpGet("userinfo")]
         public async Task<ActionResult> GetUserInfo()
@@ -66,6 +105,11 @@ namespace API.Controllers
             return Ok(mapper.Map<UserInfoDto>(user));
         }
 
+
+        /// <summary>
+        /// Are there a user logged in from client (browser) the request came from?
+        /// </summary>
+        /// <returns>Logged in or not</returns>
         [AllowAnonymous]
         [HttpGet]
         public ActionResult GetAuthState()
@@ -74,6 +118,11 @@ namespace API.Controllers
             return Ok(new { IsAuthenticated = User.Identity?.IsAuthenticated ?? false});
         }
 
+        /// <summary>
+        /// Updates or creates an address for the logged in user
+        /// </summary>
+        /// <param name="addressDto">Address information</param>
+        /// <returns>Returns the created address</returns>
         [Authorize]
         [HttpPost("address")]
         public async Task<ActionResult<AddressDto>> CreateOrUpdateAddress(AddressDto addressDto)
