@@ -2,14 +2,13 @@
 
 namespace Core.Interfaces
 {
-    public interface IUnitOfWork
+    public interface IUnitOfWork : IDisposable
     {
-        //IGenericRepository<Author> AuthorRepository { get; }
-
         IBooksRepository BookRepository { get; }       
         IAuthorRepository AuthorRepository { get; }
         IUserRepository UserRepository { get; }
+        IGenericRepository<Address> AddressRepository { get; }
 
-        public Task<bool> SaveAllAsync();
+        Task<bool> SaveAllAsync();
     }
 }

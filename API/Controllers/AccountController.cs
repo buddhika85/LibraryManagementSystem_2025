@@ -83,9 +83,33 @@ namespace API.Controllers
         // TO DO: Admin can edit staff/members
         // TO DO: Staf can edit members
 
-        // TO DO: Admin can delete staff/members
+
+        /// <summary>
+        /// Admin can delete staff/members
+        /// </summary>
+        /// <returns></returns>
+        [Authorize(Roles = "Admin")]
+        [HttpDelete("{username}")]
+        public async Task<IActionResult> DeleteByUsername(string username)
+        {
+            var userToDelete = await userManager.FindByNameAsync(username);
+            if (userToDelete == null)
+            {
+                return BadRequest($"User with such username does not exists : {username}");
+            }
+
+            ResultDto result = await userService.DeleteUserAsync(username);
+            if (result.IsSuccess)
+            {
+                return NoContent();                
+            }
+            else
+            {
+                return StatusCode(500, $"An error occurred while deleting the user with username {username}.");
+            }
+        }
         
-        // TO DO: Staf can delete members
+        // TO DO: Staf can deactivate members
 
         [AllowAnonymous]
         [HttpPost("login")]

@@ -1,4 +1,5 @@
-﻿using Core.Interfaces;
+﻿using Core.Entities;
+using Core.Interfaces;
 
 namespace Infrastructure.Data
 {
@@ -6,16 +7,17 @@ namespace Infrastructure.Data
     {
         private readonly AppDbContext context;
 
-        public UnitOfWork(AppDbContext context,
-                // IGenericRepository<Author> authorRepository,
+        public UnitOfWork(AppDbContext context,                
                 IBooksRepository booksRepository,
                 IAuthorRepository authorRepository,
-                IUserRepository userRepository)
+                IUserRepository userRepository,
+                IGenericRepository<Address> addressRepository)
         {
             this.context = context;
             BookRepository = booksRepository;
             AuthorRepository = authorRepository;
             UserRepository = userRepository;
+            AddressRepository = addressRepository;
         }
 
         public IBooksRepository BookRepository { get; }
@@ -23,14 +25,22 @@ namespace Infrastructure.Data
         public IAuthorRepository AuthorRepository { get; }
         public IUserRepository UserRepository { get; }
 
-        //public IGenericRepository<Author> AuthorRepository { get; }
-
-
+        public IGenericRepository<Address> AddressRepository { get; }
 
         public async Task<bool> SaveAllAsync()
         {
-            var count = await context.SaveChangesAsync();
-            return count > 0;
+            using var transaction = await context.Database.BeginTransactionAsync();
+            try
+            {
+                var count = await context.SaveChangesAsync();
+                await transaction.CommitAsync();
+                return count > 0;
+            }
+            catch
+            {
+                await transaction.RollbackAsync();
+                throw;
+            }
         }
 
         public void Dispose() => context.Dispose();
