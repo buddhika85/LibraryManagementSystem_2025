@@ -32,13 +32,12 @@ namespace API.Controllers
         /// <returns>Returns registration request was successful or not</returns>
         [AllowAnonymous]
         [HttpPost("registerMember")]
-        public async Task<ActionResult> RegisterMember(MemberRegisterDto memberRegisterDto)
+        public async Task<IActionResult> RegisterMember(MemberRegisterDto memberRegisterDto)
         {
             if (memberRegisterDto.Role != UserRoles.Member)
             {
                 return BadRequest("Role must be Member for MemberRegisterDto.");
             }
-
             return await RegisterHelper(memberRegisterDto);
         }        
 
@@ -50,53 +49,14 @@ namespace API.Controllers
         /// <returns>Returns registration request was successful or not</returns>
         [Authorize(Roles = "Admin")]
         [HttpPost("register")]
-        public async Task<ActionResult> Register(RegisterDto registerDto)
+        public async Task<IActionResult> Register(RegisterDto registerDto)
         {
             return await RegisterHelper(registerDto);
         }
+             
+        // TO DO: Get all members
+        // TO DO: Get all staff
 
-        private async Task<ActionResult> RegisterHelper(RegisterDto registerDto)
-        {
-            var user = new AppUser
-            {
-                FirstName = registerDto.FirstName,
-                LastName = registerDto.LastName,
-                Email = registerDto.Email,
-                PhoneNumber = registerDto.PhoneNumber,
-                UserName = registerDto.Email,
-                Address = mapper.Map<Address>(registerDto.Address),
-            };
-
-            // add user along with address
-            var result = await signInManager.UserManager.CreateAsync(user, registerDto.Password);
-
-            // add user to Role
-            if (result.Succeeded)
-            {
-                result = await signInManager.UserManager.AddToRoleAsync(user, registerDto.Role.ToString());
-            }
-            else
-            {
-                AddErrorsToModelState(result);
-                return ValidationProblem();
-            }
-
-            if (!result.Succeeded)
-            {
-                AddErrorsToModelState(result);
-                return ValidationProblem();
-            }
-
-            return Ok();
-        }
-
-        private void AddErrorsToModelState(IdentityResult result)
-        {
-            foreach (var error in result.Errors)
-            {
-                ModelState.AddModelError(error.Code, error.Description);
-            }
-        }
 
         // TO DO: Admin can edit staff/members
         // TO DO: Staf can edit members
@@ -126,7 +86,7 @@ namespace API.Controllers
 
         [Authorize]
         [HttpPost("logout")]
-        public async Task<ActionResult> Logout()
+        public async Task<IActionResult> Logout()
         {
             await signInManager.SignOutAsync();
             return NoContent();
@@ -138,7 +98,7 @@ namespace API.Controllers
         /// <returns>UserInfoDto containing logged in users information</returns>
         [AllowAnonymous]
         [HttpGet("userinfo")]
-        public async Task<ActionResult> GetUserInfo()
+        public async Task<IActionResult> GetUserInfo()
         {
             if (User.Identity?.IsAuthenticated == false)
                 return NoContent();     // anonymous will return NoContent
@@ -188,5 +148,51 @@ namespace API.Controllers
             }
             return Ok(mapper.Map<AddressDto>(user.Address));
         }
+
+
+        #region Helpers
+        private async Task<IActionResult> RegisterHelper(RegisterDto registerDto)
+        {
+            var user = new AppUser
+            {
+                FirstName = registerDto.FirstName,
+                LastName = registerDto.LastName,
+                Email = registerDto.Email,
+                PhoneNumber = registerDto.PhoneNumber,
+                UserName = registerDto.Email,
+                Address = mapper.Map<Address>(registerDto.Address),
+            };
+
+            // add user along with address
+            var result = await signInManager.UserManager.CreateAsync(user, registerDto.Password);
+
+            // add user to Role
+            if (result.Succeeded)
+            {
+                result = await signInManager.UserManager.AddToRoleAsync(user, registerDto.Role.ToString());
+            }
+            else
+            {
+                AddErrorsToModelState(result);
+                return ValidationProblem();
+            }
+
+            if (!result.Succeeded)
+            {
+                AddErrorsToModelState(result);
+                return ValidationProblem();
+            }
+
+            return Ok();
+        }
+
+        private void AddErrorsToModelState(IdentityResult result)
+        {
+            foreach (var error in result.Errors)
+            {
+                ModelState.AddModelError(error.Code, error.Description);
+            }
+        }
+        #endregion 
     }
 }

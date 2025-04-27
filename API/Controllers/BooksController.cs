@@ -53,7 +53,7 @@ namespace API.Controllers
         }
 
         [HttpPut("{id:int}")]
-        public async Task<ActionResult> Update(int id, BookSaveDto item)
+        public async Task<IActionResult> Update(int id, BookSaveDto item)
         {
             if (item.Id != id)
                 return BadRequest("ID in URL does not match ID in body.");
@@ -76,7 +76,7 @@ namespace API.Controllers
         }
 
         [HttpDelete("{id:int}")]
-        public async Task<ActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
             var exists = await bookService.IsExistsAsync(id);
             if (!exists)
