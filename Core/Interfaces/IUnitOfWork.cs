@@ -8,7 +8,7 @@ namespace Core.Interfaces
 
         IBooksRepository BookRepository { get; }       
         IAuthorRepository AuthorRepository { get; }
-
+        IUserRepository UserRepository { get; }
 
         public Task<bool> SaveAllAsync();
     }

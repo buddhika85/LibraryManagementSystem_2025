@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Core.DTOs;
 using Core.Entities;
+using Core.Enums;
 
 namespace Infrastructure.Helpers
 {
@@ -24,6 +25,10 @@ namespace Infrastructure.Helpers
             CreateMap<Book, BookSaveDto>().ForMember(dest => dest.AuthorIds, opt => opt.MapFrom(src => src.Authors.Select(x => x.Id)));
 
             CreateMap<AppUser, UserInfoDto>().ReverseMap();
+            CreateMap<AppUser, MemberUserDisplayDto>()
+                    .ForMember(dest => dest.Role, opt => opt.MapFrom(src => UserRoles.Member));    // always member
+            CreateMap<AppUser, StaffUserDisplayDto>()
+                    .ForMember(dest => dest.Role, opt => opt.MapFrom(src => UserRoles.Staff));     // always staff
             CreateMap<Address, AddressDto>().ReverseMap();
         }
 

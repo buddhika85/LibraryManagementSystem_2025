@@ -20,5 +20,7 @@ namespace Core.DTOs
 
         [Required]
         public string Country { get; set; } = string.Empty;
+
+        public override string ToString() => $"{Line1}, {Line2}, {City}, {State}, {Postcode}, {Country}"; 
     }
 }

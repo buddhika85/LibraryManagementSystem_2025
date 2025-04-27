@@ -3,10 +3,10 @@ using AutoMapper;
 using Core.DTOs;
 using Core.Entities;
 using Core.Enums;
+using Core.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Rewrite;
 
 namespace API.Controllers
 {
@@ -15,12 +15,15 @@ namespace API.Controllers
     {
         private readonly SignInManager<AppUser> signInManager;
         private readonly UserManager<AppUser> userManager;
+        private readonly IUserService userService;
         private readonly IMapper mapper;
 
-        public AccountController(SignInManager<AppUser> signInManager, UserManager<AppUser> userManager, IMapper mapper)
+        public AccountController(SignInManager<AppUser> signInManager, UserManager<AppUser> userManager, 
+            IUserService userService, IMapper mapper)
         {
             this.signInManager = signInManager;
             this.userManager = userManager;
+            this.userService = userService;
             this.mapper = mapper;
         }
 
@@ -53,9 +56,28 @@ namespace API.Controllers
         {
             return await RegisterHelper(registerDto);
         }
-             
-        // TO DO: Get all members
-        // TO DO: Get all staff
+
+        /// <summary>
+        /// Returns all members. Admin and Staff privilaged.
+        /// </summary>
+        /// <returns>Returns all members</returns>
+        [Authorize(Roles = "Admin,Staff")]
+        [HttpGet("allMembers")]
+        public async Task<ActionResult<IReadOnlyList<UsersListDto>>> GetMembersAsync()
+        {           
+            return Ok(await userService.GetMembersAsync());
+        }
+
+        /// <summary>
+        /// Returns all staff. Admin only privilaged.
+        /// </summary>
+        /// <returns>Returns all staff</returns>
+        [Authorize(Roles = "Admin")]
+        [HttpGet("allStaff")]
+        public async Task<ActionResult<IReadOnlyList<UsersListDto>>> GetStaffAsync()
+        {
+            return Ok(await userService.GetStaffAsync());
+        }
 
 
         // TO DO: Admin can edit staff/members

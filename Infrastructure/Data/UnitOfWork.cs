@@ -1,5 +1,4 @@
-﻿using Core.Entities;
-using Core.Interfaces;
+﻿using Core.Interfaces;
 
 namespace Infrastructure.Data
 {
@@ -10,16 +9,19 @@ namespace Infrastructure.Data
         public UnitOfWork(AppDbContext context,
                 // IGenericRepository<Author> authorRepository,
                 IBooksRepository booksRepository,
-                IAuthorRepository authorRepository)
+                IAuthorRepository authorRepository,
+                IUserRepository userRepository)
         {
             this.context = context;
             BookRepository = booksRepository;
             AuthorRepository = authorRepository;
+            UserRepository = userRepository;
         }
 
         public IBooksRepository BookRepository { get; }
 
         public IAuthorRepository AuthorRepository { get; }
+        public IUserRepository UserRepository { get; }
 
         //public IGenericRepository<Author> AuthorRepository { get; }
 
