@@ -78,38 +78,7 @@ namespace API.Controllers
         {
             return Ok(await userService.GetStaffAsync());
         }
-
-
-        // TO DO: Admin can edit staff/members
-        // TO DO: Staf can edit members
-
-
-        /// <summary>
-        /// Admin can delete staff/members
-        /// </summary>
-        /// <returns></returns>
-        [Authorize(Roles = "Admin")]
-        [HttpDelete("{username}")]
-        public async Task<IActionResult> DeleteByUsername(string username)
-        {
-            var userToDelete = await userManager.FindByNameAsync(username);
-            if (userToDelete == null)
-            {
-                return BadRequest($"User with such username does not exists : {username}");
-            }
-
-            ResultDto result = await userService.DeleteUserAsync(username);
-            if (result.IsSuccess)
-            {
-                return NoContent();                
-            }
-            else
-            {
-                return StatusCode(500, $"An error occurred while deleting the user with username {username}.");
-            }
-        }
-        
-        // TO DO: Staf can deactivate members
+               
 
         [AllowAnonymous]
         [HttpPost("login")]
@@ -196,6 +165,65 @@ namespace API.Controllers
             return Ok(mapper.Map<AddressDto>(user.Address));
         }
 
+
+        // TO DO: Admin can edit staff/members
+        // TO DO: Staf can edit members
+
+        // TO DO: Admin and Staff can deactivate members
+        [Authorize(Roles = "Admin,Staff")]
+        [HttpPut("activateDeactivateMembers/{username}")]
+        public async Task<IActionResult> ActivateDeactivateMembers(string username)
+        {
+            var user = await userManager.FindByNameAsync(username);
+            if (user == null)
+            {
+                return BadRequest($"Member with such username does not exists : {username}");
+            }
+
+            var roles = await userManager.GetRolesAsync(user);
+            if (roles == null || !roles.Any() || 
+                roles[0] != UserRoles.Member.ToString())
+            {
+                return BadRequest($"Member with such username does not exists : {username}");
+            }
+            // Toggle IsActive property
+            user.IsActive = !user.IsActive;
+
+            // Save changes to the database using UserManager
+            var result = await userManager.UpdateAsync(user);
+            if (!result.Succeeded)
+            {
+                return BadRequest("Failed to update user status.");
+            }
+            return NoContent();
+        }
+
+        /// <summary>
+        /// Admin can delete staff/member user records
+        /// </summary>
+        /// <returns>Deletion status</returns>
+        [Authorize(Roles = "Admin")]
+        [HttpDelete("{username}")]
+        public async Task<IActionResult> DeleteByUsername(string username)
+        {
+            var userToDelete = await userManager.FindByNameAsync(username);
+            if (userToDelete == null)
+            {
+                return BadRequest($"User with such username does not exists : {username}");
+            }
+
+            ResultDto result = await userService.DeleteUserAsync(username);
+            if (result.IsSuccess)
+            {
+                return NoContent();
+            }
+            else
+            {
+                return StatusCode(500, $"An error occurred while deleting the user with username {username}.");
+            }
+        }
+
+        
 
         #region Helpers
         private async Task<IActionResult> RegisterHelper(RegisterDto registerDto)
