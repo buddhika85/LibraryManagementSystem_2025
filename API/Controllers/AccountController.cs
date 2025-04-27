@@ -176,6 +176,12 @@ namespace API.Controllers
         #region Helpers
         private async Task<IActionResult> RegisterHelper(RegisterDto registerDto)
         {
+            var userExists = await userManager.FindByNameAsync(registerDto.Email) != null;
+            if (userExists)
+            {
+                return BadRequest($"User with same username already exists : {registerDto.Email}");
+            }
+
             var user = new AppUser
             {
                 FirstName = registerDto.FirstName,
