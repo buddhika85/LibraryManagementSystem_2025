@@ -9,5 +9,6 @@ namespace Core.Interfaces
         public Task<IReadOnlyList<AppUser>> GetStaffAsync();
 
         Task<bool> DeleteUserAsync(string username);
+        Task<int> FindAddressIdByUsernameAsync(string username);
     }
 }

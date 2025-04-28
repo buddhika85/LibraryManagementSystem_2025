@@ -62,5 +62,29 @@ namespace Infrastructure.Services
             }
             return new ResultDto { ErrorMessage = $"User with username {username} deletion unsuccessful"};
         }
+
+        public async Task<ResultDto> UpdateAddressOfUser(string username, AddressDto address)
+        {
+            var resultDto = new ResultDto();
+            int addressId = await userRepository.FindAddressIdByUsernameAsync(username);
+            var addressModel = await addressRepository.GetByIdAsync(addressId);
+            if (addressModel == null)
+            {
+                resultDto.ErrorMessage = $"Address does not exisit for username  {username}";
+                return resultDto;
+            }
+
+            mapper.Map(address, addressModel);
+            addressRepository.Update(addressModel);
+
+            var result = await unitOfWork.SaveAllAsync();
+            if (!result)
+            {
+                resultDto.ErrorMessage = $"Updating address for username {username} is unsuccessful";
+                return resultDto;
+            }
+           
+            return resultDto;
+        }
     }
 }

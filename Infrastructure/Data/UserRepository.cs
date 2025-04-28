@@ -53,5 +53,17 @@ namespace Infrastructure.Data
             return await context.SaveChangesAsync() > 0;
         }
 
+        // should be a valid username
+        public async Task<int> FindAddressIdByUsernameAsync(string username)
+        {
+            var user = await context.Users.Include(x => x.Address).SingleAsync(x => x.UserName == username);
+            if (user == null || user.Address == null)
+            {
+                throw new InvalidOperationException($"User with username '{username}' does not exist.");
+            }
+
+            // If Address is null, return null; otherwise, return Address.Id
+            return user.Address.Id;
+        }
     }
 }

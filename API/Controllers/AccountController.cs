@@ -4,6 +4,7 @@ using Core.DTOs;
 using Core.Entities;
 using Core.Enums;
 using Core.Interfaces;
+using Infrastructure.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -166,10 +167,67 @@ namespace API.Controllers
         }
 
 
-        // TO DO: Admin can edit staff/members
-        // TO DO: Staf can edit members
+        /// <summary>
+        /// Admin can edit staff/members
+        /// </summary>
+        /// <param name="username">username / email</param>
+        /// <param name="updateDto">update information</param>
+        /// <returns>returns update status</returns>
+        [Authorize(Roles = "Admin")]
+        [HttpPut("updateUser/{username}")]
+        public async Task<IActionResult> UpdateStaffOrMember(string username, UserUpdateDto updateDto)
+        {
+            var user = await userManager.FindByNameAsync(username);
+            if (user == null)
+            {
+                return BadRequest($"Staff, Member with such username does not exists : {username}");
+            }
 
-        // TO DO: Admin and Staff can deactivate members
+            var roles = await userManager.GetRolesAsync(user);
+            if (roles == null || !roles.Any() ||
+                (roles[0] != UserRoles.Member.ToString() && roles[0] != UserRoles.Staff.ToString()))
+            {
+                return BadRequest($"Staff, Member with such username does not exists : {username}");
+            }
+
+            return await UpdateUserAsync(username, updateDto, user);
+        }
+
+        
+
+        /// <summary>
+        /// Admin, Staff updating member
+        /// </summary>
+        /// <param name="username">username / email</param>
+        /// <param name="updateDto">update information</param>
+        /// <returns>returns update status</returns>
+        [Authorize(Roles = "Admin,Staff")]
+        [HttpPut("updateMember/{username}")]
+        public async Task<IActionResult> UpdateMember(string username, UserUpdateDto updateDto)
+        {
+            var user = await userManager.FindByNameAsync(username);
+            if (user == null)
+            {
+                return BadRequest($"Member with such username does not exists : {username}");
+            }
+
+            var roles = await userManager.GetRolesAsync(user);
+            if (roles == null || !roles.Any() ||
+                roles[0] != UserRoles.Member.ToString())
+            {
+                return BadRequest($"Member with such username does not exists : {username}");
+            }
+
+            return await UpdateUserAsync(username, updateDto, user);
+        }
+
+
+        /// <summary>
+        /// Activate or Deactivate Members
+        /// Admin and Staff can deactivate members
+        /// </summary>
+        /// <param name="username">username of member</param>
+        /// <returns>Sttaus of de/activation</returns>
         [Authorize(Roles = "Admin,Staff")]
         [HttpPut("activateDeactivateMembers/{username}")]
         public async Task<IActionResult> ActivateDeactivateMembers(string username)
@@ -223,9 +281,33 @@ namespace API.Controllers
             }
         }
 
-        
+
 
         #region Helpers
+
+        private async Task<IActionResult> UpdateUserAsync(string username, UserUpdateDto updateDto, AppUser user)
+        {
+            CustomMapper.MapToUserFromUpdateDto(user, updateDto);
+            // Save changes to the database using UserManager
+            var result = await userManager.UpdateAsync(user);
+            if (!result.Succeeded)
+            {
+                return BadRequest("Failed to update user.");
+            }
+            else
+            {
+                if (updateDto.Address != null)
+                {
+                    var resultDto = await userService.UpdateAddressOfUser(username, updateDto.Address);
+                    if (resultDto.IsSuccess)
+                        return NoContent();
+
+                    return StatusCode(500, $"An error occurred while updating the user with username {username} - Address section {updateDto.Address}.");
+                }
+            }
+            return NoContent();
+        }
+
         private async Task<IActionResult> RegisterHelper(RegisterDto registerDto)
         {
             var userExists = await userManager.FindByNameAsync(registerDto.Email) != null;
