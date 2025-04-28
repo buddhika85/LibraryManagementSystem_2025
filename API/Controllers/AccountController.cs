@@ -8,6 +8,7 @@ using Infrastructure.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace API.Controllers
 {
@@ -214,6 +215,29 @@ namespace API.Controllers
             var roles = await userManager.GetRolesAsync(user);
             if (roles == null || !roles.Any() ||
                 roles[0] != UserRoles.Member.ToString())
+            {
+                return BadRequest($"Member with such username does not exists : {username}");
+            }
+
+            return await UpdateUserAsync(username, updateDto, user);
+        }
+
+        /// <summary>
+        /// Authorised users updating their own profiles
+        /// </summary>
+        /// <param name="username">username / email</param>
+        /// <param name="updateDto">update information</param>
+        /// <returns>returns update status</returns>
+        [Authorize]
+        [HttpPut("updateProfile/{username}")]
+        public async Task<IActionResult> Update(string username, UserUpdateDto updateDto)
+        {
+            var loggedInUsername = User.FindFirst(ClaimTypes.Name)?.Value;
+            if (loggedInUsername != username)
+                 return BadRequest($"{username} is not logged in to update profile");
+
+            var user = await userManager.FindByNameAsync(username);
+            if (user == null)
             {
                 return BadRequest($"Member with such username does not exists : {username}");
             }
