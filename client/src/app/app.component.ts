@@ -6,7 +6,7 @@ import { BookListComponent } from "./features/book-list/book-list.component";
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, HeaderComponent, BookListComponent],
+  imports: [RouterOutlet, HeaderComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })

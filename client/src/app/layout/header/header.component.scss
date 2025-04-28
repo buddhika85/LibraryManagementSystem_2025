@@ -46,4 +46,25 @@
   .mobile-nav a {
     @apply block py-1 hover:text-gray-300 cursor-pointer;
   }
+
+
+  .logo {
+    cursor: pointer; // Makes the div act clickable like a link
+    text-decoration: none; // Removes underline
+    color: inherit; // Keeps current text color
+  
+    &:hover {
+      text-decoration: underline; // Simulates an <a> tag hover effect
+      color: rgb(197, 172, 197); // Optionally change color to resemble a link
+    }
+  }
+
+  a 
+  {
+    &.active {
+      color: rgb(197, 172, 197); // Change color when active
+    }
+  }
+  
+  
   

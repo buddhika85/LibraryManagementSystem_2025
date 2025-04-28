@@ -5,7 +5,7 @@ import { ProfileComponent } from './features/profile/profile.component';
 
 export const routes: Routes = [
      
-    { path: '', component: HomeComponent },
+    { path: '', component: HomeComponent},
     { path: 'manageBooks', component: BookListComponent },
     //{ path: 'manageBooks/:id', component:BookDetailComponent },
     { path: 'profile', component: ProfileComponent },
