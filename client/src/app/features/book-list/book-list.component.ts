@@ -12,8 +12,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { MatDialog } from '@angular/material/dialog';
 import { AddEditBookDialogComponent } from './add-edit-book-dialog/add-edit-book-dialog.component';
-import { BookGenre } from '../../shared/models/book-genre';
-import { BookSaveDto } from '../../shared/models/book-save-dto';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-book-list',
@@ -30,7 +29,7 @@ export class BookListComponent implements OnInit {
   pageTitle = 'Books List';
 
   // Mat-table 
-  displayedColumns: string[] = ['bookId', 'bookTitle', 'authorListStr', 'bookGenreStr', 'bookPublishedDateStr', 'edit', 'delete'];
+  displayedColumns: string[] = ['bookId', 'bookPictureUrl', 'bookTitle', 'authorListStr', 'bookGenreStr', 'bookPublishedDateStr', 'edit', 'delete'];
   dataSource!: MatTableDataSource<BookWithAuthorsDto>;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -126,4 +125,10 @@ export class BookListComponent implements OnInit {
       complete: () => {}
     });
   }
+  
+  getImageUrl(imageName: string): string 
+  {
+    return imageName ? `${environment.apiBookImageUrl}${imageName}` : `${environment.apiImagesUrl}no-image-available.jpg`;
+  }
+    
 }
