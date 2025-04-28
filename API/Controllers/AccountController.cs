@@ -230,7 +230,7 @@ namespace API.Controllers
         /// <returns>returns update status</returns>
         [Authorize]
         [HttpPut("updateProfile/{username}")]
-        public async Task<IActionResult> Update(string username, UserUpdateDto updateDto)
+        public async Task<IActionResult> UpdateProfile(string username, UserUpdateDto updateDto)
         {
             var loggedInUsername = User.FindFirst(ClaimTypes.Name)?.Value;
             if (loggedInUsername != username)
