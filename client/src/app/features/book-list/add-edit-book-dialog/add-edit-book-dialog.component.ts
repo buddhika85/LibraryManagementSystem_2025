@@ -17,6 +17,7 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatButtonModule } from '@angular/material/button';
 import { EnumUtils } from '../../../core/utils/enum.utils';
 import { BookService } from '../../../core/services/book.service';
+import { UploadBookImageRequest } from '../../../shared/models/upload-book-image-dto';
 
 
 @Component({
@@ -68,8 +69,31 @@ export class AddEditBookDialogComponent implements OnInit
   onFileSelected(event: Event) {
     const file = (event.target as HTMLInputElement).files?.[0];
     if (file) {
-      // Optional: Handle file upload logic (e.g., send to backend or convert to base64)
-      this.form.patchValue({ pictureUrl: file.name });
+      
+      // upload to server
+      // receive server URL from API response and patch it to the form
+      // optional : with the URL received from API, show the image in the form as a preview
+      const uploadRequest: UploadBookImageRequest = {
+        file: file
+      };
+
+      this.bookService.uploadBookImage(uploadRequest).subscribe({
+        next: (data) => 
+          { 
+            this.form.patchValue({ pictureUrl: data.path });
+
+            // Mark the control as dirty
+            this.form.get('pictureUrl')?.markAsDirty();
+
+            console.log('Image uploaded successfully:', data.path);
+          },
+          error: error => 
+          {         
+            console.error('Error uploading image:', error);
+            
+          },
+          complete: () => { }
+      });
     }
   }
 

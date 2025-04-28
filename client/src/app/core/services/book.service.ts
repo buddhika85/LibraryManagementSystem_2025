@@ -7,6 +7,7 @@ import { environment } from '../../../environments/environment';
 import { BookForEditDto } from '../../shared/models/book-for-edit-dto';
 import { BookSaveDto } from '../../shared/models/book-save-dto';
 import { InsertResultDto, ResultDto } from '../../shared/models/result-dto';
+import { UploadBookImageRequest } from '../../shared/models/upload-book-image-dto';
 
 @Injectable({
   providedIn: 'root'
@@ -39,5 +40,13 @@ export class BookService {
   deleteBook(id: number): Observable<any>
   {
     return this.http.delete<any>(`${this.baseUrl}books/${id}`); 
+  }
+
+  uploadBookImage(uploadRequest: UploadBookImageRequest): Observable<any>
+  {
+    const formData = new FormData();
+    formData.append('file', uploadRequest.file);
+
+    return this.http.post<any>(`${this.baseUrl}books/uploadBookImage`, formData);
   }
 }

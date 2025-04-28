@@ -89,7 +89,34 @@ namespace API.Controllers
             }
             return StatusCode(500, $"An error occurred while deleting the item with Id {id}.");
         }
-    
-        
+
+        /// <summary>
+        /// This will update the received image into - wwwroot/images/booksImgs folder - of the API server
+        /// </summary>
+        /// <param name="file">Image uploaded</param>
+        /// <returns>If successful the image path will be returned</returns>
+        [HttpPost("uploadBookImage")]
+        [Consumes("multipart/form-data")]
+        public async Task<IActionResult> UploadBookImage([FromForm] UploadBookImageRequestDto requestDto)
+        {
+            if (requestDto == null || requestDto.File == null || requestDto.File.Length == 0)
+            {
+                return BadRequest("No file uploaded.");
+            }
+
+            var uploadPath = Path.Combine("wwwroot", "images", "booksImgs");
+            Directory.CreateDirectory(uploadPath);
+
+            var fileName = Guid.NewGuid() + Path.GetExtension(requestDto.File.FileName);
+            var filePath = Path.Combine(uploadPath, fileName);
+
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                await requestDto.File.CopyToAsync(stream);
+            }
+
+            return Ok(new { path = $"{fileName}" });
+        }
+
     }
 }

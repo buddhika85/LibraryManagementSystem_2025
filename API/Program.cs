@@ -6,6 +6,7 @@ using Infrastructure.Helpers;
 using Infrastructure.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -57,7 +58,17 @@ builder.Services.AddCors();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.SwaggerDoc("v1", new OpenApiInfo { Title = "LMS API", Version = "v1" });
+
+    // File upload support
+    options.MapType<IFormFile>(() => new OpenApiSchema
+    {
+        Type = "string",
+        Format = "binary"
+    });
+});
 
 var app = builder.Build();
 
@@ -89,7 +100,6 @@ app.UseCors(x =>
      .AllowCredentials()                                // accepting identity cookie from these clients
      .WithOrigins(allowedOrigins));
 
-
 app.MapControllers();
 
 // seeding
@@ -112,6 +122,6 @@ catch (Exception ex)
     throw;
 }
 
-
+app.UseStaticFiles();     // expose wwwroot content - https://localhost:5001/images/booksImgs/7154e61d-19af-49ee-afc8-1b2c8df19bd4.png
 
 app.Run();
