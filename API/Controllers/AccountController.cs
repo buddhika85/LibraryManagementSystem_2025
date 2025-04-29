@@ -84,7 +84,7 @@ namespace API.Controllers
 
         [AllowAnonymous]
         [HttpPost("login")]
-        public async Task<IActionResult> Login(LoginRequest loginRequest)
+        public async Task<IActionResult> Login(LoginRequestDto loginRequest)
         {
             var user = await userManager.FindByEmailAsync(loginRequest.Email);
             if (user == null)

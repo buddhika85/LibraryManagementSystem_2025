@@ -11,22 +11,29 @@
     <div class="nav-wrapper">
       <!-- Centered links -->
       <nav class="main-nav">
+
         <a routerLink="/" 
           routerLinkActive="active"  
           [routerLinkActiveOptions]="{exact: true}">Home</a>
+
         <a routerLink="/manageBooks" 
           routerLinkActive="active">Manage Books</a>
+
         <a routerLinkActive="active">Manage Staff</a>
+
         <a routerLinkActive="active">Manage Members</a>
+
         <a routerLinkActive="active">Manage Borrowals</a>
-        <a routerLink="/profile" 
+
+        <a routerLink="account/profile" 
           routerLinkActive="active">Profile</a>
+        
       </nav>
 
       <!-- Right-aligned Auth buttons -->
       <div class="auth-links">
-        <a routerLink="/login" class="login-btn">Login</a>
-        <a routerLink="/register" class="register-btn">Register</a>
+        <a routerLink="account/login" class="login-btn">Login</a>
+        <a routerLink="account/register" class="register-btn">Register</a>
       </div>
     </div>
 
