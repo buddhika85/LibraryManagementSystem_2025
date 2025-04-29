@@ -12,7 +12,7 @@ export class AccountService
 {
 
   private http = inject(HttpClient);
-  baseUrl = environment.apiBaseUrl + '/account';
+  baseUrl = environment.apiBaseUrl + 'account';
   
   currentUser = signal<UserInfoDto | null>(null);
 
@@ -20,12 +20,12 @@ export class AccountService
   {
     let params = new HttpParams();
     params = params.append('useCookies', true);
-    return this.http.post<LoginResponseDto>(this.baseUrl + '/login', loginRequest, { params });
+    return this.http.post<any>(this.baseUrl + '/login', loginRequest, { params, withCredentials: true });
   }
 
   logout()
   {
-    return this.http.post(this.baseUrl + '/logout', {});
+    return this.http.post(this.baseUrl + '/logout', {}, { withCredentials: true });
   }
 
   // guest and any role can execute below method
@@ -43,9 +43,12 @@ export class AccountService
 
   getUserInfo() 
   {
-    return this.http.get<UserInfoDto>(this.baseUrl + '/userinfo').subscribe(
+    return this.http.get<UserInfoDto>(this.baseUrl + '/userinfo', { withCredentials: true }).subscribe(
       {
-        next: user => this.currentUser.set(user),
+        next: user => {
+          this.currentUser.set(user);
+          console.log('User info fetched successfully:', user);
+        },
         error: error => {
           this.currentUser.set(null);
           console.error('UNAUTHOIRSIED - Error fetching user info:', error);

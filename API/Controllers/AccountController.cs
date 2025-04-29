@@ -95,7 +95,7 @@ namespace API.Controllers
 
             if (result.Succeeded)
             {
-                return Ok("Login successful");
+                return Ok(new { message = "Login successful" });
             }
 
             return Unauthorized("Invalid credentials");
