@@ -19,6 +19,13 @@
             <input matInput formControlName="password" type="password" placeholder="password" required>
         </mat-form-field>
 
+         <!-- Error message -->
+        <div class="error-div-dialog">
+            <span *ngIf="errorMessage" class="error-span-dialog">
+            {{ errorMessage }}
+            </span>
+        </div>
+
         <button mat-flat-button color="primary" type="submit" class="w-full py-2" [disabled]="loginForm.invalid">Sign In</button>
     </form>
 

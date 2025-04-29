@@ -1,5 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { Form, FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButton } from '@angular/material/button';
 import { MatCard } from '@angular/material/card';
 import { MatFormField, MatInput, MatLabel } from '@angular/material/input';
@@ -10,6 +11,7 @@ import { Router } from '@angular/router';
   selector: 'app-login',
   standalone: true,
   imports: [
+    CommonModule,
     ReactiveFormsModule,
     MatCard,
     MatButton,
@@ -39,8 +41,8 @@ export class LoginComponent implements OnInit {
   createForm() {
     this.loginForm = this.formBuilder.group(
       {
-        email: [''],
-        password: ['']
+        email: ['', Validators.required],
+        password: ['', Validators.required]
       }
     );
   }
@@ -60,7 +62,7 @@ export class LoginComponent implements OnInit {
         error: (error) => 
         {
           console.error('Login failed', error);
-          this.errorMessage = 'Invalid email or password.';
+          this.errorMessage = 'Login failed - Invalid email or password.';
         }
       });
     } 
