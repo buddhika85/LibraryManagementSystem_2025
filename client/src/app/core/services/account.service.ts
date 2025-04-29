@@ -4,6 +4,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { LoginResponseDto, UserInfoDto } from '../../shared/models/user-info-dto';
 import { LoginRequestDto } from '../../shared/models/login-request-dto';
 import { MemberRegisterDto, RegisterDto } from '../../shared/models/register-dto';
+import { map } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -43,18 +44,9 @@ export class AccountService
 
   getUserInfo() 
   {
-    return this.http.get<UserInfoDto>(this.baseUrl + '/userinfo', { withCredentials: true }).subscribe(
-      {
-        next: user => {
-          this.currentUser.set(user);
-          console.log('User info fetched successfully:', user);
-        },
-        error: error => {
-          this.currentUser.set(null);
-          console.error('UNAUTHOIRSIED - Error fetching user info:', error);
-        }, 
-        complete: () => {}
-      }
-    );
+    return this.http.get<UserInfoDto>(this.baseUrl + '/userinfo', { withCredentials: true }).pipe(map(user => {
+      this.currentUser.set(user);
+      return user;
+    }));
   }
 }

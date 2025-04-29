@@ -30,11 +30,20 @@
         
       </nav>
 
-      <!-- Right-aligned Auth buttons -->
-      <div class="auth-links">
-        <a routerLink="account/login" class="login-btn">Login</a>
-        <a routerLink="account/register" class="register-btn">Register</a>
-      </div>
+      @if(accountService.currentUser())
+      {
+        <div class="auth-links">
+          <a (click)="logout()" class="login-btn">Logout</a>
+        </div>
+      }
+      @else
+      {
+          <!-- Right-aligned Auth buttons -->
+          <div class="auth-links">
+            <a routerLink="account/login" class="login-btn">Login</a>
+            <a routerLink="account/register" class="register-btn">Register</a>
+          </div>
+      }
     </div>
 
     <!-- Mobile toggle -->
