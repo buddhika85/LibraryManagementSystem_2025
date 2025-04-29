@@ -21,12 +21,12 @@ export class AccountService
   {
     let params = new HttpParams();
     params = params.append('useCookies', true);
-    return this.http.post<any>(this.baseUrl + '/login', loginRequest, { params, withCredentials: true });
+    return this.http.post<any>(this.baseUrl + '/login', loginRequest, { params });
   }
 
   logout()
   {
-    return this.http.post(this.baseUrl + '/logout', {}, { withCredentials: true });
+    return this.http.post(this.baseUrl + '/logout', {});
   }
 
   // guest and any role can execute below method
@@ -44,7 +44,7 @@ export class AccountService
 
   getUserInfo() 
   {
-    return this.http.get<UserInfoDto>(this.baseUrl + '/userinfo', { withCredentials: true }).pipe(map(user => {
+    return this.http.get<UserInfoDto>(this.baseUrl + '/userinfo').pipe(map(user => {
       this.currentUser.set(user);
       return user;
     }));
