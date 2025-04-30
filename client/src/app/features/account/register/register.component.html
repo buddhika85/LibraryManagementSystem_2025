@@ -1,4 +1,5 @@
 <div class="container">
+
     <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="max-w-4xl mx-auto p-8">
   
       <div class="text-center mb-6">
@@ -67,16 +68,28 @@
         </mat-form-field>
       </div>
   
-      <!-- Error Message -->
-      <div class="error-div-dialog mb-4">
-        <span *ngIf="errorMessage" class="error-span-dialog">
-          {{ errorMessage }}
-        </span>
-      </div>
+      @if (validationErrors)
+      {
+        <!-- Error Message -->
+        <div class="error-div-dialog mb-4">
+
+          <span *ngIf="errorMessage" class="error-span-dialog">
+            {{ errorMessage }}
+
+            <ul class="list-disc px-3">
+              @for (error of validationErrors; track $index) 
+              {
+                <li>{{error}}</li>
+              }
+            </ul>
+          </span>
+          
+        </div>
+      }
   
       <!-- Submit Button -->
       <div class="flex justify-end">
-        <button mat-flat-button class="py-2 px-6 mr-1 clear-btn" [disabled]="registerForm.dirty">
+        <button mat-flat-button class="py-2 px-6 mr-1 clear-btn" (click)="clearForm()">
             Clear
         </button>
         <button mat-flat-button color="primary" type="submit" class="py-2 px-6" [disabled]="registerForm.invalid">

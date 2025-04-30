@@ -11,6 +11,7 @@ import { first } from 'rxjs';
 import { UserRoles } from '../../../shared/models/user-roles-enum';
 import { MemberRegisterDto } from '../../../shared/models/register-dto';
 import { AddressDto } from '../../../shared/models/address-dto';
+import { SnackBarService } from '../../../core/services/snack-bar.service';
 
 @Component({
   selector: 'app-register',
@@ -35,6 +36,9 @@ export class RegisterComponent implements OnInit {
   private accountService = inject(AccountService);
   private router = inject(Router);
 
+  private snackBarService = inject(SnackBarService);
+  validationErrors?: string[];
+
   registerForm!: FormGroup;
   
   ngOnInit(): void {
@@ -54,6 +58,12 @@ export class RegisterComponent implements OnInit {
     });
   }
 
+  clearForm(): void {
+    this.registerForm.reset();
+    this.errorMessage = '';
+    this.validationErrors = undefined;
+  }
+
   onSubmit(): void {
 
     if (this.registerForm.valid) {
@@ -63,11 +73,12 @@ export class RegisterComponent implements OnInit {
       this.accountService.registerMember(registerData).subscribe({
         next: (data) => {
           //console.log(data.message);
-          this.router.navigate(['/account/login']);
+          this.snackBarService.success("Registration successful! Please log in.");
+          this.router.navigateByUrl('/account/login');
         },
-        error: (error) => {
+        error: (errors) => {
           this.errorMessage = 'Registration error:';
-          console.error('Registration error:', error);
+          this.validationErrors = errors;
         }
       });
     } 
