@@ -1,6 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButton } from '@angular/material/button';
 //import { MatCard } from '@angular/material/card';
 import { MatFormField, MatLabel } from '@angular/material/form-field';
@@ -43,16 +43,16 @@ export class RegisterComponent implements OnInit {
   
   ngOnInit(): void {
     this.registerForm = this.formBuilder.group({  
-      firstName: ['Jack'],
-      lastName: ['Gill'],
-      email: ['j@g.c'],
-      phoneNumber: ['123456789'],
-      password: ['test'],
-      line1: ['123'],
-      line2: ['Test St'],
-      city: ['Hills'],
-      state: ['State'],
-      postcode: ['2134'],
+      firstName: ['Jack', Validators.required],
+      lastName: ['Gill', Validators.required],
+      email: ['j@g.c', [Validators.required, Validators.email]],
+      phoneNumber: ['123456789', Validators.required],
+      password: ['test', Validators.required],
+      line1: ['123', Validators.required],
+      line2: ['Test St', Validators.required],
+      city: ['Hills', Validators.required],
+      state: ['State', Validators.required],
+      postcode: ['2134', Validators.required],
       country: ['Australia'],
       role: [UserRoles.member]
     });
@@ -73,10 +73,12 @@ export class RegisterComponent implements OnInit {
       this.accountService.registerMember(registerData).subscribe({
         next: (data) => {
           //console.log(data.message);
+          debugger
           this.snackBarService.success("Registration successful! Please log in.");
           this.router.navigateByUrl('/account/login');
         },
         error: (errors) => {
+          debugger
           this.errorMessage = 'Registration error:';
           this.validationErrors = errors;
         }
