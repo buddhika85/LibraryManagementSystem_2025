@@ -12,6 +12,6 @@ export type RegisterDto = {
   };
   
 // Using Omit<>: MemberRegisterDto inherits from RegisterDto but overrides role to always be 'Member'
-export type MemberRegisterDto = Omit<RegisterDto, 'role'> & {
-    role: 'Member';
-};
+export interface MemberRegisterDto extends RegisterDto {
+    role: UserRoles.member; // Override the role to always be 'Member'
+}

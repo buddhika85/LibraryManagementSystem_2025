@@ -36,10 +36,10 @@ export class AccountService
   }
 
   // admin only can execute below method
-  registerAdmin(registerDto : RegisterDto)
-  {
-    return this.http.post(this.baseUrl + '/register', registerDto);
-  }
+  // registerAdmin(registerDto : RegisterDto)
+  // {
+  //   return this.http.post(this.baseUrl + '/register', registerDto);
+  // }
 
 
   getUserInfo() 

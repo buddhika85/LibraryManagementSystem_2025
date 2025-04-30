@@ -11,6 +11,7 @@ import { provideNativeDateAdapter } from '@angular/material/core';
 import { InitService } from './core/services/init.service';
 import { lastValueFrom } from 'rxjs';
 import { authInterceptor } from './core/interceptors/auth.interceptor';
+import { errorInterceptor } from './core/interceptors/error.interceptor';
 
 function initializeApp(initService : InitService)
 {
@@ -25,6 +26,7 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes), 
     provideAnimationsAsync(),
     provideHttpClient(withInterceptors([
+      errorInterceptor,
       authInterceptor]
     )),
     {
