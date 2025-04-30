@@ -3,6 +3,9 @@ import { Component, inject } from '@angular/core';
 import { MatIcon } from '@angular/material/icon';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { AccountService } from '../../core/services/account.service';
+import { BusyService } from '../../core/services/busy.service';
+
+import { MatProgressBar } from '@angular/material/progress-bar';
 
 @Component({
   selector: 'app-header',
@@ -11,7 +14,7 @@ import { AccountService } from '../../core/services/account.service';
     MatIcon, CommonModule, 
     RouterLink,
     RouterLinkActive,
-    
+    MatProgressBar
   ],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss'
@@ -22,6 +25,8 @@ export class HeaderComponent {
   accountService = inject(AccountService);
   private router = inject(Router);
 
+  busyService = inject(BusyService);
+
   toggleMenu() {
     this.menuOpen = !this.menuOpen;
   }
@@ -31,7 +36,7 @@ export class HeaderComponent {
       next: () => 
       {
         this.accountService.currentUser.set(null); // Clear user data after logout
-        this.router.navigate(['/login']);        
+        this.router.navigateByUrl('/account/login');     
       },
       error: (err) => {
         console.error('Logout failed', err);

@@ -14,6 +14,7 @@ import { TestErrorService } from '../../core/services/test-error.service';
 export class TestErrorComponent 
 {
   errorService = inject(TestErrorService);
+  validationErrors?: string[];
   
   get404Error() { 
     this.errorService.getNotFound().subscribe({
@@ -46,7 +47,10 @@ export class TestErrorComponent
   getValidationError() { 
     this.errorService.getValidationError().subscribe({
       next: (response) => console.log(response),
-      error: (error) => console.log(error)
+      error: (error) => 
+      {
+        this.validationErrors = error;
+      }
     });
   }
   

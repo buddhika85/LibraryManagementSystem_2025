@@ -7,13 +7,13 @@
       <input type="hidden" formControlName="id" />
       
       <!-- Title -->
-      <mat-form-field appearance="fill">
+      <mat-form-field appearance="outline">
         <mat-label>Title</mat-label>
         <input matInput formControlName="title" required />
       </mat-form-field>
 
       <!-- Genre -->
-      <mat-form-field appearance="fill">
+      <mat-form-field appearance="outline">
         <mat-label>Genre</mat-label>        
         <mat-select formControlName="genre" required>
           <mat-option *ngFor="let genre of genres" [value]="genre.value">
@@ -23,7 +23,7 @@
       </mat-form-field>
 
       <!-- Authors -->
-      <mat-form-field appearance="fill">
+      <mat-form-field appearance="outline">
         <mat-label>Authors</mat-label>
         <mat-select formControlName="authorIds" multiple required>
           <mat-option *ngFor="let author of authors" [value]="author.id">
@@ -33,7 +33,7 @@
       </mat-form-field>
 
       <!-- Published Date -->
-      <mat-form-field appearance="fill">
+      <mat-form-field appearance="outline">
         <mat-label>Published Date</mat-label>
         <input matInput [matDatepicker]="picker" formControlName="publishedDate" required />
         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>

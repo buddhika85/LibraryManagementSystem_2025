@@ -14,12 +14,7 @@
 
         <a routerLink="/" 
           routerLinkActive="active"  
-          [routerLinkActiveOptions]="{exact: true}">Home</a>
-
-          <a routerLink="/test-error" 
-          routerLinkActive="active"  
-          [routerLinkActiveOptions]="{exact: true}">Error Test</a>
-
+          [routerLinkActiveOptions]="{exact: true}">Home</a>       
 
         <a routerLink="/manageBooks" 
           routerLinkActive="active">Manage Books</a>
@@ -33,6 +28,10 @@
         <a routerLink="account/profile" 
           routerLinkActive="active">Profile</a>
         
+          <a routerLink="/test-error" 
+          routerLinkActive="active"  
+          [routerLinkActiveOptions]="{exact: true}">Error Test</a>
+
       </nav>
 
       @if(accountService.currentUser())
@@ -58,6 +57,10 @@
       </button>
     </div>
   </div>
+
+  @if (busyService.loading) {
+    <mat-progress-bar mode="indeterminate" class="fixed top-1 z-50"></mat-progress-bar>
+  }
 
   <!-- Mobile Nav Menu -->
   <div *ngIf="menuOpen" class="mobile-nav">

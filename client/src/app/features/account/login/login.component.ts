@@ -57,7 +57,7 @@ export class LoginComponent implements OnInit {
         {
           console.log(data.message);
           this .accountService.getUserInfo().subscribe();     // Fetch user info after login     
-          this.router.navigate(['/home']);
+          this.router.navigateByUrl('');
         },
         error: (error) => 
         {
