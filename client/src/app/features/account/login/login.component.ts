@@ -5,7 +5,7 @@ import { MatButton } from '@angular/material/button';
 import { MatCard } from '@angular/material/card';
 import { MatFormField, MatInput, MatLabel } from '@angular/material/input';
 import { AccountService } from '../../../core/services/account.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -26,11 +26,20 @@ export class LoginComponent implements OnInit {
   private formBuilder = inject(FormBuilder);
   private accountService = inject(AccountService);
   private router = inject(Router);
+  private activatedRoute = inject(ActivatedRoute); 
+  returnUrl = 'home';
+
 
   loginForm!: FormGroup;
   errorMessage: string = '';
 
-  constructor() {
+  constructor() 
+  {
+    const url = this.activatedRoute.snapshot.queryParams['returnUrl'];
+    if (url) 
+    {
+      this.returnUrl = url;
+    }
   }
 
   ngOnInit(): void {
@@ -41,7 +50,7 @@ export class LoginComponent implements OnInit {
   createForm() {
     this.loginForm = this.formBuilder.group(
       {
-        email: ['', Validators.required],
+        email: ['', [Validators.required, Validators.email]],
         password: ['', Validators.required]
       }
     );
@@ -57,7 +66,7 @@ export class LoginComponent implements OnInit {
         {
           console.log(data.message);
           this .accountService.getUserInfo().subscribe();     // Fetch user info after login     
-          this.router.navigateByUrl('');
+          this.router.navigateByUrl(this.returnUrl);
         },
         error: (error) => 
         {
