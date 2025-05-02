@@ -18,7 +18,7 @@ namespace API.Controllers
     [Authorize]
     public class AccountController : UserController
     {
-        private protected AccountController(SignInManager<AppUser> signInManager, 
+        public AccountController(SignInManager<AppUser> signInManager, 
             UserManager<AppUser> userManager, IUserService userService, IMapper mapper) : base(signInManager, userManager, userService, mapper)
         {
         }
