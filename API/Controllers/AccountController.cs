@@ -251,8 +251,30 @@ namespace API.Controllers
 
             return await UpdateUserAsync(username, updateDto, user);           
         }
+                
+        [Authorize]
+        [HttpPost("changePassword")]
+        public async Task<IActionResult> ChangePassword(ChangePasswordDto dto)
+        {
+            var loggedInUsername = User.FindFirst(ClaimTypes.Name)?.Value;
+            if (loggedInUsername != dto.Username)
+                return BadRequest($"{dto.Username} is not logged in to update profile");
 
-        // !string.IsNullOrWhiteSpace(updateDto.Password) && updateDto.Password != "*********"
+            var user = await userManager.FindByNameAsync(dto.Username);
+            if (user == null)
+            {
+                return BadRequest($"Member with such username does not exists : {dto.Username}");
+            }
+
+            var result = await userManager.ChangePhoneNumberAsync(user, dto.OldPassword, dto.NewPassword);
+
+            if (result.Succeeded)
+                return NoContent();
+
+            AddErrorsToModelState(result);
+            return ValidationProblem();
+        }
+
 
         /// <summary>
         /// Activate or Deactivate Members
