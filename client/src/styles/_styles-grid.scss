@@ -19,6 +19,10 @@
 
 .table-wrapper {
     @apply mt-1 rounded-lg shadow-md overflow-x-auto bg-white;
+
+    mat-table {
+      @apply bg-white; // set overall background
+    }
   
     table {
       @apply w-full;
@@ -52,4 +56,3 @@
       @apply text-center text-gray-500 py-4;
     }
   }
-  

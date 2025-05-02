@@ -10,6 +10,16 @@
   @apply mx-auto max-w-screen-2xl;
 }
 
+@layer components {
+  .page-header {
+    @apply text-center mb-6;
+
+    h1 {
+      @apply text-3xl font-bold text-indigo-700;
+    }
+  }
+}
+
 .text-primary {
   color: darkblue;
 }
