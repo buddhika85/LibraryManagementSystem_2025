@@ -9,6 +9,7 @@ import { ServerErrorComponent } from './shared/components/server-error/server-er
 import { NotFoundComponent } from './shared/components/not-found/not-found.component';
 import { authGuard } from './core/guards/auth.guard';
 import { LandingComponent } from './features/landing/landing.component';
+import { ChangePasswordComponent } from './features/account/change-password/change-password.component';
 
 
 export const routes: Routes = [
@@ -25,6 +26,7 @@ export const routes: Routes = [
     { path: 'account/login', component: LoginComponent },
     { path: 'account/register', component: RegisterComponent},
     { path: 'account/profile', component: ProfileComponent },
+    { path: 'account/change-password', component: ChangePasswordComponent},
   
     { path: 'manageBooks', component: BookListComponent, canActivate: [authGuard]  },
    

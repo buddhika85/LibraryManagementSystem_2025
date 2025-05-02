@@ -74,8 +74,7 @@ export class RegisterComponent implements OnInit {
 
       this.accountService.registerMember(registerData).subscribe({
         next: (data) => {
-          //console.log(data.message);
-          debugger
+          
           this.snackBarService.success("Registration successful! Please log in.");
           this.router.navigateByUrl('/account/login');
         },

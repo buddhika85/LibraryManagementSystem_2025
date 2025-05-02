@@ -7,6 +7,7 @@ import { MemberRegisterDto, RegisterDto } from '../../shared/models/register-dto
 import { map, Observable } from 'rxjs';
 import { UserRoles } from '../../shared/models/user-roles-enum';
 import { UserUpdateDto } from '../../shared/models/user-update-dto';
+import { ChangePasswordDto } from '../../shared/models/change-password-dto';
 
 @Injectable({
   providedIn: 'root'
@@ -83,5 +84,10 @@ export class AccountService
   updateProfile(dto: UserUpdateDto)
   {
     return this.http.put(this.baseUrl + `/updateProfile/${dto.email}`, dto);
+  }
+
+  changePassword(dto: ChangePasswordDto) 
+  {
+    return this.http.post(this.baseUrl + `/changePassword`, dto);
   }
 }

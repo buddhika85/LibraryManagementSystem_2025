@@ -266,7 +266,7 @@ namespace API.Controllers
                 return BadRequest($"Member with such username does not exists : {dto.Username}");
             }
 
-            var result = await userManager.ChangePhoneNumberAsync(user, dto.OldPassword, dto.NewPassword);
+            var result = await userManager.ChangePasswordAsync(user, dto.OldPassword, dto.NewPassword);
 
             if (result.Succeeded)
                 return NoContent();

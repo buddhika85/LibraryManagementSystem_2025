@@ -7,7 +7,7 @@ import { MatInput } from '@angular/material/input';
 import { AccountService } from '../../../core/services/account.service';
 import { Router } from '@angular/router';
 import { UserRoles } from '../../../shared/models/user-roles-enum';
-import { MemberRegisterDto } from '../../../shared/models/register-dto';
+
 import { AddressDto } from '../../../shared/models/address-dto';
 import { SnackBarService } from '../../../core/services/snack-bar.service';
 import { UserInfoDto } from '../../../shared/models/user-info-dto';
