@@ -6,6 +6,7 @@ import { LoginRequestDto } from '../../shared/models/login-request-dto';
 import { MemberRegisterDto, RegisterDto } from '../../shared/models/register-dto';
 import { map, Observable } from 'rxjs';
 import { UserRoles } from '../../shared/models/user-roles-enum';
+import { UserUpdateDto } from '../../shared/models/user-update-dto';
 
 @Injectable({
   providedIn: 'root'
@@ -77,5 +78,10 @@ export class AccountService
   getAuthState() : Observable<{ isAuthenticated: boolean }> 
   {
     return this.http.get<{isAuthenticated: boolean}>(this.baseUrl + '/auth-status');
+  }
+
+  updateProfile(dto: UserUpdateDto)
+  {
+    return this.http.put(this.baseUrl + `/updateProfile/${dto.email}`, dto);
   }
 }

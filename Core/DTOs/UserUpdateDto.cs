@@ -11,7 +11,7 @@ namespace Core.DTOs
         public string LastName { get; set; } = string.Empty;
    
         [Required]
-        public string PhoneNumber { get; set; } = string.Empty;     
+        public string PhoneNumber { get; set; } = string.Empty;
 
         [Required]
         public AddressDto? Address { get; set; }

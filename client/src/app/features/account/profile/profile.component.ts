@@ -11,6 +11,7 @@ import { MemberRegisterDto } from '../../../shared/models/register-dto';
 import { AddressDto } from '../../../shared/models/address-dto';
 import { SnackBarService } from '../../../core/services/snack-bar.service';
 import { UserInfoDto } from '../../../shared/models/user-info-dto';
+import { UserUpdateDto } from '../../../shared/models/user-update-dto';
 
 @Component({
   selector: 'app-profile',
@@ -66,7 +67,7 @@ export class ProfileComponent implements OnInit  {
   }
 
   clearForm(): void {
-    this.profileForm.reset();
+    this.createForm();
     this.errorMessage = '';
     this.validationErrors = undefined;
   }
@@ -75,18 +76,17 @@ export class ProfileComponent implements OnInit  {
 
     if (this.profileForm.valid) {
 
-      const registerData: MemberRegisterDto = this.getMemberRegisterDto(this.profileForm);
+      const updateData: UserUpdateDto = this.getUpdateProfileDto(this.profileForm);
 
-      this.accountService.registerMember(registerData).subscribe({
+      this.accountService.updateProfile(updateData).subscribe({
         next: (data) => {
-          //console.log(data.message);
-          debugger
-          this.snackBarService.success("Registration successful! Please log in.");
-          this.router.navigateByUrl('/account/login');
+          
+          this.snackBarService.success("Profile details updated successfully");
+          //this.router.navigateByUrl('/account/login');
         },
         error: (errors) => {
           debugger
-          this.errorMessage = 'Registration error:';
+          this.errorMessage = 'Update error:';
           this.validationErrors = errors;
         }
       });
@@ -97,7 +97,7 @@ export class ProfileComponent implements OnInit  {
     }
   }
 
-  getMemberRegisterDto(profileForm: FormGroup): MemberRegisterDto 
+  getUpdateProfileDto(profileForm: FormGroup): UserUpdateDto 
   {
     const addressVals: AddressDto = { 
       line1: this.profileForm.get('line1')?.value, 
@@ -107,15 +107,13 @@ export class ProfileComponent implements OnInit  {
       postcode: this.profileForm.get('postcode')?.value, 
       country: this.profileForm.get('country')?.value 
     };
-    const registerData: MemberRegisterDto = { 
+    const updateDto: UserUpdateDto = { 
       firstName: this.profileForm.get('firstName')?.value, 
       lastName: this.profileForm.get('lastName')?.value,
       email: this.profileForm.get('email')?.value,
-      phoneNumber: this.profileForm.get('phoneNumber')?.value, 
-      password: this.profileForm.get('password')?.value,
-      address: addressVals, 
-      role: UserRoles.member 
+      phoneNumber: this.profileForm.get('phoneNumber')?.value,       
+      address: addressVals
     };
-    return registerData;
+    return updateDto;
   }
 }

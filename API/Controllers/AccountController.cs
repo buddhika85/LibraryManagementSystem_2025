@@ -249,9 +249,10 @@ namespace API.Controllers
                 return BadRequest($"Member with such username does not exists : {username}");
             }
 
-            return await UpdateUserAsync(username, updateDto, user);
+            return await UpdateUserAsync(username, updateDto, user);           
         }
 
+        // !string.IsNullOrWhiteSpace(updateDto.Password) && updateDto.Password != "*********"
 
         /// <summary>
         /// Activate or Deactivate Members
@@ -323,7 +324,8 @@ namespace API.Controllers
             var result = await userManager.UpdateAsync(user);
             if (!result.Succeeded)
             {
-                return BadRequest("Failed to update user.");
+                AddErrorsToModelState(result);
+                return ValidationProblem();
             }
             else
             {
