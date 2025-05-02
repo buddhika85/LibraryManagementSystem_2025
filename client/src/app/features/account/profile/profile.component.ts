@@ -10,6 +10,7 @@ import { UserRoles } from '../../../shared/models/user-roles-enum';
 import { MemberRegisterDto } from '../../../shared/models/register-dto';
 import { AddressDto } from '../../../shared/models/address-dto';
 import { SnackBarService } from '../../../core/services/snack-bar.service';
+import { UserInfoDto } from '../../../shared/models/user-info-dto';
 
 @Component({
   selector: 'app-profile',
@@ -29,6 +30,7 @@ export class ProfileComponent implements OnInit  {
 
     errorMessage: string = '';
   
+    private unchangedPassword: string = '*********';
     private formBuilder = inject(FormBuilder);
     private accountService = inject(AccountService);
     private router = inject(Router);
@@ -37,26 +39,28 @@ export class ProfileComponent implements OnInit  {
     validationErrors?: string[];
   
     profileForm!: FormGroup;
+    profileUser!: UserInfoDto | null;
 
     
   ngOnInit(): void {
+    this.profileUser = this.accountService.currentUser();
     this.createForm();
   }
 
   private createForm(): void 
   {
     this.profileForm = this.formBuilder.group({  
-      firstName: ['Jack', Validators.required],
-      lastName: ['Gill', Validators.required],
-      email: ['j@g.c', [Validators.required, Validators.email]],
-      phoneNumber: ['123456789', Validators.required],
-      password: ['test', Validators.required],
-      line1: ['123', Validators.required],
-      line2: ['Test St', Validators.required],
-      city: ['Hills', Validators.required],
-      state: ['State', Validators.required],
-      postcode: ['2134', Validators.required],
-      country: ['Australia'],
+      firstName: [this.profileUser?.firstName, Validators.required],
+      lastName: [this.profileUser?.lastName, Validators.required],
+      email: [this.profileUser?.email, [Validators.required, Validators.email]],
+      phoneNumber: [this.profileUser?.phoneNumber, Validators.required],
+      password: [this.unchangedPassword, Validators.required],
+      line1: [this.profileUser?.address.line1, Validators.required],
+      line2: [this.profileUser?.address.line2, Validators.required],
+      city: [this.profileUser?.address.city, Validators.required],
+      state: [this.profileUser?.address.state, Validators.required],
+      postcode: [this.profileUser?.address.postcode, Validators.required],
+      country: [this.profileUser?.address.country, Validators.required],
       role: [UserRoles.member]
     });
   }

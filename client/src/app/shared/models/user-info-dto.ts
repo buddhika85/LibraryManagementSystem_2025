@@ -6,6 +6,7 @@ export type UserInfoDto =
     firstName: string;
     lastName: string;   
     email: string;
+    phoneNumber: string;
     address: AddressDto;
     role: UserRoles;
 }
