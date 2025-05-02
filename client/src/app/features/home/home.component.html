@@ -1,7 +1,7 @@
 <div class="flex flex-col mt-5 items-center min-h-screen text-center px-4">
   <div class="page-header">
     <h1>LMS - Roles and Available Functions</h1>
-    <p class="text-base text-gray-700 mt-1 font-semibold">Logged in as - {{ accountService.currentUser()?.email }}</p>
+    <p class="sub-header">Logged in as - {{ accountService.currentUser()?.email }}</p>
     <p *appIsAdmin class="text-red-600 font-semibold">You are an admin</p>
     <p *appIsMember class="text-green-600 font-semibold">You are a Member</p>
     <p *appIsStaff class="text-yellow-700 font-semibold">You are a Staff-Member</p>

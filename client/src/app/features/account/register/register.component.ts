@@ -2,12 +2,10 @@ import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButton } from '@angular/material/button';
-//import { MatCard } from '@angular/material/card';
 import { MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
 import { AccountService } from '../../../core/services/account.service';
 import { Router } from '@angular/router';
-import { first } from 'rxjs';
 import { UserRoles } from '../../../shared/models/user-roles-enum';
 import { MemberRegisterDto } from '../../../shared/models/register-dto';
 import { AddressDto } from '../../../shared/models/address-dto';
@@ -18,8 +16,7 @@ import { SnackBarService } from '../../../core/services/snack-bar.service';
   standalone: true,
   imports: [
     CommonModule,
-    ReactiveFormsModule,
-        //MatCard,
+    ReactiveFormsModule,        
         MatButton,
         MatInput,
         MatLabel,
@@ -42,6 +39,11 @@ export class RegisterComponent implements OnInit {
   registerForm!: FormGroup;
   
   ngOnInit(): void {
+    this.createForm();
+  }
+
+  private createForm(): void 
+  {
     this.registerForm = this.formBuilder.group({  
       firstName: ['Jack', Validators.required],
       lastName: ['Gill', Validators.required],
