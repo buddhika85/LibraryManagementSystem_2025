@@ -6,6 +6,10 @@ import { AccountService } from '../../core/services/account.service';
 import { BusyService } from '../../core/services/busy.service';
 
 import { MatProgressBar } from '@angular/material/progress-bar';
+import { IsAdminDirective } from '../../shared/directives/is-admin.directive';
+import { IsStaffOrAdminDirective } from '../../shared/directives/is-staff-or-admin.directive';
+import { IsMemberDirective } from '../../shared/directives/is-member.directive';
+import { IsLoggedInDirective } from '../../shared/directives/is-logged-in.directive';
 
 @Component({
   selector: 'app-header',
@@ -14,7 +18,11 @@ import { MatProgressBar } from '@angular/material/progress-bar';
     MatIcon, CommonModule, 
     RouterLink,
     RouterLinkActive,
-    MatProgressBar
+    MatProgressBar,
+    IsAdminDirective,
+    IsStaffOrAdminDirective,
+    IsMemberDirective,
+    IsLoggedInDirective
   ],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss'

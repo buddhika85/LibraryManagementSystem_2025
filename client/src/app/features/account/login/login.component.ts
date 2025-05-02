@@ -51,7 +51,7 @@ export class LoginComponent implements OnInit {
     this.loginForm = this.formBuilder.group(
       {
         email: ['staffMember@gmail.com', [Validators.required, Validators.email]],
-        password: ['', Validators.required]
+        password: ['Pass#Word', Validators.required]
       }
     );
   }
@@ -67,6 +67,9 @@ export class LoginComponent implements OnInit {
           console.log(data.message);
           this .accountService.getUserInfo().subscribe();     // Fetch user info after login     
           this.router.navigateByUrl(this.returnUrl);
+          // alert(this.accountService.isAdmin() ? 'Is Admin' : 
+          //       this.accountService.isStaff() ? 'Staff' : 
+          //       this.accountService.isMember() ? 'Member' : 'No Role - probelm');
         },
         error: (error) => 
         {

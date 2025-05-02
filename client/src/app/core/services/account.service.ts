@@ -1,10 +1,11 @@
-import { inject, Injectable, signal } from '@angular/core';
+import { computed, inject, Injectable, signal } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { LoginResponseDto, UserInfoDto } from '../../shared/models/user-info-dto';
 import { LoginRequestDto } from '../../shared/models/login-request-dto';
 import { MemberRegisterDto, RegisterDto } from '../../shared/models/register-dto';
 import { map, Observable } from 'rxjs';
+import { UserRoles } from '../../shared/models/user-roles-enum';
 
 @Injectable({
   providedIn: 'root'
@@ -16,6 +17,29 @@ export class AccountService
   baseUrl = environment.apiBaseUrl + 'account';
   
   currentUser = signal<UserInfoDto | null>(null);
+  
+  isAdmin = computed(() => {
+    if (this.currentUser() != null && this.currentUser()?.role == UserRoles.admin) {
+      return true;
+    }
+    return false;
+  });
+
+  isStaff = computed(() => {
+    if (this.currentUser() != null && this.currentUser()?.role == UserRoles.staff) {
+      return true;
+    }
+    return false;
+  });
+
+  isMember = computed(() => {
+    if (this.currentUser() != null && this.currentUser()?.role == UserRoles.member) {
+      return true;
+    }
+    return false;
+  });
+
+
 
   login(loginRequest : LoginRequestDto) 
   {

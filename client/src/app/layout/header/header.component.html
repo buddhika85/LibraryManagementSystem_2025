@@ -17,20 +17,22 @@
           [routerLinkActiveOptions]="{exact: true}">Home</a>       
 
         <a routerLink="/manageBooks" 
-          routerLinkActive="active">Manage Books</a>
+          routerLinkActive="active"  *appIsAdmin>Manage Books</a>
 
-        <a routerLinkActive="active">Manage Staff</a>
+        <a routerLinkActive="active" *appIsAdmin>Manage Staff</a>
 
-        <a routerLinkActive="active">Manage Members</a>
+        <a routerLinkActive="active" *appIsStaffOrAdmin>Manage Members</a>
 
-        <a routerLinkActive="active">Manage Borrowals</a>
+        <a routerLinkActive="active" *appIsStaffOrAdmin>Manage Borrowals</a>
+
+        <a routerLinkActive="active" *appIsMember>Manage Borrowals</a>
 
         <a routerLink="account/profile" 
-          routerLinkActive="active">Profile</a>
+          routerLinkActive="active" *appIsLoggedIn>Profile</a>
         
-          <a routerLink="/test-error" 
+        <!-- <a routerLink="/test-error" 
           routerLinkActive="active"  
-          [routerLinkActiveOptions]="{exact: true}">Error Test</a>
+          [routerLinkActiveOptions]="{exact: true}">Error Test</a> -->
 
       </nav>
 
