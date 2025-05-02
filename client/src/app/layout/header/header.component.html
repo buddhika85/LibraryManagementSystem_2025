@@ -39,9 +39,14 @@
 
       @if(accountService.currentUser())
       {
-        <div class="auth-links">
+        <!-- <div class="auth-links">
           <a (click)="logout()" class="login-btn">Logout</a>
-        </div>
+        </div> -->
+
+        <button mat-button [mat-menu-trigger-for]="menu" class="menu-button">
+          <mat-icon>arrow_drop_down</mat-icon>
+          <span>{{ accountService.currentUser()?.email | uppercase}}</span>
+        </button>
       }
       @else
       {
@@ -72,3 +77,26 @@
     <a routerLink="/register">Register</a>
   </div>
 </header>
+
+
+
+
+
+<mat-menu #menu="matMenu" class="custom-menu">
+  <button mat-menu-item routerLink="account/profile" class="menu-item">
+    <mat-icon>person</mat-icon>
+    <span>Profile</span>
+  </button>
+
+  <button mat-menu-item routerLink="account/change-password" class="menu-item">
+    <mat-icon>lock</mat-icon>
+    <span>Change Password</span>
+  </button>
+
+  <mat-divider></mat-divider>
+
+  <button mat-menu-item (click)="logout()" class="menu-item">
+    <mat-icon>logout</mat-icon>
+    <span>Logout</span>
+  </button>
+</mat-menu>

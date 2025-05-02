@@ -11,11 +11,22 @@ import { IsStaffOrAdminDirective } from '../../shared/directives/is-staff-or-adm
 import { IsMemberDirective } from '../../shared/directives/is-member.directive';
 import { IsLoggedInDirective } from '../../shared/directives/is-logged-in.directive';
 
+import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
+import { MatDivider } from '@angular/material/divider';
+import { MatButton } from '@angular/material/button';
+
 @Component({
   selector: 'app-header',
   standalone: true,
   imports: [ 
-    MatIcon, CommonModule, 
+    MatIcon, 
+    MatButton,
+    MatMenu,
+    MatMenuItem,
+    MatMenuTrigger,
+    MatDivider,
+    
+    CommonModule, 
     RouterLink,
     RouterLinkActive,
     MatProgressBar,

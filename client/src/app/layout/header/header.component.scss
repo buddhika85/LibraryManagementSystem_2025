@@ -66,3 +66,53 @@
       color: rgb(197, 172, 197); // Change color when active
     }
   }
+
+// mat-menu for logout, prpfile, change password buttons
+// Custom Button Style
+.menu-button {
+  @apply flex items-center space-x-2 px-4 py-2 rounded-md bg-white text-indigo-600;
+  @apply hover:bg-gray-100 hover:text-indigo-700 transition-all duration-300 cursor-pointer text-sm shadow-md;
+ 
+  
+  mat-icon {
+    @apply text-indigo-600;
+  }
+
+  span {
+    @apply text-indigo-600;
+  }
+
+  &:focus {
+    outline: none;
+  }
+
+  font-size: 13px !important; // Make the font size smaller
+}
+
+//// Custom Menu Styles
+.custom-menu {
+  @apply w-56 shadow-lg bg-white rounded-lg ring-1 ring-gray-200;
+  
+  mat-menu-item {
+    @apply flex items-center space-x-2 text-gray-700 hover:bg-gray-100 px-4 py-2 rounded-md transition-all duration-300;
+    
+    mat-icon {
+      @apply text-gray-700;
+    }
+
+    span {
+      @apply text-gray-700;
+    }
+  }
+
+  mat-divider {
+    @apply my-2;
+  }
+}
+
+// Custom Menu Item Hover Effect
+.menu-item {
+  &:hover {
+    @apply bg-gray-100;
+  }
+}
