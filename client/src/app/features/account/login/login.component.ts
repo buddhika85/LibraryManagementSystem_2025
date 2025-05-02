@@ -34,7 +34,7 @@ export class LoginComponent implements OnInit {
   errorMessage: string = '';
 
   constructor() 
-  {
+  {    
     const url = this.activatedRoute.snapshot.queryParams['returnUrl'];
     if (url) 
     {
@@ -50,7 +50,7 @@ export class LoginComponent implements OnInit {
   createForm() {
     this.loginForm = this.formBuilder.group(
       {
-        email: ['', [Validators.required, Validators.email]],
+        email: ['staffMember@gmail.com', [Validators.required, Validators.email]],
         password: ['', Validators.required]
       }
     );
@@ -63,7 +63,7 @@ export class LoginComponent implements OnInit {
 
       this.accountService.login(loginData).subscribe({
         next: (data) => 
-        {
+        {          
           console.log(data.message);
           this .accountService.getUserInfo().subscribe();     // Fetch user info after login     
           this.router.navigateByUrl(this.returnUrl);

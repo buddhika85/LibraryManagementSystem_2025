@@ -36,7 +36,7 @@ export class HeaderComponent {
       next: () => 
       {
         this.accountService.currentUser.set(null); // Clear user data after logout
-        this.router.navigateByUrl('/account/login');     
+        this.router.navigateByUrl('');            //  go to { path: '', component: LandingComponent},
       },
       error: (err) => {
         console.error('Logout failed', err);

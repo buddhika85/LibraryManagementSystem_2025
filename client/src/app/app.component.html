@@ -1,17 +1,16 @@
+
 <app-header></app-header>
 
 <div class="flex flex-col min-h-screen">
 
-    <div class="container mt-6 flex-grow">
+  <!-- Main content area -->
+  <main class="flex-grow container mt-6">
+    <router-outlet></router-outlet>
+  </main>
 
-        <router-outlet>
-
-        </router-outlet>
-
-    </div>
-</div>
-
-<!-- Sticky Footer -->
-<footer class="text-center bg-slate-300 text-blue-900  py-4 w-full">
+  <!-- Sticky Footer -->
+  <footer class="text-center bg-slate-300 text-blue-900 py-4 w-full">
     <p>© 2025 Library Management System | All Rights Reserved</p>
-</footer>
+  </footer>
+  
+</div>

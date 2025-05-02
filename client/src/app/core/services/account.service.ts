@@ -4,7 +4,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { LoginResponseDto, UserInfoDto } from '../../shared/models/user-info-dto';
 import { LoginRequestDto } from '../../shared/models/login-request-dto';
 import { MemberRegisterDto, RegisterDto } from '../../shared/models/register-dto';
-import { map } from 'rxjs';
+import { map, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -48,5 +48,10 @@ export class AccountService
       this.currentUser.set(user);
       return user;
     }));
+  }
+
+  getAuthState() : Observable<{ isAuthenticated: boolean }> 
+  {
+    return this.http.get<{isAuthenticated: boolean}>(this.baseUrl + '/auth-status');
   }
 }

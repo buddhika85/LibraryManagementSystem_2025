@@ -27,7 +27,7 @@ export const routes: Routes = [
     { path: 'account/profile', component: ProfileComponent },
   
     { path: 'manageBooks', component: BookListComponent, canActivate: [authGuard]  },
-    //{ path: 'manageBooks/:id', component:BookDetailComponent },
+   
 
   
     { path: '**', redirectTo: 'not-found', pathMatch: 'full' } // Redirect to not found for any unknown routes   
