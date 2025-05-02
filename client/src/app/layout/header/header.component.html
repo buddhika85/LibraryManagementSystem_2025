@@ -59,7 +59,7 @@
     </div>
 
     <!-- Mobile toggle -->
-    <div class="mobile-menu-btn md:hidden">
+    <div class="mobile-menu-btn md:hidden bg-gray-200">
       <button (click)="toggleMenu()">
         <mat-icon>menu</mat-icon>
       </button>
@@ -72,9 +72,9 @@
 
   <!-- Mobile Nav Menu -->
   <div *ngIf="menuOpen" class="mobile-nav">
-    <a routerLink="/home">Home</a>
-    <a routerLink="/login">Login</a>
-    <a routerLink="/register">Register</a>
+    <a routerLink="/home" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Home</a>
+    <a routerLink="account/login">Login</a>
+    <a routerLink="account/register">Register</a>
   </div>
 </header>
 

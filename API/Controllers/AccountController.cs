@@ -12,22 +12,17 @@ using System.Security.Claims;
 
 namespace API.Controllers
 {
+    /// <summary>
+    /// Identity and account/profile management
+    /// </summary>
     [Authorize]
-    public class AccountController : BaseApiController
+    public class AccountController : UserController
     {
-        private readonly SignInManager<AppUser> signInManager;
-        private readonly UserManager<AppUser> userManager;
-        private readonly IUserService userService;
-        private readonly IMapper mapper;
-
-        public AccountController(SignInManager<AppUser> signInManager, UserManager<AppUser> userManager, 
-            IUserService userService, IMapper mapper)
+        private protected AccountController(SignInManager<AppUser> signInManager, 
+            UserManager<AppUser> userManager, IUserService userService, IMapper mapper) : base(signInManager, userManager, userService, mapper)
         {
-            this.signInManager = signInManager;
-            this.userManager = userManager;
-            this.userService = userService;
-            this.mapper = mapper;
         }
+
 
         /// <summary>
         /// Member registration.
@@ -59,27 +54,7 @@ namespace API.Controllers
             return await RegisterHelper(registerDto);
         }
 
-        /// <summary>
-        /// Returns all members. Admin and Staff privilaged.
-        /// </summary>
-        /// <returns>Returns all members</returns>
-        [Authorize(Roles = "Admin,Staff")]
-        [HttpGet("allMembers")]
-        public async Task<ActionResult<IReadOnlyList<UsersListDto>>> GetMembersAsync()
-        {           
-            return Ok(await userService.GetMembersAsync());
-        }
-
-        /// <summary>
-        /// Returns all staff. Admin only privilaged.
-        /// </summary>
-        /// <returns>Returns all staff</returns>
-        [Authorize(Roles = "Admin")]
-        [HttpGet("allStaff")]
-        public async Task<ActionResult<IReadOnlyList<UsersListDto>>> GetStaffAsync()
-        {
-            return Ok(await userService.GetStaffAsync());
-        }
+        
                
 
         [AllowAnonymous]
@@ -176,60 +151,6 @@ namespace API.Controllers
 
 
         /// <summary>
-        /// Admin can edit staff/members
-        /// </summary>
-        /// <param name="username">username / email</param>
-        /// <param name="updateDto">update information</param>
-        /// <returns>returns update status</returns>
-        [Authorize(Roles = "Admin")]
-        [HttpPut("updateUser/{username}")]
-        public async Task<IActionResult> UpdateStaffOrMember(string username, UserUpdateDto updateDto)
-        {
-            var user = await userManager.FindByNameAsync(username);
-            if (user == null)
-            {
-                return BadRequest($"Staff, Member with such username does not exists : {username}");
-            }
-
-            var roles = await userManager.GetRolesAsync(user);
-            if (roles == null || !roles.Any() ||
-                (roles[0] != UserRoles.Member.ToString() && roles[0] != UserRoles.Staff.ToString()))
-            {
-                return BadRequest($"Staff, Member with such username does not exists : {username}");
-            }
-
-            return await UpdateUserAsync(username, updateDto, user);
-        }
-
-        
-
-        /// <summary>
-        /// Admin, Staff updating member
-        /// </summary>
-        /// <param name="username">username / email</param>
-        /// <param name="updateDto">update information</param>
-        /// <returns>returns update status</returns>
-        [Authorize(Roles = "Admin,Staff")]
-        [HttpPut("updateMember/{username}")]
-        public async Task<IActionResult> UpdateMember(string username, UserUpdateDto updateDto)
-        {
-            var user = await userManager.FindByNameAsync(username);
-            if (user == null)
-            {
-                return BadRequest($"Member with such username does not exists : {username}");
-            }
-
-            var roles = await userManager.GetRolesAsync(user);
-            if (roles == null || !roles.Any() ||
-                roles[0] != UserRoles.Member.ToString())
-            {
-                return BadRequest($"Member with such username does not exists : {username}");
-            }
-
-            return await UpdateUserAsync(username, updateDto, user);
-        }
-
-        /// <summary>
         /// Authorised users updating their own profiles
         /// </summary>
         /// <param name="username">username / email</param>
@@ -276,92 +197,11 @@ namespace API.Controllers
         }
 
 
-        /// <summary>
-        /// Activate or Deactivate Members
-        /// Admin and Staff can deactivate members
-        /// </summary>
-        /// <param name="username">username of member</param>
-        /// <returns>Sttaus of de/activation</returns>
-        [Authorize(Roles = "Admin,Staff")]
-        [HttpPut("activateDeactivateMembers/{username}")]
-        public async Task<IActionResult> ActivateDeactivateMembers(string username)
-        {
-            var user = await userManager.FindByNameAsync(username);
-            if (user == null)
-            {
-                return BadRequest($"Member with such username does not exists : {username}");
-            }
-
-            var roles = await userManager.GetRolesAsync(user);
-            if (roles == null || !roles.Any() || 
-                roles[0] != UserRoles.Member.ToString())
-            {
-                return BadRequest($"Member with such username does not exists : {username}");
-            }
-            // Toggle IsActive property
-            user.IsActive = !user.IsActive;
-
-            // Save changes to the database using UserManager
-            var result = await userManager.UpdateAsync(user);
-            if (!result.Succeeded)
-            {
-                return BadRequest("Failed to update user status.");
-            }
-            return NoContent();
-        }
-
-        /// <summary>
-        /// Admin can delete staff/member user records
-        /// </summary>
-        /// <returns>Deletion status</returns>
-        [Authorize(Roles = "Admin")]
-        [HttpDelete("{username}")]
-        public async Task<IActionResult> DeleteByUsername(string username)
-        {
-            var userToDelete = await userManager.FindByNameAsync(username);
-            if (userToDelete == null)
-            {
-                return BadRequest($"User with such username does not exists : {username}");
-            }
-
-            ResultDto result = await userService.DeleteUserAsync(username);
-            if (result.IsSuccess)
-            {
-                return NoContent();
-            }
-            else
-            {
-                return StatusCode(500, $"An error occurred while deleting the user with username {username}.");
-            }
-        }
-
 
 
         #region Helpers
 
-        private async Task<IActionResult> UpdateUserAsync(string username, UserUpdateDto updateDto, AppUser user)
-        {
-            CustomMapper.MapToUserFromUpdateDto(user, updateDto);
-            // Save changes to the database using UserManager
-            var result = await userManager.UpdateAsync(user);
-            if (!result.Succeeded)
-            {
-                AddErrorsToModelState(result);
-                return ValidationProblem();
-            }
-            else
-            {
-                if (updateDto.Address != null)
-                {
-                    var resultDto = await userService.UpdateAddressOfUser(username, updateDto.Address);
-                    if (resultDto.IsSuccess)
-                        return NoContent();
-
-                    return StatusCode(500, $"An error occurred while updating the user with username {username} - Address section {updateDto.Address}.");
-                }
-            }
-            return NoContent();
-        }
+       
 
         private async Task<IActionResult> RegisterHelper(RegisterDto registerDto)
         {
@@ -398,13 +238,7 @@ namespace API.Controllers
             return Ok();
         }
 
-        private void AddErrorsToModelState(IdentityResult result)
-        {
-            foreach (var error in result.Errors)
-            {
-                ModelState.AddModelError(error.Code, error.Description);
-            }
-        }
+       
         #endregion 
     }
 }
