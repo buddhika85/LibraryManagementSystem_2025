@@ -134,7 +134,7 @@ namespace API.Controllers
         /// </summary>
         /// <returns>Logged in or not</returns>
         [AllowAnonymous]
-        [HttpGet]
+        [HttpGet("auth-status")]
         public ActionResult GetAuthState()
         {
             // anonymous will return false
