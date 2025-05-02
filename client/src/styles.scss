@@ -3,6 +3,9 @@
 @tailwind components;
 @tailwind utilities;
 
+@import 'styles/_styles-grid';
+@import 'styles/_styles-page';
+
 .container {
   @apply mx-auto max-w-screen-2xl;
 }

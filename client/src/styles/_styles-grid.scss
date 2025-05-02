@@ -1,0 +1,55 @@
+
+
+// mat-table/grid
+
+  
+  // search filter
+  .filter-field {
+    @apply w-full max-w-full mb-1;
+  
+    mat-form-field {
+      @apply w-full;
+    }
+  
+    input {
+      @apply placeholder-gray-400 text-gray-800;
+    }
+  }
+
+
+.table-wrapper {
+    @apply mt-1 rounded-lg shadow-md overflow-x-auto bg-white;
+  
+    table {
+      @apply w-full;
+  
+      th {
+        @apply bg-gray-100 text-left text-sm font-semibold text-gray-700 px-4 py-3;
+      }
+  
+      td {
+        @apply text-sm text-gray-800 px-4 py-2 border-t;
+      }
+  
+      tr.mat-row:hover {
+        @apply bg-gray-50;
+      }
+  
+      img.book-grid-image {
+        @apply h-12 w-12 object-cover rounded;
+      }
+  
+      button[mat-icon-button] {
+        @apply transition duration-200 hover:scale-110;
+      }
+    }
+  
+    .mat-paginator {
+      @apply mt-4;
+    }
+  
+    .mat-no-data-row td {
+      @apply text-center text-gray-500 py-4;
+    }
+  }
+  

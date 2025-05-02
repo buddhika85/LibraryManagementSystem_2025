@@ -1,0 +1,21 @@
+
+// page styles
+
+
+//// page header
+
+.page-header {
+    @apply text-center mb-6;
+  
+    h1 {
+      @apply text-3xl font-bold text-indigo-700;
+    }
+  }
+  
+  // add button on top of table/grid
+  .action-button {
+    @apply mb-6 bg-indigo-600 text-white font-medium py-2 px-4 rounded-md shadow-md hover:bg-indigo-700 transition-all duration-200;
+  }
+  
+
+  
