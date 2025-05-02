@@ -125,7 +125,14 @@ namespace API.Controllers
             if (user == null)
                 return Unauthorized();
 
-            return Ok(mapper.Map<UserInfoDto>(user));
+           
+            var roles = await userManager.GetRolesAsync(user);
+            if (roles == null)
+                return Unauthorized();
+
+            var userDto = mapper.Map<UserInfoDto>(user);
+            userDto.Role = Enum.Parse<UserRoles>(roles[0]);
+            return Ok(userDto);
         }
 
 

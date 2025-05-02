@@ -16,10 +16,11 @@
           routerLinkActive="active"  
           [routerLinkActiveOptions]="{exact: true}">Home</a>       
 
-        <a routerLink="/manageBooks" 
-          routerLinkActive="active"  *appIsAdmin>Manage Books</a>
-
+       
         <a routerLinkActive="active" *appIsAdmin>Manage Staff</a>
+
+        <a routerLink="/manageBooks" 
+          routerLinkActive="active"  *appIsStaffOrAdmin>Manage Books</a>
 
         <a routerLinkActive="active" *appIsStaffOrAdmin>Manage Members</a>
 
