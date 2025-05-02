@@ -17,16 +17,20 @@
           [routerLinkActiveOptions]="{exact: true}">Home</a>       
 
        
-        <a routerLinkActive="active" *appIsAdmin>Manage Staff</a>
+        <a routerLink="/manageStaff"
+          routerLinkActive="active" *appIsAdmin>Manage Staff</a>
+       
+        <a routerLink="/manageMembers" 
+          routerLinkActive="active" *appIsStaffOrAdmin>Manage Members</a>
 
         <a routerLink="/manageBooks" 
           routerLinkActive="active"  *appIsStaffOrAdmin>Manage Books</a>
 
-        <a routerLinkActive="active" *appIsStaffOrAdmin>Manage Members</a>
+        <a routerLink="/manageBorrowals" 
+          routerLinkActive="active" *appIsStaffOrAdmin>Manage Borrowals</a>
 
-        <a routerLinkActive="active" *appIsStaffOrAdmin>Manage Borrowals</a>
-
-        <a routerLinkActive="active" *appIsMember>Manage Borrowals</a>
+        <a 
+          routerLinkActive="active" *appIsMember>View Borrowals</a>
 
         <a routerLink="account/profile" 
           routerLinkActive="active" *appIsLoggedIn>Profile</a>

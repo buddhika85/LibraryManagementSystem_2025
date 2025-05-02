@@ -10,6 +10,9 @@ import { NotFoundComponent } from './shared/components/not-found/not-found.compo
 import { authGuard } from './core/guards/auth.guard';
 import { LandingComponent } from './features/landing/landing.component';
 import { ChangePasswordComponent } from './features/account/change-password/change-password.component';
+import { MemberListComponent } from './features/member-list/member-list.component';
+import { StaffListComponent } from './features/staff-list/staff-list.component';
+import { BorrowalsListComponent } from './features/borrowals-list/borrowals-list.component';
 
 
 export const routes: Routes = [
@@ -25,12 +28,16 @@ export const routes: Routes = [
 
     { path: 'account/login', component: LoginComponent },
     { path: 'account/register', component: RegisterComponent},
-    { path: 'account/profile', component: ProfileComponent },
-    { path: 'account/change-password', component: ChangePasswordComponent},
+
+    { path: 'account/profile', component: ProfileComponent, canActivate: [authGuard] },
+    { path: 'account/change-password', component: ChangePasswordComponent, canActivate: [authGuard]},
   
     { path: 'manageBooks', component: BookListComponent, canActivate: [authGuard]  },
    
+    { path: 'manageMembers', component: MemberListComponent, canActivate: [authGuard]  },
+    { path: 'manageStaff', component: StaffListComponent, canActivate: [authGuard]  },
 
+    { path: 'manageBorrowals', component: BorrowalsListComponent, canActivate: [authGuard]  },
   
     { path: '**', redirectTo: 'not-found', pathMatch: 'full' } // Redirect to not found for any unknown routes   
 ];
