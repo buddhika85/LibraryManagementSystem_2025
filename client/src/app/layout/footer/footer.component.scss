@@ -1,0 +1,14 @@
+// Custom Footer Style
+.footer {
+    @apply bg-slate-300 text-blue-900 py-4 w-full;
+    @apply text-sm text-center;
+  
+    p {
+      @apply text-gray-700;
+    }
+  
+    &:hover {
+      @apply bg-slate-400;
+    }
+  }
+  
