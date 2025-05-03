@@ -10,9 +10,9 @@ import { Observable } from 'rxjs';
 export class MemberService {
 
   private http = inject(HttpClient);
-  baseUrl = environment.apiBaseUrl + 'member';
+  baseUrl = environment.apiBaseUrl + 'members';
   
-  getAllMembers() : Observable<UsersListDto> 
+  getAllMembers() : Observable<UsersListDto>
   {
     return this.http.get<UsersListDto>(this.baseUrl + '/allMembers');
   }

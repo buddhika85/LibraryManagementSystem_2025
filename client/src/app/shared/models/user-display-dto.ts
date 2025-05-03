@@ -5,10 +5,13 @@ export type UserDisplayDto = {
     id: string;
     firstName: string;
     lastName: string;
+    fullName: string;
     email: string;
     phoneNumber: string;
     role: UserRoles;
     roleStr: string;
+    isActive: boolean;
+    activeStr: string;
     address: AddressDto;
     addressStr: string;
 };

@@ -12,11 +12,16 @@ namespace Core.DTOs
     {
         public required string Id { get; set; }
         public required string FirstName { get; set; }         
-        public required string LastName { get; set; }         
-        public required string Email { get; set; }         
-        public required string PhoneNumber { get; set; } 
+        public required string LastName { get; set; }
 
-        
+        public string FullName => $"{FirstName} {LastName}";
+
+        public required string Email { get; set; }         
+        public required string PhoneNumber { get; set; }
+
+        public bool IsActive { get; set; }
+        public string ActiveStr => IsActive ? "Yes" : "No";
+
         public virtual UserRoles Role { get; init; }
         public string RoleStr => Role.ToString();
 

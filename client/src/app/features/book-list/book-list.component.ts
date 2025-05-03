@@ -26,7 +26,7 @@ export class BookListComponent implements OnInit {
 
 
   // page labels
-  pageTitle = 'Books List';
+  pageTitle = 'Books';
 
   // Mat-table 
   displayedColumns: string[] = ['bookId', 'bookPictureUrl', 'bookTitle', 'authorListStr', 'bookGenreStr', 'bookPublishedDateStr', 'edit', 'delete'];
@@ -48,7 +48,7 @@ export class BookListComponent implements OnInit {
 
   ngOnInit(): void 
   {
-    this.loadBooksGridData();
+    this.loadGridData();
   }
 
   // seach filter on top of the table
@@ -70,7 +70,7 @@ export class BookListComponent implements OnInit {
     this.bookService.deleteBook(bookId).subscribe(
       {
         next: () => {
-          this.loadBooksGridData();
+          this.loadGridData();
         },
         error: error => console.error(`There was an error when deleting book with ID ${bookId}`, error),
         complete: () => {}
@@ -99,7 +99,7 @@ export class BookListComponent implements OnInit {
             }
           }).afterClosed().subscribe(result => {
             if (result) {
-              this.loadBooksGridData();
+              this.loadGridData();
             }
           });
         },
@@ -111,7 +111,7 @@ export class BookListComponent implements OnInit {
 
   
 
-  private loadBooksGridData() {
+  private loadGridData() {
     this.bookService.getAllBooksWithAuthors().subscribe({
       next: data => {
         this.booksWithAuthorList = data;
