@@ -16,4 +16,9 @@ export class MemberService {
   {
     return this.http.get<UsersListDto>(this.baseUrl + '/allMembers');
   }
+
+  activateDeactivateMembers(username: string)
+  {       
+    return this.http.put(this.baseUrl + `/activateDeactivateMembers/${username}`, {});
+  }
 }

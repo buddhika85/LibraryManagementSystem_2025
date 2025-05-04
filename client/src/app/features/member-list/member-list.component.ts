@@ -10,6 +10,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { MatDialog } from '@angular/material/dialog'; 
 import { MemberUserDisplayDto, UsersListDto } from '../../shared/models/user-display-dto';
+import { SnackBarService } from '../../core/services/snack-bar.service';
 
 @Component({
   selector: 'app-member-list',
@@ -24,6 +25,7 @@ export class MemberListComponent implements OnInit
 
   pageTitle = 'Members';
   memberService = inject(MemberService);
+  snackbar = inject(SnackBarService);
 
   userList: UsersListDto = {
     usersList: [],
@@ -73,11 +75,18 @@ export class MemberListComponent implements OnInit
     //this.openAddEditBookDialog(0);
   }
 
-  edit(id: number) {
+  edit(email: string) {
     //this.openAddEditBookDialog(id);
   }
 
-  activateDeactivate(id: number) {
-    //this.openAddEditBookDialog(id);
+  activateDeactivate(email: string) {
+    this.memberService.activateDeactivateMembers(email).subscribe({
+      next: () => {
+        this.loadGridData();
+        this.snackbar.success('Member status updated successfully!');
+      },
+      error: () => this.snackbar.error('There was an error when activating/deactivating member!'),
+      complete: () => {}
+    });
   }
 }
