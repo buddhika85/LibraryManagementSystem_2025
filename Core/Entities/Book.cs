@@ -9,5 +9,7 @@ namespace Core.Entities
         public required ICollection<Author> Authors { get; set; } = new List<Author>();
         public required DateTime PublishedDate { get; set; }
         public required string PictureUrl { get; set; }
+
+        public required bool IsAvailable { get; set; } = true;
     }
 }
