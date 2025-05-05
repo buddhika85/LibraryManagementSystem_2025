@@ -12,7 +12,10 @@ import { MatDialog } from '@angular/material/dialog';
 import { MemberUserDisplayDto, UsersListDto } from '../../shared/models/user-display-dto';
 import { SnackBarService } from '../../core/services/snack-bar.service';
 import { UserInfoDto } from '../../shared/models/user-info-dto';
-import { AddEditMemberDialogComponent } from './add-edit-member-dialog/add-edit-member-dialog.component';
+
+import { AddEditUserDialogComponent } from '../add-edit-user-dialog/add-edit-user-dialog.component';
+import { UserRoles } from '../../shared/models/user-roles-enum';
+import { AddressDto } from '../../shared/models/address-dto';
 
 @Component({
   selector: 'app-member-list',
@@ -77,15 +80,32 @@ export class MemberListComponent implements OnInit
   }
 
   add() 
-  {
-    this.openAddEditDialog(null);
+  {   
+    const userInfo: UserInfoDto = {
+      firstName: '',
+      lastName: '',
+      email: '',
+      phoneNumber: '',
+      address: {
+        line1: '', line2: '', city: '', postcode: '', state: '', country: ''
+      },
+      role: UserRoles.member
+    };
+  
+    this.openAddEditDialog(userInfo);
   }
 
   edit(email: string) 
   {
     this.memberService.getMemberForEdit(email).subscribe({
       next: user => {
-        this.openAddEditDialog(user);
+        console.log(user);
+        if (user) {
+          this.openAddEditDialog(user);
+        }
+        else {
+          this.snackbar.error('There was an error when loading member for edit!');
+        }
       },
       error: () => this.snackbar.error('There was an error when loading member for edit!'),
       complete: () => {}
@@ -98,9 +118,10 @@ export class MemberListComponent implements OnInit
     // blur active element to avoid aria-hidden warning
     (document.activeElement as HTMLElement)?.blur();
 
-    const dialogRef = this.dialog.open(AddEditMemberDialogComponent, {
-      width: '600px',
+    const dialogRef = this.dialog.open(AddEditUserDialogComponent, {
+      width: '800px',
       data: {
+        userType: UserRoles.member,
         user: user                }
     }).afterClosed().subscribe(result => {
       if (result) {
