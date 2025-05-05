@@ -9,6 +9,8 @@ namespace Core.Interfaces
         IUserRepository UserRepository { get; }
         IGenericRepository<Address> AddressRepository { get; }
 
+        IBorrowalsRepository Borrowals { get;  }
+
         Task<bool> SaveAllAsync();
     }
 }
