@@ -11,6 +11,7 @@ namespace Infrastructure.Data
                 IBooksRepository booksRepository,
                 IAuthorRepository authorRepository,
                 IUserRepository userRepository,
+                IBorrowalsRepository borrowalsRepository,
                 IGenericRepository<Address> addressRepository)
         {
             this.context = context;
@@ -18,15 +19,18 @@ namespace Infrastructure.Data
             AuthorRepository = authorRepository;
             UserRepository = userRepository;
             AddressRepository = addressRepository;
+            BorrowalsRepository = borrowalsRepository;
         }
 
         public IBooksRepository BookRepository { get; }
 
         public IAuthorRepository AuthorRepository { get; }
         public IUserRepository UserRepository { get; }
+        public IBorrowalsRepository BorrowalsRepository { get; }
 
         public IGenericRepository<Address> AddressRepository { get; }
 
+        
         public async Task<bool> SaveAllAsync()
         {
             using var transaction = await context.Database.BeginTransactionAsync();
