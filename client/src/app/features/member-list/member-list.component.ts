@@ -124,8 +124,7 @@ export class MemberListComponent implements OnInit
         userType: UserRoles.member,
         user: user                }
     }).afterClosed().subscribe(result => {
-      if (result) {
-        debugger
+      if (result) {        
         this.loadGridData();
       }
     });

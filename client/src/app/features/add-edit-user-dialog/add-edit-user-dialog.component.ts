@@ -16,6 +16,7 @@ import { MemberService } from '../../core/services/member.service';
 import { ResultDto } from '../../shared/models/result-dto';
 import { InsertUpdateUserDto } from '../../shared/models/insert-update-user-dto';
 import { AddressDto } from '../../shared/models/address-dto';
+import { UserUpdateDto } from '../../shared/models/user-update-dto';
 
 
 @Component({
@@ -84,8 +85,7 @@ export class AddEditUserDialogComponent implements OnInit
     if (this.userAddEditForm.valid) 
     {             
         if (this.isAddMode)   
-        {
-          debugger
+        {          
           this.addMember();          
         }
         else
@@ -103,20 +103,11 @@ export class AddEditUserDialogComponent implements OnInit
 
   private addMember(): void
   {
-    const memberDto: InsertUpdateUserDto = {... this.userAddEditForm.value };
-    const address: AddressDto = { 
-      line1:  this.userAddEditForm.value.line1, 
-      line2:  this.userAddEditForm.value.line2,
-      city:  this.userAddEditForm.value.city,
-      state:  this.userAddEditForm.value.state,
-      postcode:  this.userAddEditForm.value.postcode,
-      country:  'Australia'
-    }
-    memberDto.address = address;
+    const memberDto: InsertUpdateUserDto = {... this.userAddEditForm.value };   
+    memberDto.address = this.createAddressDto();
     memberDto.role = UserRoles.member;
     this.memberService.addMember(memberDto).subscribe({
-      next: (result: ResultDto) => {
-        debugger
+      next: (result: ResultDto) => {        
         if(result && result.isSuccess) {
           this.dialogRef.close(true);
         }
@@ -136,7 +127,33 @@ export class AddEditUserDialogComponent implements OnInit
 
   private updateUser() : void
   {
+    const dto: UserUpdateDto = { ... this.userAddEditForm.value };
+    dto.address = this.createAddressDto();
+    this.memberService.updateMember(this.userAddEditForm.value.email, dto).subscribe({
+      next: () => { 
+          this.dialogRef.close(true);
+      },
+      error: (errors) => {   
+        debugger     
+        this.errorMessage = '';
+        console.log(`${errors}`);
+        this.validationErrors = errors;
+      },
+      complete: () => {}
+    });
+  }
 
+  private createAddressDto(): AddressDto
+  {
+    const address: AddressDto = { 
+      line1:  this.userAddEditForm.value.line1, 
+      line2:  this.userAddEditForm.value.line2,
+      city:  this.userAddEditForm.value.city,
+      state:  this.userAddEditForm.value.state,
+      postcode:  this.userAddEditForm.value.postcode,
+      country:  'Australia'
+    }
+    return address;
   }
 }
 
