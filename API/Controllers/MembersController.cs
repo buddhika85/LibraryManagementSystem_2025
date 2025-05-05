@@ -95,10 +95,26 @@ namespace API.Controllers
             return NoContent();
         }
 
-     
 
 
+        [Authorize(Roles = "Admin,Staff")]
+        [HttpGet("getMemberForEditOrInsert/{email:string}")]
+        public async Task<ActionResult<UserInfoDto>> GetMemberForEditOrInsert(string email)
+        {
+            var user = await signInManager.UserManager.FindByEmailAsync(email);
+            if (user == null)
+                return BadRequest($"user with such email {email} does not exists");
 
-        
+            var roles = await userManager.GetRolesAsync(user);
+            if (roles == null)
+                return BadRequest("Issue in getting user roles");
+
+            if (roles[0] != UserRoles.Member.ToString())
+                return BadRequest("Not a member user");
+
+            var userDto = mapper.Map<UserInfoDto>(user);
+            userDto.Role = UserRoles.Member;
+            return Ok(userDto);
+        }
     }
 }
