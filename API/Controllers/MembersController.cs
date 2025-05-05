@@ -3,6 +3,7 @@ using Core.DTOs;
 using Core.Entities;
 using Core.Enums;
 using Core.Interfaces;
+using Infrastructure.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -32,33 +33,6 @@ namespace API.Controllers
 
 
 
-
-
-        /// <summary>
-        /// Admin, Staff updating member
-        /// </summary>
-        /// <param name="username">username / email</param>
-        /// <param name="updateDto">update information</param>
-        /// <returns>returns update status</returns>
-        [Authorize(Roles = "Admin,Staff")]
-        [HttpPut("updateMember/{username}")]
-        public async Task<IActionResult> UpdateMember(string username, UserUpdateDto updateDto)
-        {
-            var user = await userManager.FindByNameAsync(username);
-            if (user == null)
-            {
-                return BadRequest($"Member with such username does not exists : {username}");
-            }
-
-            var roles = await userManager.GetRolesAsync(user);
-            if (roles == null || !roles.Any() ||
-                roles[0] != UserRoles.Member.ToString())
-            {
-                return BadRequest($"Member with such username does not exists : {username}");
-            }
-
-            return await UpdateUserAsync(username, updateDto, user);
-        }
 
 
         /// <summary>
@@ -109,5 +83,63 @@ namespace API.Controllers
             userDto.Role = UserRoles.Member;
             return Ok(userDto);
         }
+
+        [Authorize(Roles = "Admin,Staff")]
+        [HttpPost("addMember")]
+        public async Task<ActionResult<ResultDto>> AddMember(InsertUpdateUserDto userDto)
+        {
+            var user = mapper.Map<AppUser>(userDto);        
+            var randomPassword = PasswordGenerator.GeneratePassword(10);
+            // add user along with address
+            var result = await signInManager.UserManager.CreateAsync(user, randomPassword);
+
+            // add user to Role
+            if (result.Succeeded)
+            {
+                result = await signInManager.UserManager.AddToRoleAsync(user, UserRoles.Member.ToString());
+            }
+            else
+            {
+                AddErrorsToModelState(result);
+                return ValidationProblem();
+            }
+
+            if (!result.Succeeded)
+            {
+                AddErrorsToModelState(result);
+                return ValidationProblem();
+            }
+
+            return Ok(new ResultDto());
+        }
+
+
+
+        /// <summary>
+        /// Admin, Staff updating member
+        /// </summary>
+        /// <param name="username">username / email</param>
+        /// <param name="updateDto">update information</param>
+        /// <returns>returns update status</returns>
+        [Authorize(Roles = "Admin,Staff")]
+        [HttpPut("updateMember/{username}")]
+        public async Task<IActionResult> UpdateMember(string username, UserUpdateDto updateDto)
+        {
+            var user = await userManager.FindByNameAsync(username);
+            if (user == null)
+            {
+                return BadRequest($"Member with such username does not exists : {username}");
+            }
+
+            var roles = await userManager.GetRolesAsync(user);
+            if (roles == null || !roles.Any() ||
+                roles[0] != UserRoles.Member.ToString())
+            {
+                return BadRequest($"Member with such username does not exists : {username}");
+            }
+
+            return await UpdateUserAsync(username, updateDto, user);
+        }
+
     }
 }

@@ -29,6 +29,9 @@ namespace Infrastructure.Helpers
                     .ForMember(dest => dest.Role, opt => opt.MapFrom(src => UserRoles.Member));    // always member
             CreateMap<AppUser, StaffUserDisplayDto>()
                     .ForMember(dest => dest.Role, opt => opt.MapFrom(src => UserRoles.Staff));     // always staff
+
+            CreateMap<InsertUpdateUserDto, AppUser>();
+
             CreateMap<Address, AddressDto>().ReverseMap();
         }
 

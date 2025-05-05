@@ -4,6 +4,9 @@ import { environment } from '../../../environments/environment';
 import { UsersListDto } from '../../shared/models/user-display-dto';
 import { Observable } from 'rxjs';
 import { UserInfoDto } from '../../shared/models/user-info-dto';
+import { InsertUpdateUserDto } from '../../shared/models/insert-update-user-dto';
+import { ResultDto } from '../../shared/models/result-dto';
+import { UserUpdateDto } from '../../shared/models/user-update-dto';
 
 @Injectable({
   providedIn: 'root'
@@ -26,5 +29,15 @@ export class MemberService {
   getMemberForEdit(email: string | null) : Observable<UserInfoDto>
   {
     return this.http.get<UserInfoDto>(this.baseUrl + `/getMemberForEdit/${email}`);
+  }
+
+  addMember(userDto : InsertUpdateUserDto) : Observable<ResultDto>
+  {
+    return this.http.post<ResultDto>(this.baseUrl + `/addMember`, userDto);
+  }
+
+  updateMember(email: string, dto: UserUpdateDto) 
+  {
+    return this.http.put(this.baseUrl + `/updateMember/${email}`, dto);
   }
 }

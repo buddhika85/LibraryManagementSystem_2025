@@ -125,6 +125,7 @@ export class MemberListComponent implements OnInit
         user: user                }
     }).afterClosed().subscribe(result => {
       if (result) {
+        debugger
         this.loadGridData();
       }
     });

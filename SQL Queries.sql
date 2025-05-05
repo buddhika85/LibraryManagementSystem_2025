@@ -33,5 +33,7 @@ select t.UserName, r.[Name] as 'Role', a.Id 'Address ID', a.Line1 'Address Line 
 
 --delete from Addresses where Id not in (2, 3)
 
---update AspNetUsers set IsActive = 0 where Email = 'm2@g.c'
+--update AspNetUsers set IsActive = 0 where Email = 'm2@g.c';
 
+
+delete from AspNetUsers where FirstName = 'a';

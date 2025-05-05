@@ -12,6 +12,10 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatButtonModule } from '@angular/material/button';
 import { UserInfoDto } from '../../shared/models/user-info-dto';
 import { UserRoles } from '../../shared/models/user-roles-enum';
+import { MemberService } from '../../core/services/member.service';
+import { ResultDto } from '../../shared/models/result-dto';
+import { InsertUpdateUserDto } from '../../shared/models/insert-update-user-dto';
+import { AddressDto } from '../../shared/models/address-dto';
 
 
 @Component({
@@ -26,12 +30,14 @@ import { UserRoles } from '../../shared/models/user-roles-enum';
 export class AddEditUserDialogComponent implements OnInit
 {
  
+  isAddMode: boolean;
   userType: UserRoles;
   userRoleStr: string;
   user: UserInfoDto;
 
   errorMessage: string = '';
   private formBuilder = inject(FormBuilder);
+  private memberService = inject(MemberService);
   validationErrors?: string[];  
   userAddEditForm!: FormGroup;
 
@@ -43,6 +49,7 @@ export class AddEditUserDialogComponent implements OnInit
     this.userType = data.userType;
     this.userRoleStr = UserRoles[this.userType];
     this.user = data.user;
+    this.isAddMode = this.user.email === '';
   }
 
   
@@ -63,8 +70,7 @@ export class AddEditUserDialogComponent implements OnInit
       line2: [this.user.address.line2, Validators.required],
       city: [this.user.address.city, Validators.required],
       state: [this.user.address.state, Validators.required],
-      postcode: [this.user.address.postcode, Validators.required],
-      country: [this.user.address.country, Validators.required]
+      postcode: [this.user.address.postcode, Validators.required]
     });
   }
 
@@ -74,9 +80,63 @@ export class AddEditUserDialogComponent implements OnInit
     this.validationErrors = undefined;
   }
 
-  onSubmit(): void {
-  
-     
+  onSubmit(): void {  
+    if (this.userAddEditForm.valid) 
+    {             
+        if (this.isAddMode)   
+        {
+          debugger
+          this.addMember();          
+        }
+        else
+        {
+          this.updateUser();
+        }
+    }
+    else
+    {
+      this.errorMessage = 'Error - please fill the form properly !';
+    }
+
+  }
+
+
+  private addMember(): void
+  {
+    const memberDto: InsertUpdateUserDto = {... this.userAddEditForm.value };
+    const address: AddressDto = { 
+      line1:  this.userAddEditForm.value.line1, 
+      line2:  this.userAddEditForm.value.line2,
+      city:  this.userAddEditForm.value.city,
+      state:  this.userAddEditForm.value.state,
+      postcode:  this.userAddEditForm.value.postcode,
+      country:  'Australia'
+    }
+    memberDto.address = address;
+    memberDto.role = UserRoles.member;
+    this.memberService.addMember(memberDto).subscribe({
+      next: (result: ResultDto) => {
+        debugger
+        if(result && result.isSuccess) {
+          this.dialogRef.close(true);
+        }
+        else {
+          this.errorMessage = 'Error inserting member!';
+          console.log(`${this.errorMessage} ${result?.errorMessage}`);          
+        }
+      },
+      error: (errors) => {        
+        this.errorMessage = '';
+        console.log(`${errors}`);
+        this.validationErrors = errors;
+      },
+      complete: () => {}
+    });
+  }
+
+  private updateUser() : void
+  {
+
   }
 }
 

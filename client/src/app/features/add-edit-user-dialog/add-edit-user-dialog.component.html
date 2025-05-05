@@ -6,7 +6,7 @@
     <form [formGroup]="userAddEditForm" (ngSubmit)="onSubmit()" class="max-w-5xl mx-auto p-6 bg-white shadow-lg rounded-xl mt-10">
       
       <div class="page-header">
-        <h1 >{{ (this.user.email === '' ? 'Add '  : 'Edit ') }} {{ this.userRoleStr}}</h1>
+        <h1 >{{ (this.isAddMode ? 'Add '  : 'Edit ') }} {{ this.userRoleStr}}</h1>
         <p class="sub-header">Please fill in the details below</p>
       </div>
   
@@ -37,7 +37,9 @@
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <mat-form-field appearance="outline" class="w-full">
             <mat-label>Email</mat-label>
-            <input matInput formControlName="email" type="email" placeholder="name@example.com" required class="read-only-textbx" [readonly]="true">
+            <input matInput formControlName="email" type="email" placeholder="name@example.com" required 
+                [class.read-only-textbx]="!this.isAddMode"
+                [readonly]="!this.isAddMode">
           </mat-form-field>
   
           <mat-form-field appearance="outline" class="w-full">
@@ -90,6 +92,19 @@
           </ul>
         </div>
       }
+
+
+      @if (errorMessage)
+      {
+        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-6">
+            <strong class="font-semibold">Please fix the following:</strong>
+            <ul class="list-disc pl-5 mt-2">
+            
+                <li>{{ errorMessage }}</li>
+              
+            </ul>
+          </div>
+      }
   
       <!-- Buttons -->
       <div class="flex justify-end space-x-3 mt-6">
@@ -97,7 +112,7 @@
           Reset
         </button>
         <button mat-flat-button color="primary" type="submit" [disabled]="userAddEditForm.invalid">
-          Update
+          Save
         </button>
       </div>
   

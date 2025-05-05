@@ -1,7 +1,7 @@
 export interface ResultDto
 {
-    ErrorMessage: string;
-    IsSuccess: boolean;
+    errorMessage: string;
+    isSuccess: boolean;
 }
 
 export interface InsertResultDto extends ResultDto
