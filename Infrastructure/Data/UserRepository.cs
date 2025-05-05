@@ -2,6 +2,7 @@
 using Core.Enums;
 using Core.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using System.Data;
 
 namespace Infrastructure.Data
 {
@@ -64,6 +65,21 @@ namespace Infrastructure.Data
 
             // If Address is null, return null; otherwise, return Address.Id
             return user.Address.Id;
+        }
+
+        public async Task<AppUser?> GetUserByRoleAndEmailAsync(string email, UserRoles filterRole)
+        {
+            var role = await context.Roles.FirstOrDefaultAsync(x => x.Name == filterRole.ToString());
+            var userRoles = context.UserRoles;
+            if (role == null)
+            {
+                throw new InvalidOperationException("Role not found.");
+            }
+
+            
+            return await context.Users.Include(x => x.Address)
+                .Where(x => x.Email == email && userRoles.Any(r => r.UserId == x.Id && r.RoleId == role.Id))
+                .SingleOrDefaultAsync();
         }
     }
 }

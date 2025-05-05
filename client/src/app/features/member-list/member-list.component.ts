@@ -11,6 +11,8 @@ import { MatIcon } from '@angular/material/icon';
 import { MatDialog } from '@angular/material/dialog'; 
 import { MemberUserDisplayDto, UsersListDto } from '../../shared/models/user-display-dto';
 import { SnackBarService } from '../../core/services/snack-bar.service';
+import { UserInfoDto } from '../../shared/models/user-info-dto';
+import { AddEditMemberDialogComponent } from './add-edit-member-dialog/add-edit-member-dialog.component';
 
 @Component({
   selector: 'app-member-list',
@@ -39,6 +41,9 @@ export class MemberListComponent implements OnInit
   
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
+
+  // dialog
+  readonly dialog = inject(MatDialog);
 
   ngOnInit(): void 
   {
@@ -71,12 +76,37 @@ export class MemberListComponent implements OnInit
     }
   }
 
-  add() {
+  add() 
+  {
     this.openAddEditDialog(null);
   }
 
-  edit(email: string) {
-    this.openAddEditDialog(email);
+  edit(email: string) 
+  {
+    this.memberService.getMemberForEdit(email).subscribe({
+      next: user => {
+        this.openAddEditDialog(user);
+      },
+      error: () => this.snackbar.error('There was an error when loading member for edit!'),
+      complete: () => {}
+    });
+  }
+
+ 
+  private openAddEditDialog(user: UserInfoDto | null) {
+  
+    // blur active element to avoid aria-hidden warning
+    (document.activeElement as HTMLElement)?.blur();
+
+    const dialogRef = this.dialog.open(AddEditMemberDialogComponent, {
+      width: '600px',
+      data: {
+        user: user                }
+    }).afterClosed().subscribe(result => {
+      if (result) {
+        this.loadGridData();
+      }
+    });
   }
 
   activateDeactivate(email: string) {
@@ -90,8 +120,4 @@ export class MemberListComponent implements OnInit
     });
   }
 
-  private openAddEditDialog(email: string | null) {
-  
-    this.memberService.getMemberForEditOrInsert(email).subscribe();
-  }
 }

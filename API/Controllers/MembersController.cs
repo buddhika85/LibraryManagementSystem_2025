@@ -98,19 +98,12 @@ namespace API.Controllers
 
 
         [Authorize(Roles = "Admin,Staff")]
-        [HttpGet("getMemberForEditOrInsert/{email:string}")]
-        public async Task<ActionResult<UserInfoDto>> GetMemberForEditOrInsert(string email)
+        [HttpGet("getMemberForEdit/{email}")]
+        public async Task<ActionResult<UserInfoDto>> GetMemberForEdit(string email)
         {
-            var user = await signInManager.UserManager.FindByEmailAsync(email);
+            var user = await userService.GetUserByRoleAndEmailAsync(email, UserRoles.Member);
             if (user == null)
-                return BadRequest($"user with such email {email} does not exists");
-
-            var roles = await userManager.GetRolesAsync(user);
-            if (roles == null)
-                return BadRequest("Issue in getting user roles");
-
-            if (roles[0] != UserRoles.Member.ToString())
-                return BadRequest("Not a member user");
+                return BadRequest($"user with such email {email} does not exists");           
 
             var userDto = mapper.Map<UserInfoDto>(user);
             userDto.Role = UserRoles.Member;

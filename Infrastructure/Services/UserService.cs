@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Core.DTOs;
 using Core.Entities;
+using Core.Enums;
 using Core.Interfaces;
 
 namespace Infrastructure.Services
@@ -85,6 +86,17 @@ namespace Infrastructure.Services
             }
            
             return resultDto;
+        }
+
+        public async Task<UserInfoDto?> GetUserByRoleAndEmailAsync(string email, UserRoles filterRole)
+        {
+            var user = await userRepository.GetUserByRoleAndEmailAsync(email, filterRole);
+            if (user == null)
+            {
+                return null;
+            }
+
+            return mapper.Map<UserInfoDto>(user);
         }
     }
 }

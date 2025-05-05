@@ -23,8 +23,8 @@ export class MemberService {
     return this.http.put(this.baseUrl + `/activateDeactivateMembers/${username}`, {});
   }
 
-  getMemberForEditOrInsert(email: string | null) : Observable<UserInfoDto>
+  getMemberForEdit(email: string | null) : Observable<UserInfoDto>
   {
-    return this.http.get<UserInfoDto>(this.baseUrl + `/getMemberForEditOrInsert/${email}`);
+    return this.http.get<UserInfoDto>(this.baseUrl + `/getMemberForEdit/${email}`);
   }
 }
