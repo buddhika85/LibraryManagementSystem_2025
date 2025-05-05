@@ -11,4 +11,5 @@ export interface BookWithAuthorsDto {
   bookPictureUrl: string;
   authorList: AuthorDto[];
   authorListStr: string;
+  isAvailable: boolean;
 }

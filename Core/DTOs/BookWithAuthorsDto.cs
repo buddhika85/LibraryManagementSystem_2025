@@ -13,6 +13,8 @@ namespace Core.DTOs
         public string BookPublishedDateStr { get; set; } = string.Empty;
         public required string BookPictureUrl { get; set; }
 
+        public bool IsAvailable { get; set; }
+
         // authors
         public IReadOnlyList<AuthorDto> AuthorList { get; set; } = [];
 
