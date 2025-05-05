@@ -72,11 +72,11 @@ export class MemberListComponent implements OnInit
   }
 
   add() {
-    //this.openAddEditBookDialog(0);
+    this.openAddEditDialog(null);
   }
 
   edit(email: string) {
-    //this.openAddEditBookDialog(id);
+    this.openAddEditDialog(email);
   }
 
   activateDeactivate(email: string) {
@@ -88,5 +88,10 @@ export class MemberListComponent implements OnInit
       error: () => this.snackbar.error('There was an error when activating/deactivating member!'),
       complete: () => {}
     });
+  }
+
+  private openAddEditDialog(email: string | null) {
+  
+    this.memberService.getMemberForEditOrInsert(email).subscribe();
   }
 }

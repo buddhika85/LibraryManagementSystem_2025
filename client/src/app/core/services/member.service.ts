@@ -3,6 +3,7 @@ import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { UsersListDto } from '../../shared/models/user-display-dto';
 import { Observable } from 'rxjs';
+import { UserInfoDto } from '../../shared/models/user-info-dto';
 
 @Injectable({
   providedIn: 'root'
@@ -20,5 +21,10 @@ export class MemberService {
   activateDeactivateMembers(username: string)
   {       
     return this.http.put(this.baseUrl + `/activateDeactivateMembers/${username}`, {});
+  }
+
+  getMemberForEditOrInsert(email: string | null) : Observable<UserInfoDto>
+  {
+    return this.http.get<UserInfoDto>(this.baseUrl + `/getMemberForEditOrInsert/${email}`);
   }
 }
