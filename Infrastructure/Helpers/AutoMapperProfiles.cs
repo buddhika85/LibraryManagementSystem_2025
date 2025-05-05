@@ -33,6 +33,10 @@ namespace Infrastructure.Helpers
             CreateMap<InsertUpdateUserDto, AppUser>();
 
             CreateMap<Address, AddressDto>().ReverseMap();
+
+
+            CreateMap<Borrowals, BorrowalsDisplayDto>();
+
         }
 
        

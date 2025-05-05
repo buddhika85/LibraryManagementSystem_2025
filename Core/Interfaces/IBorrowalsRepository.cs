@@ -2,7 +2,8 @@
 
 namespace Core.Interfaces
 {
-    public interface IBorrowalsRepository :IGenericRepository<Borrowals>
+    public interface IBorrowalsRepository : IGenericRepository<Borrowals>
     {
+        Task<IReadOnlyList<Borrowals>> GetAllBorrowalsWithNavPropsAsync();
     }
 }
