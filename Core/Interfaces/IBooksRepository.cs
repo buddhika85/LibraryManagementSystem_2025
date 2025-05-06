@@ -6,5 +6,7 @@ namespace Core.Interfaces
     {
         public Task<IList<Book>> GetBooksIncludingAuthorsAsync();
         public Task<Book?> GetBookByIdAsync(int id);
+
+        public Task<IList<Book>> GetBooksIncludingAuthorsAsync(BookFilterDto bookFilterDto, bool isAvailable);
     }
 }

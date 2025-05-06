@@ -18,6 +18,12 @@ namespace Infrastructure.Services
             this.booksRepository = unitOfWork.BookRepository;
         }
 
+        public async Task<IReadOnlyList<BookWithAuthorsDto>> FindBooksAsync(BookFilterDto bookFilterDto, bool isAvailable)
+        {
+            var entities = await booksRepository.GetBooksIncludingAuthorsAsync(bookFilterDto, isAvailable);
+            return mapper.Map<IReadOnlyList<BookWithAuthorsDto>>(entities);
+        }
+
         public async Task<IReadOnlyList<AuthorDto>> GetAuthorsAsync()
         {
             var entities = await authorRepo.ListAllAsync();

@@ -38,5 +38,16 @@ namespace API.Controllers
             };
             return Ok(dto);
         }
+
+        [Authorize(Roles = "Admin,Staff")]
+        [HttpGet("filter-books")]
+        public async Task<ActionResult<BookWithAuthorListDto>> FilterBooks(BookFilterDto bookFilterDto)
+        {
+            var dto = new BookWithAuthorListDto
+            {
+                BookWithAuthorList = await libraryService.FindBooksAsync(bookFilterDto, isAvailable: true)
+            };
+            return Ok(dto);
+        }
     }
 }

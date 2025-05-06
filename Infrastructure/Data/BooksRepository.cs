@@ -1,4 +1,5 @@
-﻿using Core.Entities;
+﻿using Core.DTOs;
+using Core.Entities;
 using Core.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
@@ -18,6 +19,19 @@ namespace Infrastructure.Data
         public async Task<IList<Book>> GetBooksIncludingAuthorsAsync()
         {
             return await context.Books.Include(x => x.Authors).ToListAsync();
+        }
+
+        public async Task<IList<Book>> GetBooksIncludingAuthorsAsync(BookFilterDto bookFilterDto, bool isAvailable)
+        {
+            return await context.Books.Include(x => x.Authors)
+                            .Where(x => x.IsAvailable &&
+                                (
+                                    (!bookFilterDto.AuthorIds.Any() && !bookFilterDto.BookGenres.Any()) || // No filtering
+                                    (bookFilterDto.AuthorIds.Any() && x.Authors.Any(a => bookFilterDto.AuthorIds.Contains(a.Id))) ||
+                                    (bookFilterDto.BookGenres.Any() && bookFilterDto.BookGenres.Contains((int)x.Genre))
+                                )
+                            )
+                            .ToListAsync();
         }
     }
 }
