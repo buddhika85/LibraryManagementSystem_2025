@@ -36,4 +36,9 @@ select t.UserName, r.[Name] as 'Role', a.Id 'Address ID', a.Line1 'Address Line 
 --update AspNetUsers set IsActive = 0 where Email = 'm2@g.c';
 
 
-delete from AspNetUsers where FirstName = 'a';
+--delete from AspNetUsers where FirstName = 'a';
+
+
+select * from Borrowals;
+
+--insert into Borrowals values (GETDATE(), GETDATE() + 7, 2, 2, 'ef22f114-942d-4b85-a7ae-abeddbfe817c')
