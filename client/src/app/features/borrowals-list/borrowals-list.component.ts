@@ -53,7 +53,7 @@ export class BorrowalsListComponent implements OnInit
 
   private loadGridData()   
   {
-    this.borrowalsService.GetAllBorrowals().subscribe({
+    this.borrowalsService.getAllBorrowals().subscribe({
       next: (data) =>  {        
         this.borrowals = data;
         this.dataSource = new MatTableDataSource(this.borrowals.borrowalsList);
@@ -83,7 +83,8 @@ export class BorrowalsListComponent implements OnInit
     (document.activeElement as HTMLElement)?.blur();
 
     const dialogRef = this.dialog.open(BorrowBookDialogComponent, {
-      width: '800px',
+      width: '1000px',  // width
+      maxWidth: '90vw', // Optional: Prevent exceeding viewport width    
       data: {
         // userType: UserRoles.member,
         // user: user                

@@ -13,6 +13,9 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatButtonModule } from '@angular/material/button';
 import { EnumUtils } from '../../../core/utils/enum.utils';
 import { BorrwalsService } from '../../../core/services/borrwals.service';
+import { BorrowFormDto } from '../../../shared/models/borrow-form-dto';
+import { SnackBarService } from '../../../core/services/snack-bar.service';
+import { BookGenre } from '../../../shared/models/book-genre';
 
 @Component({
   selector: 'app-borrow-book-dialog',
@@ -29,25 +32,56 @@ export class BorrowBookDialogComponent implements OnInit
   private borrowalService = inject(BorrwalsService);
   private dialogRef = inject(MatDialogRef<BorrowBookDialogComponent>);
   private formBuilder = inject(FormBuilder);
+  private snackBarService = inject(SnackBarService);
 
   validationErrors?: string[];
   borrowalForm!: FormGroup;
   errorMessage: string = '';
-
+  borrowFormDto! : BorrowFormDto;
   
+  genres = Object.keys(BookGenre)
+  .filter(key => isNaN(Number(key))) // filter out numeric keys
+  .map(key => ({
+    label: key,
+    value: BookGenre[key as keyof typeof BookGenre]
+  }));
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: {  }) 
   {    
+    this.borrowalService.getBorrowFormData().subscribe(
+      {
+        next: (data) => {
+          this.borrowFormDto = data;
+          this.createForm();        
+        },
+        error: (error) =>  {
+          this.errorMessage = 'error in loading borrow form information';
+          this.snackBarService.error(this.errorMessage);
+        },
+        complete:() => {}
+      }
+    );    
   }
 
   ngOnInit(): void 
-  {
-    this.createForm();
+  {  
   }
 
   createForm() 
   {
-    this.borrowalForm = this.formBuilder.group({  });
+    this.borrowalForm = this.formBuilder.group({  
+      genre: [[], Validators.required],
+      authors:  [[], Validators.required],
+      book: [Validators.required]
+    });
+
+    this.borrowalForm.get('genre')?.valueChanges.subscribe(selectedGenres => {
+      this.filterBooks();
+    });
+  
+    this.borrowalForm.get('authors')?.valueChanges.subscribe(selectedAuthors => {
+      this.filterBooks();
+    });
   }
 
   
@@ -58,4 +92,12 @@ export class BorrowBookDialogComponent implements OnInit
   }
 
   onSubmit(): void {  }
+
+  private filterBooks()
+  {
+    const selectedGenres = this.borrowalForm.get('genre')?.value || [];
+    const selectedAuthors = this.borrowalForm.get('authors')?.value || [];
+
+    alert('selected genres ' + selectedGenres + '   selected authors ' + selectedAuthors);
+  }
 }

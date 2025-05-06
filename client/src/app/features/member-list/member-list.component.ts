@@ -119,7 +119,8 @@ export class MemberListComponent implements OnInit
     (document.activeElement as HTMLElement)?.blur();
 
     const dialogRef = this.dialog.open(AddEditUserDialogComponent, {
-      width: '800px',
+      width: '1000px',
+      maxWidth: '90vw', // Optional: Prevent exceeding viewport width    
       data: {
         userType: UserRoles.member,
         user: user                }
