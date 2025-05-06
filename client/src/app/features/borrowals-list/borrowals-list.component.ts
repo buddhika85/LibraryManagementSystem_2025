@@ -14,6 +14,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { BorrowalsDisplayDto } from '../../shared/models/borrowals-display-dto';
 import { environment } from '../../../environments/environment';
+import { BorrowBookDialogComponent } from './borrow-book-dialog/borrow-book-dialog.component';
+import { ReturnBookDialogComponent } from './return-book-dialog/return-book-dialog.component';
 
 @Component({
   selector: 'app-borrowals-list',
@@ -41,12 +43,15 @@ export class BorrowalsListComponent implements OnInit
 
   snackBarService = inject(SnackBarService);
 
+  // dialog
+  readonly dialog = inject(MatDialog);
+
   ngOnInit(): void 
   {
-    this.loadBorrowals();
+    this.loadGridData();
   }
 
-  private loadBorrowals()   
+  private loadGridData()   
   {
     this.borrowalsService.GetAllBorrowals().subscribe({
       next: (data) =>  {        
@@ -74,12 +79,39 @@ export class BorrowalsListComponent implements OnInit
   }
 
   borroBook(){
-    //alert('borrow');
+    // blur active element to avoid aria-hidden warning
+    (document.activeElement as HTMLElement)?.blur();
+
+    const dialogRef = this.dialog.open(BorrowBookDialogComponent, {
+      width: '800px',
+      data: {
+        // userType: UserRoles.member,
+        // user: user                
+      }
+    }).afterClosed().subscribe(result => {
+      if (result) {        
+        this.loadGridData();
+      }
+    });
   }
 
   returnBook(borrowalId: number)
   {
-    alert('Return ' + borrowalId);
+    //alert('Return ' + borrowalId);
+    // blur active element to avoid aria-hidden warning
+    (document.activeElement as HTMLElement)?.blur();
+
+    const dialogRef = this.dialog.open(ReturnBookDialogComponent, {
+      width: '800px',
+      data: {
+        // userType: UserRoles.member,
+        // user: user                
+      }
+    }).afterClosed().subscribe(result => {
+      if (result) {        
+        this.loadGridData();
+      }
+    });
   }
 
   getImageUrl(imageName: string): string 
