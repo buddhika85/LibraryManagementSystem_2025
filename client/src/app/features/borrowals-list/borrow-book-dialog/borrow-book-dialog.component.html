@@ -18,7 +18,7 @@
 
                 <mat-form-field appearance="outline" class="w-full">
                     <mat-label>Genre</mat-label>
-                    <mat-select formControlName="genre" multiple required>
+                    <mat-select formControlName="genre" multiple>
                         <mat-option *ngFor="let genre of this.genres" [value]="genre.value">
                             {{ genre.label }}
                         </mat-option>
@@ -27,7 +27,7 @@
 
                 <mat-form-field appearance="outline" class="w-full">
                     <mat-label>Authors</mat-label>
-                    <mat-select formControlName="authors" multiple required>
+                    <mat-select formControlName="authors" multiple>
                         <mat-option *ngFor="let author of this.borrowFormDto.authors" [value]="author.id">
                             {{ author.name }}
                         </mat-option>

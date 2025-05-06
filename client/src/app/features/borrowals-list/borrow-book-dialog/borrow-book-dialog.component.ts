@@ -83,11 +83,11 @@ export class BorrowBookDialogComponent implements OnInit
   createForm() 
   {
     this.borrowalForm = this.formBuilder.group({  
-      genre: [[], Validators.required],
-      authors:  [[], Validators.required],
+      genre: [[]],
+      authors:  [[]],
       book: [Validators.required],
       member: ['', Validators.required],
-      borrowalDate: [{value: new Date(), disabled: true},, Validators.required],
+      borrowalDate: [{value: new Date(), disabled: true}, Validators.required],
       returnDate: [{value: this.calculateReturnDate(), disabled: true}, Validators.required]
     });
 
@@ -108,18 +108,6 @@ export class BorrowBookDialogComponent implements OnInit
     );
   }
 
-  private calculateReturnDate(): Date {
-    const returnDate = new Date();
-    returnDate.setDate(returnDate.getDate() + 7); // Adds 7 days to today's date
-    return returnDate;
-  }
-  
-  
-
-  
-
-
- 
 
   // filter member objects based what value (user typed on text box)
   private filterMembers(value: string): UserDisplayDto[] 
@@ -155,6 +143,13 @@ export class BorrowBookDialogComponent implements OnInit
     });
   }
 
+  private calculateReturnDate(): Date {
+    const returnDate = new Date();
+    returnDate.setDate(returnDate.getDate() + 7); // Adds 7 days to today's date
+    return returnDate;
+  }
+
+
   // return full image path of server to display image
   getImageUrl(imageName: string): string 
   {
@@ -168,5 +163,15 @@ export class BorrowBookDialogComponent implements OnInit
     this.validationErrors = undefined;
   }
 
-  onSubmit(): void {  }
+  onSubmit(): void 
+  {  
+    if (this.borrowalForm.valid)
+    {
+      const formInputs = this.borrowalForm.getRawValue();  // this.borrowalForm.value does not read disabled form inputs
+      
+      return;
+    }
+    
+    this.errorMessage = "Please recheck the form";
+  }
 }
