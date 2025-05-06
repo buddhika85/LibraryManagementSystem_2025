@@ -61,16 +61,8 @@ export class BorrowBookDialogComponent implements OnInit
       {
         next: (data) => {
           this.borrowFormDto = data;
-          console.log(this.borrowFormDto);    
-          
-          
-
-          this.createForm();   
-          
-          this.filterMembers$ = this.borrowalForm.get('member')!.valueChanges.pipe(
-            startWith(''),
-            map(value => this.filterMembers(value || '')) 
-          );
+          //console.log(this.borrowFormDto);   
+          this.createForm();  
         },
         error: (error) =>  {
           this.errorMessage = 'error in loading borrow form information';
@@ -91,7 +83,9 @@ export class BorrowBookDialogComponent implements OnInit
       genre: [[], Validators.required],
       authors:  [[], Validators.required],
       book: [Validators.required],
-      member: ['', Validators.required]
+      member: ['', Validators.required],
+      borrowalDate: [{value: new Date(), disabled: true},, Validators.required],
+      returnDate: [{value: this.calculateReturnDate(), disabled: true}, Validators.required]
     });
 
     this.borrowalForm.get('genre')?.valueChanges.subscribe(selectedGenres => {
@@ -101,8 +95,18 @@ export class BorrowBookDialogComponent implements OnInit
     this.borrowalForm.get('authors')?.valueChanges.subscribe(selectedAuthors => {
       this.filterBooks();
     });
+
+    this.filterMembers$ = this.borrowalForm.get('member')!.valueChanges.pipe(
+      startWith(''),
+      map(value => this.filterMembers(value || '')) 
+    );
   }
 
+  private calculateReturnDate(): Date {
+    const returnDate = new Date();
+    returnDate.setDate(returnDate.getDate() + 7); // Adds 7 days to today's date
+    return returnDate;
+  }
   
   clearForm(): void {
     this.createForm();

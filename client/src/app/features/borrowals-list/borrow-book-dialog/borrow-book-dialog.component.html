@@ -3,7 +3,7 @@
 @if(this.borrowFormDto) 
 {
     <div class="container">
-        <form [formGroup]="borrowalForm" (ngSubmit)="onSubmit()" class="max-w-5xl mx-auto p-6 bg-white shadow-lg rounded-xl mt-10">
+        <form [formGroup]="borrowalForm" (ngSubmit)="onSubmit()" class="popup-form-class">
           
           <div class="page-header">
             <h1 >Borrow a book</h1>
@@ -53,21 +53,36 @@
     
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
     
-              <mat-form-field appearance="outline" class="w-full">
-                <mat-label>Select a member</mat-label>
-                <input type="text" matInput formControlName="member" [matAutocomplete]="auto">
+                <mat-form-field appearance="outline" class="w-full">
+                    <mat-label>Select a member</mat-label>
+                    <input type="text" matInput formControlName="member" [matAutocomplete]="auto">
 
-                <mat-autocomplete #auto>
-                    <mat-option *ngFor="let member of filterMembers$ | async" [value]="member.email">
-                    {{ member.firstName }} {{ member.lastName }}
-                    </mat-option>
-                </mat-autocomplete>
-              </mat-form-field>
-      
-            
+                    <mat-autocomplete #auto>
+                        <mat-option *ngFor="let member of filterMembers$ | async" [value]="member.email">
+                        {{ member.firstName }} {{ member.lastName }}
+                        </mat-option>
+                    </mat-autocomplete>
+                </mat-form-field>           
+
+                <mat-form-field appearance="outline" class="w-full">
+                    <mat-label>Start Date</mat-label>
+                    <input matInput [matDatepicker]="pickerStartDate" formControlName="borrowalDate" required [readonly]="true"/>
+                    <mat-datepicker-toggle matSuffix [for]="pickerStartDate"></mat-datepicker-toggle>
+                    <mat-datepicker #pickerStartDate></mat-datepicker>
+                </mat-form-field>
+                  
+                <mat-form-field appearance="outline" class="w-full">
+                    <mat-label>Due Date</mat-label>
+                    <input matInput [matDatepicker]="pickerEndDate" formControlName="returnDate" required [readonly]="true"/>
+                    <mat-datepicker-toggle matSuffix [for]="pickerEndDate"></mat-datepicker-toggle>
+                    <mat-datepicker #pickerEndDate></mat-datepicker>
+                </mat-form-field>
+                  
+
             </div>
+
            </section>
-           
+
         </form>
     
     </div>

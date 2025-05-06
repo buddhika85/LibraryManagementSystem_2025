@@ -3,7 +3,7 @@
 
 
 <div class="container">
-    <form [formGroup]="userAddEditForm" (ngSubmit)="onSubmit()" class="max-w-5xl mx-auto p-6 bg-white shadow-lg rounded-xl mt-10">
+    <form [formGroup]="userAddEditForm" (ngSubmit)="onSubmit()" class="popup-form-class">
       
       <div class="page-header">
         <h1 >{{ (this.isAddMode ? 'Add '  : 'Edit ') }} {{ this.userRoleStr}}</h1>
