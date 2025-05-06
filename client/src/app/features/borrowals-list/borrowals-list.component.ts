@@ -74,7 +74,7 @@ export class BorrowalsListComponent implements OnInit
   }
 
   borroBook(){
-    alert('borrow');
+    //alert('borrow');
   }
 
   returnBook(borrowalId: number)

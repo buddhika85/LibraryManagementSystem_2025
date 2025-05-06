@@ -40,5 +40,5 @@ select t.UserName, r.[Name] as 'Role', a.Id 'Address ID', a.Line1 'Address Line 
 
 
 select * from Borrowals;
-
+--update Books set IsAvailable = 0 where Id = 2;
 --insert into Borrowals values (GETDATE(), GETDATE() + 7, 2, 2, 'ef22f114-942d-4b85-a7ae-abeddbfe817c')
