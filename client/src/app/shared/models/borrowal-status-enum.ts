@@ -1,8 +1,7 @@
 
 export enum BorrowalStatus {
-    Active = "Active",
-    Overdue = "Overdue",
-    Returned = "Returned",
-    Lost = "Lost",
-  }
+  Available = 1,
+  Out = 2,
+  Returned = 3
+}
  
