@@ -44,8 +44,10 @@ export class BorrowBookDialogComponent implements OnInit
   errorMessage: string = '';
   borrowFormDto! : BorrowFormDto; 
 
+  // member list drop down is bound to this observable
   filterMembers$!: Observable<UserDisplayDto[]>;
   
+  // all genres - label, value list
   genres = Object.keys(BookGenre)
   .filter(key => isNaN(Number(key))) // filter out numeric keys
   .map(key => ({
@@ -77,6 +79,7 @@ export class BorrowBookDialogComponent implements OnInit
   { 
   }
 
+  // creating form
   createForm() 
   {
     this.borrowalForm = this.formBuilder.group({  
@@ -88,14 +91,17 @@ export class BorrowBookDialogComponent implements OnInit
       returnDate: [{value: this.calculateReturnDate(), disabled: true}, Validators.required]
     });
 
+    // on change of genre execute filter books
     this.borrowalForm.get('genre')?.valueChanges.subscribe(selectedGenres => {
       this.filterBooks();
     });
   
+    // on change of authors execute filter books
     this.borrowalForm.get('authors')?.valueChanges.subscribe(selectedAuthors => {
       this.filterBooks();
     });
 
+    // intialize filterMembers$ observable to show 
     this.filterMembers$ = this.borrowalForm.get('member')!.valueChanges.pipe(
       startWith(''),
       map(value => this.filterMembers(value || '')) 
@@ -108,14 +114,29 @@ export class BorrowBookDialogComponent implements OnInit
     return returnDate;
   }
   
-  clearForm(): void {
-    this.createForm();
-    this.errorMessage = '';
-    this.validationErrors = undefined;
+  
+
+  
+
+
+ 
+
+  // filter member objects based what value (user typed on text box)
+  private filterMembers(value: string): UserDisplayDto[] 
+  {
+    if (!this.borrowFormDto?.members) return [];
+
+    const filterValue = value.toLowerCase();
+    const filteredMembers = this.borrowFormDto.members.filter(member =>
+      member.firstName.toLowerCase().includes(filterValue) ||                 // since every string contains an empty string, the .includes('') condition will always return true for every member.
+      member.lastName.toLowerCase().includes(filterValue) 
+    );
+
+    this.cdRef.detectChanges(); // Force UI refresh
+    return filteredMembers;
   }
 
-  onSubmit(): void {  }
-
+  // filter bookx based on author and genre selections
   private filterBooks()
   {    
     const filter: BookFilterDto = { 
@@ -134,26 +155,18 @@ export class BorrowBookDialogComponent implements OnInit
     });
   }
 
-
+  // return full image path of server to display image
   getImageUrl(imageName: string): string 
   {
     return imageName ? `${environment.apiBookImageUrl}${imageName}` : `${environment.apiImagesUrl}no-image-available.jpg`;
   }
 
-  filterMembers(value: string): UserDisplayDto[] 
-  {
-    if (!this.borrowFormDto?.members) return [];
 
-    const filterValue = value.toLowerCase();
-    const filteredMembers = this.borrowFormDto.members.filter(member =>
-      member.firstName.toLowerCase().includes(filterValue) ||
-      member.lastName.toLowerCase().includes(filterValue) ||
-      member.email.toLowerCase().includes(filterValue)
-    );
-
-    this.cdRef.detectChanges(); // Force UI refresh
-    return filteredMembers;
-
+  clearForm(): void {
+    this.createForm();
+    this.errorMessage = '';
+    this.validationErrors = undefined;
   }
 
+  onSubmit(): void {  }
 }
