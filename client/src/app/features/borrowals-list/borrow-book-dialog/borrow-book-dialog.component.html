@@ -38,8 +38,8 @@
               <mat-form-field appearance="outline" class="w-full">
                 <mat-label>Book</mat-label>
                 <mat-select formControlName="book" required>
-                    <mat-option *ngFor="let author of this.borrowFormDto.authors" [value]="author.id">
-                      {{ author.name }}
+                    <mat-option *ngFor="let book of this.booksWithAuthorsList" [value]="book.bookId">
+                      {{ book.bookTitle }}
                     </mat-option>
                 </mat-select>
               </mat-form-field>

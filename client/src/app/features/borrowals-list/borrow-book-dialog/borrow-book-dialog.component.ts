@@ -2,7 +2,6 @@ import { Component, inject, Inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialogModule } from '@angular/material/dialog';
-
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -11,11 +10,12 @@ import { MatOptionModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatButtonModule } from '@angular/material/button';
-import { EnumUtils } from '../../../core/utils/enum.utils';
 import { BorrwalsService } from '../../../core/services/borrwals.service';
 import { BorrowFormDto } from '../../../shared/models/borrow-form-dto';
 import { SnackBarService } from '../../../core/services/snack-bar.service';
 import { BookGenre } from '../../../shared/models/book-genre';
+import { BookWithAuthorsDto } from '../../../shared/models/book-with-authors-dto';
+import { BookFilterDto } from '../../../shared/models/book-filter-dto';
 
 @Component({
   selector: 'app-borrow-book-dialog',
@@ -45,6 +45,8 @@ export class BorrowBookDialogComponent implements OnInit
     label: key,
     value: BookGenre[key as keyof typeof BookGenre]
   }));
+
+  booksWithAuthorsList: BookWithAuthorsDto[] = [];
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: {  }) 
   {    
@@ -94,10 +96,20 @@ export class BorrowBookDialogComponent implements OnInit
   onSubmit(): void {  }
 
   private filterBooks()
-  {
-    const selectedGenres = this.borrowalForm.get('genre')?.value || [];
-    const selectedAuthors = this.borrowalForm.get('authors')?.value || [];
-
-    alert('selected genres ' + selectedGenres + '   selected authors ' + selectedAuthors);
+  {    
+    const filter: BookFilterDto = { 
+      authorIds: this.borrowalForm.get('authors')?.value || [],
+      bookGenres: this.borrowalForm.get('genre')?.value || []
+    };
+    this.borrowalService.filterBooks(filter).subscribe({
+      next: (data) => {
+        this.booksWithAuthorsList = data.bookWithAuthorList;
+      },
+      error: (error) => {
+        this.errorMessage = 'error in loading book information based on selected authors and genres';
+        this.snackBarService.error(this.errorMessage);
+      },
+      complete: () => {}
+    });
   }
 }

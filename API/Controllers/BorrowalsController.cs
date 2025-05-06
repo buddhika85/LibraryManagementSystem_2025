@@ -40,9 +40,14 @@ namespace API.Controllers
         }
 
         [Authorize(Roles = "Admin,Staff")]
-        [HttpGet("filter-books")]
+        [HttpPost("filter-books")]
         public async Task<ActionResult<BookWithAuthorListDto>> FilterBooks(BookFilterDto bookFilterDto)
         {
+            if (bookFilterDto == null)
+            {
+                return BadRequest("Invalid filter parameters.");
+            }
+
             var dto = new BookWithAuthorListDto
             {
                 BookWithAuthorList = await libraryService.FindBooksAsync(bookFilterDto, isAvailable: true)
