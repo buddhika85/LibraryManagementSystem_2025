@@ -23,15 +23,20 @@ namespace Infrastructure.Data
 
         public async Task<IList<Book>> GetBooksIncludingAuthorsAsync(BookFilterDto bookFilterDto, bool isAvailable)
         {
-            return await context.Books.Include(x => x.Authors)
-                            .Where(x => x.IsAvailable &&
-                                (
-                                    (!bookFilterDto.AuthorIds.Any() && !bookFilterDto.BookGenres.Any()) || // No filtering
-                                    (bookFilterDto.AuthorIds.Any() && x.Authors.Any(a => bookFilterDto.AuthorIds.Contains(a.Id))) ||
-                                    (bookFilterDto.BookGenres.Any() && bookFilterDto.BookGenres.Contains((int)x.Genre))
-                                )
-                            )
-                            .ToListAsync();
+            var query = context.Books.Include(x => x.Authors)
+                                .Where(x => x.IsAvailable == isAvailable);
+
+            if (bookFilterDto.AuthorIds.Any())
+            {
+                query = query.Where(x => x.Authors.Any(a => bookFilterDto.AuthorIds.Contains(a.Id)));
+            }
+
+            if (bookFilterDto.BookGenres.Any())
+            {
+                query = query.Where(x => bookFilterDto.BookGenres.Contains((int)x.Genre));
+            }
+
+            return await query.ToListAsync();
         }
     }
 }
