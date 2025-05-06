@@ -13,11 +13,13 @@ namespace API.Controllers
     {
         private readonly IBorrowalsService borrowalsService;
         private readonly ILibraryService libraryService;
+        private readonly IUserService userService;
 
-        public BorrowalsController(IBorrowalsService borrowalsService, ILibraryService libraryService)
+        public BorrowalsController(IBorrowalsService borrowalsService, ILibraryService libraryService, IUserService userService)
         {
             this.borrowalsService = borrowalsService;
             this.libraryService = libraryService;
+            this.userService = userService;
         }
 
         [Authorize(Roles = "Admin,Staff")]
@@ -34,7 +36,8 @@ namespace API.Controllers
         {
             var dto = new BorrowFormDto {
                 Authors = await libraryService.GetAuthorsAsync(),
-                Genres = Enum.GetValues(typeof(BookGenre)).Cast<BookGenre>().ToList()
+                Genres = Enum.GetValues(typeof(BookGenre)).Cast<BookGenre>().ToList(),
+                Members = (await userService.GetMembersAsync()).UsersList,
             };
             return Ok(dto);
         }

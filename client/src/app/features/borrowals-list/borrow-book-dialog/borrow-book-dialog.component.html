@@ -38,14 +38,36 @@
               <mat-form-field appearance="outline" class="w-full">
                 <mat-label>Book</mat-label>
                 <mat-select formControlName="book" required>
-                    <mat-option *ngFor="let book of this.booksWithAuthorsList" [value]="book.bookId">
-                      {{ book.bookTitle }}
+                    <mat-option *ngFor="let book of booksWithAuthorsList" [value]="book.bookId" class="book-option">
+                      <img [src]="getImageUrl(book.bookPictureUrl)" alt="Book Image" title="{{book.bookTitle}}" class="book-image" />
+                      <span>{{ book.bookTitle }}</span>
                     </mat-option>
                 </mat-select>
               </mat-form-field>
             </div>
-          </section>
+           </section>
     
+           <section class="mb-8 border-l-4 border-green-500 pl-4">
+    
+            <h2 class="text-2xl font-semibold text-green-700 mb-4">Member Selection</h2>
+    
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+    
+              <mat-form-field appearance="outline" class="w-full">
+                <mat-label>Select a member</mat-label>
+                <input type="text" matInput formControlName="member" [matAutocomplete]="auto">
+
+                <mat-autocomplete #auto>
+                    <mat-option *ngFor="let member of filterMembers$ | async" [value]="member.email">
+                    {{ member.firstName }} {{ member.lastName }}
+                    </mat-option>
+                </mat-autocomplete>
+              </mat-form-field>
+      
+            
+            </div>
+           </section>
+           
         </form>
     
     </div>

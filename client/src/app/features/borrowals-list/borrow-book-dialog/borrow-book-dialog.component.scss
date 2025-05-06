@@ -1,0 +1,7 @@
+.book-option {
+    @apply flex items-center gap-x-2;
+  }
+  
+.book-image {
+    @apply w-8 h-8 object-cover rounded;
+}

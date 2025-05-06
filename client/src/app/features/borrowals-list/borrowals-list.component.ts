@@ -2,7 +2,6 @@ import { Component, inject, OnInit, ViewChild } from '@angular/core';
 import { BorrwalsService } from '../../core/services/borrwals.service';
 import { BorrowalsDisplayListDto } from '../../shared/models/borrowals-display-list-dto';
 import { SnackBarService } from '../../core/services/snack-bar.service';
-
 import { MatDividerModule } from '@angular/material/divider';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
@@ -83,7 +82,7 @@ export class BorrowalsListComponent implements OnInit
     (document.activeElement as HTMLElement)?.blur();
 
     const dialogRef = this.dialog.open(BorrowBookDialogComponent, {
-      width: '1000px',  // width
+      width: '1100px',  // width
       maxWidth: '90vw', // Optional: Prevent exceeding viewport width    
       data: {
         // userType: UserRoles.member,
