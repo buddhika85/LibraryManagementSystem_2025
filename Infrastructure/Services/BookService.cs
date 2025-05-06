@@ -111,7 +111,7 @@ namespace Infrastructure.Services
                 model = UpdateBook(bookSaveDto, authorEntities, model);
             }
 
-            if (!await unitOfWork.SaveAllAsync())
+            if (!await unitOfWork.SaveAllAsTransactionAsync())
             {
                 result.ErrorMessage = "Could not save book.";                
             }
@@ -147,7 +147,7 @@ namespace Infrastructure.Services
                 return result;
             }
             booksRepository.Remove(entity);
-            if (!await unitOfWork.SaveAllAsync())
+            if (!await unitOfWork.SaveAllAsTransactionAsync())
             {
                 result.ErrorMessage = "Could not delete book.";
             }

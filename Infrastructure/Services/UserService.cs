@@ -48,7 +48,7 @@ namespace Infrastructure.Services
             var addressToDelete = await addressRepository.GetByIdAsync(id);
             if (addressToDelete != null)
                 this.addressRepository.Remove(addressToDelete);
-            if (!await unitOfWork.SaveAllAsync())
+            if (!await unitOfWork.SaveAllAsTransactionAsync())
             {
                 result.ErrorMessage = "Could not delete the address.";
             }
@@ -78,7 +78,7 @@ namespace Infrastructure.Services
             mapper.Map(address, addressModel);
             addressRepository.Update(addressModel);
 
-            var result = await unitOfWork.SaveAllAsync();
+            var result = await unitOfWork.SaveAllAsTransactionAsync();
             if (!result)
             {
                 resultDto.ErrorMessage = $"Updating address for username {username} is unsuccessful";

@@ -42,6 +42,7 @@ namespace API.Controllers
             return Ok(dto);
         }
 
+
         [Authorize(Roles = "Admin,Staff")]
         [HttpPost("filter-books")]
         public async Task<ActionResult<BookWithAuthorListDto>> FilterBooks(BookFilterDto bookFilterDto)
@@ -56,6 +57,15 @@ namespace API.Controllers
                 BookWithAuthorList = await libraryService.FindBooksAsync(bookFilterDto, isAvailable: true)
             };
             return Ok(dto);
+        }
+
+
+        [Authorize(Roles = "Admin,Staff")]
+        [HttpPost("borrow-book")]
+        public async Task<ActionResult<BorrowResultDto>> BorrowBook(BookBorrowRequestDto bookFilterDto)
+        {
+            BorrowResultDto result = await borrowalsService.BorrowBook(bookFilterDto);
+            return Ok(result);
         }
     }
 }

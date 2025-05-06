@@ -11,6 +11,12 @@ namespace Core.Interfaces
 
         IBorrowalsRepository BorrowalsRepository { get;  }
 
+
+        Task BeginTransactionAsync();       
+        Task CommitTransactionAsync();
+        Task RollbackTransactionAsync();
         Task<bool> SaveAllAsync();
+        Task<bool> SaveAllAsTransactionAsync();
+
     }
 }

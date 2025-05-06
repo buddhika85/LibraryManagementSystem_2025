@@ -11,6 +11,11 @@ namespace Infrastructure.Data
         {
         }
 
+        /// <summary>
+        /// Filter book by Id - returns author information also
+        /// </summary>
+        /// <param name="id">int</param>
+        /// <returns>Book with navigation property author</returns>
         public async Task<Book?> GetBookByIdAsync(int id)
         {
             return await context.Books.Include(x => x.Authors).SingleOrDefaultAsync(x => x.Id == id);
