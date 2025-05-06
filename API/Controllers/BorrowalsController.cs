@@ -1,5 +1,6 @@
 ﻿
 using Core.DTOs;
+using Core.Enums;
 using Core.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -11,10 +12,12 @@ namespace API.Controllers
     public class BorrowalsController : BaseApiController
     {
         private readonly IBorrowalsService borrowalsService;
+        private readonly ILibraryService libraryService;
 
-        public BorrowalsController(IBorrowalsService borrowalsService)
+        public BorrowalsController(IBorrowalsService borrowalsService, ILibraryService libraryService)
         {
             this.borrowalsService = borrowalsService;
+            this.libraryService = libraryService;
         }
 
         [Authorize(Roles = "Admin,Staff")]
@@ -22,6 +25,17 @@ namespace API.Controllers
         public async Task<ActionResult<BorrowalsDisplayListDto>> GetAllBorrowals()
         {
             var dto = await borrowalsService.GetAllBorrowalsAsync();
+            return Ok(dto);
+        }
+
+        [Authorize(Roles = "Admin,Staff")]
+        [HttpGet("borrow-form-data")]
+        public async Task<ActionResult<BorrowFormDto>> GetBorrowFormData()
+        {
+            var dto = new BorrowFormDto {
+                Authors = await libraryService.GetAuthorsAsync(),
+                Genres = Enum.GetValues(typeof(BookGenre)).Cast<BookGenre>().ToList()
+            };
             return Ok(dto);
         }
     }
