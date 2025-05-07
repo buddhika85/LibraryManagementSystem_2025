@@ -182,11 +182,11 @@ export class BorrowBookDialogComponent implements OnInit
         next: (data: BorrowResultDto) => {
           if (data.isSuccess)
           {
-            this.snackBarService.success(`Borrowal successful<br/>${data.memberFullName} borrowed ${data.bookTitle} by ${data.bookAuthors}`);
+            this.snackBarService.success(`Borrowal successful. ${data.memberFullName} borrowed ${data.bookTitle} by ${data.bookAuthors}.`);
             this.dialogRef.close(true);
             return;
           }
-          this.errorMessage = `Error in saving book borrow information<br/>${data.errorMessage}`;
+          this.errorMessage = `Error in saving book borrow information. ${data.errorMessage}`;
           this.snackBarService.error(this.errorMessage);
         },
         error: (error) => {
