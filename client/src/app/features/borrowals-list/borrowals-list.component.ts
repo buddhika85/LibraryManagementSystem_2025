@@ -58,7 +58,7 @@ export class BorrowalsListComponent implements OnInit
         this.dataSource = new MatTableDataSource(this.borrowals.borrowalsList);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
-        console.log(this.borrowals);
+        //console.log(this.borrowals);
       },
       error: () =>  {
         this.snackBarService.error('Unable to load borrowals');
@@ -102,10 +102,10 @@ export class BorrowalsListComponent implements OnInit
     (document.activeElement as HTMLElement)?.blur();
 
     const dialogRef = this.dialog.open(ReturnBookDialogComponent, {
-      width: '800px',
+      width: '1100px',  // width
+      maxWidth: '90vw', // Optional: Prevent exceeding viewport width  
       data: {
-        // userType: UserRoles.member,
-        // user: user                
+        borrowalId: borrowalId                
       }
     }).afterClosed().subscribe(result => {
       if (result) {        

@@ -77,7 +77,7 @@ namespace API.Controllers
         }
 
         [Authorize(Roles = "Admin,Staff")]
-        [HttpGet("borrowal-return-info")]
+        [HttpGet("borrowal-return-info/{borrowalId:int}")]
         public async Task<ActionResult<BorrowalReturnInfoDto>> GetBorrowalReturnInfoDto(int borrowalId)
         {
             var dto = await borrowalsService.GetBorrowalReturnInfoDto(borrowalId, customSettings.PerDayLateFeeDollars);

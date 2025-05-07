@@ -7,6 +7,7 @@ import { BorrowFormDto } from '../../shared/models/borrow-form-dto';
 import { BookWithAuthorListDto } from '../../shared/models/book-with-author-list-dto';
 import { BookFilterDto } from '../../shared/models/book-filter-dto';
 import { BookBorrowRequestDto, BorrowResultDto } from '../../shared/models/book-borrow-request-dto';
+import { BorrowalReturnInfoDto } from '../../shared/models/borrowal-return-info-dto';
 
 @Injectable({
   providedIn: 'root'
@@ -34,5 +35,10 @@ export class BorrwalsService {
   borrowBook(requestDto: BookBorrowRequestDto): Observable<BorrowResultDto>
   {
     return this.http.post<BorrowResultDto>(this.baseUrl + 'borrow-book', requestDto);
+  }
+
+  getBorrowalReturnInfoDto(borrowalId: number): Observable<BorrowalReturnInfoDto>
+  {
+    return this.http.get<BorrowalReturnInfoDto>(this.baseUrl + `borrowal-return-info/${borrowalId}`);
   }
 }

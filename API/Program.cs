@@ -75,6 +75,9 @@ builder.Services.AddSwaggerGen(options =>
     });
 });
 
+// map MyCustomSettings section of AppSettings.json to AppSettingsReader
+builder.Services.Configure<AppSettingsReader>(builder.Configuration.GetSection("MyCustomSettings"));        
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -105,7 +108,6 @@ app.UseCors(x =>
      .AllowCredentials()                                // accepting identity cookie from these clients
      .WithOrigins(allowedOrigins));
 
-builder.Services.Configure<AppSettingsReader>(builder.Configuration.GetSection("MyCustomSettings"));
 
 app.MapControllers();
 

@@ -12,12 +12,12 @@ namespace Infrastructure.Data
 
         public async Task<IReadOnlyList<Borrowals>> GetAllBorrowalsWithNavPropsAsync()
         {
-            return await context.Borrowals.Include(x => x.Book).Include(x => x.AppUser).ToListAsync();
+            return await context.Borrowals.Include(x => x.Book).Include(x => x.Book.Authors).Include(x => x.AppUser).ToListAsync();
         }
 
         public async Task<Borrowals?> GetAllBorrowalWithNavPropsAsync(int borrowalId)
         {
-            return await context.Borrowals.Where(x => x.Id == borrowalId).Include(x => x.Book).Include(x => x.AppUser).SingleOrDefaultAsync();
+            return await context.Borrowals.Where(x => x.Id == borrowalId).Include(x => x.Book).Include(x => x.Book.Authors).Include(x => x.AppUser).SingleOrDefaultAsync();
         }
     }
 }

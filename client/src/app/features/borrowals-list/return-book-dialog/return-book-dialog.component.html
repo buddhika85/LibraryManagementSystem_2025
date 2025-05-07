@@ -1,1 +1,44 @@
-<p>return-book-dialog works!</p>
+@if(this.borrowalReturnInfoDto)
+{
+    <div class="container">
+        <form [formGroup]="returnForm" (ngSubmit)="onSubmit()" class="popup-form-class">
+    
+            <div class="page-header">
+                <h1>Return a book</h1>
+                <p class="sub-header">Review, Pay if late, and return book</p>
+            </div>
+
+            <!-- Book Info Section -->
+        <section class="mb-8 border-l-4 border-blue-500 pl-4">
+
+            <h2 class="text-2xl font-semibold text-blue-700 mb-4">Book</h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+
+                
+                <mat-form-field appearance="outline" class="w-full">
+                    <mat-form-field appearance="outline" class="w-full">
+                        <mat-label>Borrowal ID</mat-label>
+                        <input matInput formControlName="borrowalId" type="text" >
+                      </mat-form-field>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="w-full">
+                    <mat-form-field appearance="outline" class="w-full">
+                        <mat-label>Book</mat-label>
+                        <input matInput formControlName="bookDisplayStr" type="text" >
+                      </mat-form-field>
+                </mat-form-field>
+
+                <!-- <mat-form-field appearance="outline" class="w-full">
+                    <mat-form-field appearance="outline" class="w-full">
+                        <mat-label>Authors</mat-label>
+                        <input matInput formControlName="authorListStr" type="text" required>
+                      </mat-form-field>
+                </mat-form-field> -->
+            </div>
+        </section>
+    
+        </form>
+    </div>
+}
