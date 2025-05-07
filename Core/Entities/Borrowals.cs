@@ -23,5 +23,8 @@ namespace Core.Entities
         public required AppUser AppUser { get; set; }
 
 
+        // Navigation property
+        public BorrowalReturn? BorrowalReturn { get; set; }
+
     }
 }

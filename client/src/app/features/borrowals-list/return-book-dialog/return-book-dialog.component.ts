@@ -15,6 +15,8 @@ import { EnumUtils } from '../../../core/utils/enum.utils';
 import { BorrwalsService } from '../../../core/services/borrwals.service';
 import { BorrowalReturnInfoDto } from '../../../shared/models/borrowal-return-info-dto';
 import { SnackBarService } from '../../../core/services/snack-bar.service';
+import { AccountService } from '../../../core/services/account.service';
+import { ReturnsAcceptDto } from '../../../shared/models/returns-accept-dto';
 
 @Component({
   selector: 'app-return-book-dialog',
@@ -31,6 +33,7 @@ export class ReturnBookDialogComponent implements OnInit
   private dialogRef = inject(MatDialogRef<ReturnBookDialogComponent>);
   private formBuilder = inject(FormBuilder);
   private snackBarService = inject(SnackBarService);
+  private accountService = inject(AccountService);
 
   // for UI change detections after API calls
   private cdRef = inject(ChangeDetectorRef);
@@ -108,8 +111,28 @@ export class ReturnBookDialogComponent implements OnInit
       this.errorMessage = 'Please fill the form, if overdue accept the due payment.'
       return;
     }
+  
+    const dto: ReturnsAcceptDto = this.createReturnsAcceptDto();
 
-    const formInputs = this.returnForm.value.getRawValue();
+    if (dto.isOverdue && !dto.paid)
+    {
+      this.errorMessage = 'It is overdue accept the due payment, and select Paid YES.'
+      return;
+    }
+    //console.log(dto);
     
+  }
+
+  createReturnsAcceptDto(): ReturnsAcceptDto
+  {
+    const { borrowalId, paid } = this.returnForm.getRawValue();
+    const dto: ReturnsAcceptDto = {
+      borrowalId: borrowalId,
+      isOverdue: this.borrowalReturnInfoDto.isOverdue,
+      paid: paid,
+      email: this.accountService.currentUser()?.email || '',
+      amountAccepted: this.borrowalReturnInfoDto.amountDue
+    };
+    return dto;
   }
 }

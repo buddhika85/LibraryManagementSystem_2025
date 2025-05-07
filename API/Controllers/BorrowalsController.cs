@@ -6,7 +6,6 @@ using Core.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using System.Runtime;
 
 namespace API.Controllers
 {
@@ -16,7 +15,7 @@ namespace API.Controllers
     {
         private readonly IBorrowalsService borrowalsService;
         private readonly ILibraryService libraryService;
-        private readonly IUserService userService;
+        private readonly IUserService userService;        
         private readonly AppSettingsReader customSettings;
 
         public BorrowalsController(IBorrowalsService borrowalsService, ILibraryService libraryService, IUserService userService,
@@ -40,7 +39,8 @@ namespace API.Controllers
         [HttpGet("borrow-form-data")]
         public async Task<ActionResult<BorrowFormDto>> GetBorrowFormData()
         {
-            var dto = new BorrowFormDto {
+            var dto = new BorrowFormDto
+            {
                 Authors = await libraryService.GetAuthorsAsync(),
                 Genres = Enum.GetValues(typeof(BookGenre)).Cast<BookGenre>().ToList(),
                 Members = (await userService.GetMembersAsync()).UsersList,
@@ -81,6 +81,14 @@ namespace API.Controllers
         public async Task<ActionResult<BorrowalReturnInfoDto>> GetBorrowalReturnInfoDto(int borrowalId)
         {
             var dto = await borrowalsService.GetBorrowalReturnInfoDto(borrowalId, customSettings.PerDayLateFeeDollars);
+            return Ok(dto);
+        }
+
+        [Authorize(Roles = "Admin,Staff")]
+        [HttpPost("return-book")]
+        public async Task<ActionResult<ReturnResultDto>> ReturnBook(ReturnsAcceptDto returnsAcceptDto)
+        {
+            var dto = await borrowalsService.ReturnBookAsync(returnsAcceptDto);
             return Ok(dto);
         }
     }

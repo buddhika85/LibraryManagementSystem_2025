@@ -247,6 +247,8 @@ namespace Infrastructure.Services
 
         #endregion borrow book
 
+
+        #region get borrowal return info
         public async Task<BorrowalReturnInfoDto> GetBorrowalReturnInfoDto(int borrowalId, decimal perDayLateFeeDollars)
         {
             var dto = new BorrowalReturnInfoDto
@@ -303,6 +305,24 @@ namespace Infrastructure.Services
             return null;
         }
 
-        
+        #endregion get borrowal return info
+
+
+
+        #region return book
+
+        public async Task<ReturnResultDto> ReturnBookAsync(ReturnsAcceptDto returnsAcceptDto)
+        {
+            var staffMember = await userRepository.GetUserByRoleAndEmailAsync(returnsAcceptDto.Email, UserRoles.Staff);
+            if (staffMember == null)
+            {
+                return new ReturnResultDto { ErrorMessage = $"Staff member with email {returnsAcceptDto.Email} does not exist." };
+            }
+
+            return null;
+        }
+
+       
+        #endregion return book
     }
 }
