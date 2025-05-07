@@ -6,5 +6,6 @@ namespace Core.Interfaces
     {
         Task<BorrowResultDto> BorrowBook(BookBorrowRequestDto bookFilterDto);
         Task<BorrowalsDisplayListDto> GetAllBorrowalsAsync();
+        Task<BorrowalReturnInfoDto> GetBorrowalReturnInfoDto(int borrowalId, decimal perDayLateFeeDollars);
     }
 }

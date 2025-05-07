@@ -3,6 +3,7 @@ using Core.DTOs;
 using Core.Entities;
 using Core.Enums;
 using Core.Interfaces;
+using Infrastructure.Helpers;
 
 namespace Infrastructure.Services
 {
@@ -19,9 +20,9 @@ namespace Infrastructure.Services
         {
             this.unitOfWork = unitOfWork;
             this.mapper = mapper;
-            this.borrowalsRepository = unitOfWork.BorrowalsRepository;
-            this.userRepository = unitOfWork.UserRepository;
-            this.booksRepository = unitOfWork.BookRepository;
+            borrowalsRepository = unitOfWork.BorrowalsRepository;
+            userRepository = unitOfWork.UserRepository;
+            booksRepository = unitOfWork.BookRepository;
         }
         
         public async Task<BorrowalsDisplayListDto> GetAllBorrowalsAsync()
@@ -32,6 +33,8 @@ namespace Infrastructure.Services
                 BorrowalsList = mapper.Map<IReadOnlyList<BorrowalsDisplayDto>>(allBrrowals)
             };
         }
+
+        #region borrow book
 
         //public async Task<BorrowResultDto> BorrowBook(BookBorrowRequestDto bookBorrowRequest)
         //{
@@ -242,5 +245,64 @@ namespace Infrastructure.Services
             }
         }
 
+        #endregion borrow book
+
+        public async Task<BorrowalReturnInfoDto> GetBorrowalReturnInfoDto(int borrowalId, decimal perDayLateFeeDollars)
+        {
+            var dto = new BorrowalReturnInfoDto
+            {
+                BorrowalId = borrowalId,
+                PerDayLateFeeDollars = perDayLateFeeDollars
+            };
+
+            var borrowal = await borrowalsRepository.GetAllBorrowalWithNavPropsAsync(borrowalId);
+            if (borrowal == null)
+            {
+                dto.ErrorMessage = $"Borrowal with such Id - {borrowalId} does not exist.";
+                return dto;
+            }
+
+            MapBorrowalToDto(borrowal, dto);
+
+            var validateError = ValidateBorrowalStatusForReturn(borrowal);
+            if (validateError != null)
+            {
+                dto.ErrorMessage = validateError;
+                return dto;
+            }
+
+            ApplyLateFeeInfo(perDayLateFeeDollars, borrowal.DueDate, dto);
+
+            return dto;
+        }
+
+        private void MapBorrowalToDto(Borrowals borrowal, BorrowalReturnInfoDto dto)
+        {
+            dto.BorrowalDateStr = borrowal.BorrowalDate.ToShortDateString();
+            dto.DueDateStr = borrowal.DueDate.ToShortDateString();
+            dto.BorrowalsDisplayDto = mapper.Map<BorrowalsDisplayDto>(borrowal);
+        }
+
+        private static void ApplyLateFeeInfo(decimal perDayLateFeeDollars, DateOnly dueDate, BorrowalReturnInfoDto dto)
+        {
+            var gapDays = DateTimeUtils.GetDayGap(dueDate);
+            if (gapDays > 0)
+            {                
+                dto.LateDays = gapDays;
+                dto.IsOverdue = true;
+                dto.PerDayLateFeeDollars = gapDays * perDayLateFeeDollars;
+            }            
+        }
+
+        private string? ValidateBorrowalStatusForReturn(Borrowals borrowal)
+        {
+            if (borrowal.BorrowalStatus != BorrowalStatus.Out)
+            {
+                return $"Borrowal Id - {borrowal.Id} has a status of {borrowal.BorrowalStatus}. So cannot return.";
+            }
+            return null;
+        }
+
+        
     }
 }

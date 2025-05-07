@@ -1,3 +1,4 @@
+using API.Helpes;
 using API.Middleware;
 using Core.Entities;
 using Core.Interfaces;
@@ -7,6 +8,7 @@ using Infrastructure.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using System.Runtime;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -102,6 +104,8 @@ app.UseCors(x =>
      .AllowAnyMethod()
      .AllowCredentials()                                // accepting identity cookie from these clients
      .WithOrigins(allowedOrigins));
+
+builder.Services.Configure<AppSettingsReader>(builder.Configuration.GetSection("MyCustomSettings"));
 
 app.MapControllers();
 
