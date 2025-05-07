@@ -12,10 +12,10 @@ namespace Core.DTOs
         public string Email { get; set; } = string.Empty;
 
         [Required]
-        public DateOnly StartDate { get; set; }
+        public DateTime StartDate { get; set; }
 
         [Required]
-        public DateOnly EndDate { get; set; }
+        public DateTime EndDate { get; set; }
     }
 
     public class BorrowResultDto: ResultDto
@@ -25,7 +25,7 @@ namespace Core.DTOs
         public string BookAuthors { get; set; } = string.Empty;
         public string MemberEmail { get; set; } = string.Empty;
         public string MemberFullName { get; set; } = string.Empty;
-        public DateOnly StartDate { get; set; }
-        public DateOnly EndDate { get; set;}
+        public DateTime StartDate { get; set; }
+        public DateTime EndDate { get; set;}
     }
 }

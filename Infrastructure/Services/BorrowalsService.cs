@@ -147,7 +147,7 @@ namespace Infrastructure.Services
 
             dto.MemberFullName = $"{user.FirstName} {user.LastName}";
             dto.BookTitle = book.Title;
-            dto.BookAuthors = string.Join(", ", book.Authors);
+            dto.BookAuthors = string.Join(", ", book.Authors.Select(x => x.Name));
 
             if (!book.IsAvailable)
             {
@@ -172,7 +172,7 @@ namespace Infrastructure.Services
         /// <returns>Error message if an error or null</returns>
         private string? ValidateBorrowRequest(BookBorrowRequestDto bookBorrowRequest)
         {
-            if (bookBorrowRequest.StartDate < DateOnly.FromDateTime(DateTime.Today))
+            if (bookBorrowRequest.StartDate < DateTime.Today)
                 return "Borrowal start date cannot be in the past.";
 
             if (bookBorrowRequest.EndDate <= bookBorrowRequest.StartDate)
@@ -188,11 +188,10 @@ namespace Infrastructure.Services
         /// <returns>Returns if Book and member object could be found</returns>
         private async Task<(AppUser?, Book?)> GetBorrowEntities(BookBorrowRequestDto bookBorrowRequest)
         {
-            var userTask = userRepository.GetUserByRoleAndEmailAsync(bookBorrowRequest.Email, UserRoles.Member);
-            var bookTask = booksRepository.GetBookByIdAsync(bookBorrowRequest.BookId);
+            var user = await userRepository.GetUserByRoleAndEmailAsync(bookBorrowRequest.Email, UserRoles.Member);
+            var book = await booksRepository.GetBookByIdAsync(bookBorrowRequest.BookId);
 
-            await Task.WhenAll(userTask, bookTask); // Parallel execution for efficiency
-            return (await userTask, await bookTask);
+            return (user, book);
         }
 
         /// <summary>
@@ -220,8 +219,8 @@ namespace Infrastructure.Services
                     BookId = book.Id,
                     Book = book,
                     BorrowalStatus = BorrowalStatus.Out,
-                    BorrowalDate = borrowBookRequest.StartDate,
-                    DueDate = borrowBookRequest.EndDate
+                    BorrowalDate = DateOnly.FromDateTime(borrowBookRequest.StartDate),
+                    DueDate = DateOnly.FromDateTime(borrowBookRequest.EndDate)
                 });
 
                 // 2. Update book record to make isAvailable = false

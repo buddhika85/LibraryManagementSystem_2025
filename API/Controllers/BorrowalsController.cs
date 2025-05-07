@@ -64,6 +64,8 @@ namespace API.Controllers
         [HttpPost("borrow-book")]
         public async Task<ActionResult<BorrowResultDto>> BorrowBook(BookBorrowRequestDto bookFilterDto)
         {
+            bookFilterDto.StartDate = bookFilterDto.StartDate.ToLocalTime();
+            bookFilterDto.EndDate = bookFilterDto.EndDate.ToLocalTime();
             BorrowResultDto result = await borrowalsService.BorrowBook(bookFilterDto);
             return Ok(result);
         }

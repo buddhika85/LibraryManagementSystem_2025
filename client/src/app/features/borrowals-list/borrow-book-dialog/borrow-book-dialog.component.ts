@@ -20,6 +20,9 @@ import { BookFilterDto } from '../../../shared/models/book-filter-dto';
 import { environment } from '../../../../environments/environment';
 import { MemberUserDisplayDto, UserDisplayDto } from '../../../shared/models/user-display-dto';
 import { map, Observable, startWith } from 'rxjs';
+import { BookBorrowRequestDto, BorrowResultDto } from '../../../shared/models/book-borrow-request-dto';
+
+
 
 @Component({
   selector: 'app-borrow-book-dialog',
@@ -167,8 +170,31 @@ export class BorrowBookDialogComponent implements OnInit
   {  
     if (this.borrowalForm.valid)
     {
-      const formInputs = this.borrowalForm.getRawValue();  // this.borrowalForm.value does not read disabled form inputs
-      
+      const { member, book, borrowalDate, returnDate } = this.borrowalForm.getRawValue();  // this.borrowalForm.value does not read disabled form inputs
+      const requestDto: BookBorrowRequestDto = 
+      {
+        bookId: book,
+        email: member,
+        endDate: new Date(returnDate),
+        startDate: new Date(borrowalDate)
+      };
+      this.borrowalService.borrowBook(requestDto).subscribe({
+        next: (data: BorrowResultDto) => {
+          if (data.isSuccess)
+          {
+            this.snackBarService.success(`Borrowal successful<br/>${data.memberFullName} borrowed ${data.bookTitle} by ${data.bookAuthors}`);
+            this.dialogRef.close(true);
+            return;
+          }
+          this.errorMessage = `Error in saving book borrow information<br/>${data.errorMessage}`;
+          this.snackBarService.error(this.errorMessage);
+        },
+        error: (error) => {
+          this.errorMessage = 'Error in saving book borrow information';
+          this.snackBarService.error(this.errorMessage);
+        },
+        complete: () => {}
+      });
       return;
     }
     

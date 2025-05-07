@@ -6,6 +6,7 @@ import { Observable } from 'rxjs';
 import { BorrowFormDto } from '../../shared/models/borrow-form-dto';
 import { BookWithAuthorListDto } from '../../shared/models/book-with-author-list-dto';
 import { BookFilterDto } from '../../shared/models/book-filter-dto';
+import { BookBorrowRequestDto, BorrowResultDto } from '../../shared/models/book-borrow-request-dto';
 
 @Injectable({
   providedIn: 'root'
@@ -28,5 +29,10 @@ export class BorrwalsService {
   filterBooks(filter: BookFilterDto): Observable<BookWithAuthorListDto>
   {
     return this.http.post<BookWithAuthorListDto>(this.baseUrl + 'filter-books', filter);
+  }
+
+  borrowBook(requestDto: BookBorrowRequestDto): Observable<BorrowResultDto>
+  {
+    return this.http.post<BorrowResultDto>(this.baseUrl + 'borrow-book', requestDto);
   }
 }
