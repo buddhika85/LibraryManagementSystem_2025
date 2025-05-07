@@ -9,8 +9,14 @@
         public string DueDateStr { get; set; } = string.Empty;
 
         public bool IsOverdue { get; set; }
+        public string IsOverdueStr => IsOverdue ? "YES" : "no";
+
         public int LateDays { get; set; }
-        public decimal PerDayLateFeeDollars { get; set; }        
+
+        public decimal PerDayLateFeeDollars { get; set; }
+        public string PerDayLateFeeDollarsStr => $"${PerDayLateFeeDollars}";
+
         public decimal AmountDue => LateDays * PerDayLateFeeDollars;
+        public string AmountDueStr => $"${AmountDue}";
     }
 }

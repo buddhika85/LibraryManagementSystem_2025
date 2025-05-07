@@ -9,8 +9,13 @@ export interface BorrowalReturnInfoDto extends ResultDto {
     dueDateStr: string;
   
     isOverdue: boolean;
+    isOverdueStr: string;
+
     lateDays: number;
+
     perDayLateFeeDollars: number;
-  
+    perDayLateFeeDollarsStr: string;
+
     amountDue: number; 
+    amountDueStr: string;
   }

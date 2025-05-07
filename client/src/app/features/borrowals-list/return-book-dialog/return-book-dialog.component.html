@@ -1,44 +1,128 @@
 @if(this.borrowalReturnInfoDto)
 {
-    <div class="container">
-        <form [formGroup]="returnForm" (ngSubmit)="onSubmit()" class="popup-form-class">
-    
-            <div class="page-header">
-                <h1>Return a book</h1>
-                <p class="sub-header">Review, Pay if late, and return book</p>
-            </div>
+<div class="container">
+    <form [formGroup]="returnForm" (ngSubmit)="onSubmit()" class="popup-form-class">
 
-            <!-- Book Info Section -->
+        <div class="page-header">
+            <h1>Return a book</h1>
+            <p class="sub-header">Review, Pay if late, and return book</p>
+        </div>
+
+        <!-- Book Info Section -->
         <section class="mb-8 border-l-4 border-blue-500 pl-4">
 
-            <h2 class="text-2xl font-semibold text-blue-700 mb-4">Book</h2>
+            <h2 class="text-xl font-semibold text-blue-700 mb-4">Book Details</h2>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+               
+                <mat-form-field appearance="outline" class="w-full">
+                    <mat-label>Borrowal ID</mat-label>
+                    <input matInput formControlName="borrowalId" type="text" />
+                </mat-form-field>
                 
                 <mat-form-field appearance="outline" class="w-full">
-                    <mat-form-field appearance="outline" class="w-full">
-                        <mat-label>Borrowal ID</mat-label>
-                        <input matInput formControlName="borrowalId" type="text" >
-                      </mat-form-field>
+                    <mat-label>Book</mat-label>
+                    <input matInput formControlName="bookDisplayStr" type="text" />
+                </mat-form-field>
+            </div>
+
+        </section>
+
+        <section class="mb-8 border-l-4 border-green-500 pl-4">
+
+            <h2 class="text-xl font-semibold text-green-700 mb-4">Borrowal Dates</h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+               
+                <mat-form-field appearance="outline" class="w-full">
+                    <mat-label>Borrowed On</mat-label>
+                    <input matInput formControlName="borrowalDateStr" type="text" />
+                </mat-form-field>
+                
+                <mat-form-field appearance="outline" class="w-full">
+                    <mat-label>Due on</mat-label>
+                    <input matInput formControlName="dueDateStr" type="text" />
                 </mat-form-field>
 
                 <mat-form-field appearance="outline" class="w-full">
-                    <mat-form-field appearance="outline" class="w-full">
-                        <mat-label>Book</mat-label>
-                        <input matInput formControlName="bookDisplayStr" type="text" >
-                      </mat-form-field>
+                    <mat-label>Overdue</mat-label>
+                    <input matInput formControlName="isOverdueStr" type="text" />
+                </mat-form-field>
+               
+            </div>
+            
+        </section>
+
+
+        <section class="mb-8 border-l-4 border-red-500 pl-4">
+
+            <h2 class="text-xl font-semibold text-red-700 mb-4">Payments</h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6">              
+               
+                <mat-form-field appearance="outline" class="w-full">
+                    <mat-label>Late days</mat-label>
+                    <input matInput formControlName="lateDays" type="text" />
                 </mat-form-field>
 
-                <!-- <mat-form-field appearance="outline" class="w-full">
-                    <mat-form-field appearance="outline" class="w-full">
-                        <mat-label>Authors</mat-label>
-                        <input matInput formControlName="authorListStr" type="text" required>
-                      </mat-form-field>
-                </mat-form-field> -->
+                <mat-form-field appearance="outline" class="w-full">
+                    <mat-label>Late Fee Per Day</mat-label>
+                    <input matInput formControlName="perDayLateFeeDollarsStr" type="text" />
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="w-full">
+                    <mat-label>Amount due</mat-label>
+                    <input matInput formControlName="amountDueStr" type="text" />
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="w-full">
+                    <mat-label>Paid</mat-label>
+                    <mat-select formControlName="paid">
+                        <mat-option [value]="true">Yes</mat-option>
+                        <mat-option [value]="false">No</mat-option>
+                      </mat-select>                    
+                </mat-form-field>
             </div>
+            
         </section>
-    
-        </form>
-    </div>
+
+
+         <!-- Validation Errors -->
+         @if (validationErrors)
+         {
+         <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-6">
+             <strong class="font-semibold">Please fix the following:</strong>
+             <ul class="list-disc pl-5 mt-2">
+                 @for (error of validationErrors; track $index) {
+                 <li>{{ error }}</li>
+                 }
+             </ul>
+         </div>
+         }
+ 
+ 
+         @if (errorMessage)
+         {
+         <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-6">
+             <strong class="font-semibold">Please fix the following:</strong>
+             <ul class="list-disc pl-5 mt-2">
+ 
+                 <li>{{ errorMessage }}</li>
+ 
+             </ul>
+         </div>
+         }
+ 
+         <!-- Buttons -->
+         <div class="flex justify-end space-x-3 mt-6">
+             <button mat-stroked-button type="button" (click)="clearForm()" class="text-gray-700 border-gray-500">
+                 Reset
+             </button>
+             <button mat-flat-button color="primary" type="submit" [disabled]="returnForm.invalid">
+                 Return
+             </button>
+         </div>
+
+    </form>
+</div>
 }

@@ -84,11 +84,11 @@ export class ReturnBookDialogComponent implements OnInit
       
       borrowalDateStr: [{value: this.borrowalReturnInfoDto.borrowalDateStr, disabled: true}, Validators.required],
       dueDateStr: [{value: this.borrowalReturnInfoDto.dueDateStr, disabled: true}, Validators.required],
-      isOverdue: [{value: this.borrowalReturnInfoDto.isOverdue, disabled: true}, Validators.required],
+      isOverdueStr: [{value: this.borrowalReturnInfoDto.isOverdueStr, disabled: true}, Validators.required],
       
       lateDays: [{value: this.borrowalReturnInfoDto.lateDays, disabled: true}, Validators.required],
-      perDayLateFeeDollars: [{value: this.borrowalReturnInfoDto.perDayLateFeeDollars, disabled: true}, Validators.required],
-      amountDue: [{value: this.borrowalReturnInfoDto.amountDue, disabled: true}, Validators.required],
+      perDayLateFeeDollarsStr: [{value: this.borrowalReturnInfoDto.perDayLateFeeDollarsStr, disabled: true}, Validators.required],
+      amountDueStr: [{value: this.borrowalReturnInfoDto.amountDueStr, disabled: true}, Validators.required],
       
       paid: [{value: false, disabled: this.borrowalReturnInfoDto.amountDue === 0.0}, Validators.required]
     });
@@ -101,5 +101,15 @@ export class ReturnBookDialogComponent implements OnInit
     this.validationErrors = undefined;
   }
 
-  onSubmit(): void {  }
+  onSubmit(): void 
+  {  
+    if (!this.returnForm.valid)
+    {
+      this.errorMessage = 'Please fill the form, if overdue accept the due payment.'
+      return;
+    }
+
+    const formInputs = this.returnForm.value.getRawValue();
+    
+  }
 }
