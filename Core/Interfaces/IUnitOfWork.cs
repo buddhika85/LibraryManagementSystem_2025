@@ -10,6 +10,7 @@ namespace Core.Interfaces
         IGenericRepository<Address> AddressRepository { get; }
 
         IBorrowalsRepository BorrowalsRepository { get;  }
+        IBorrowalReturnsRepository BorrowalReturnsRepository { get; }
 
 
         Task BeginTransactionAsync();       

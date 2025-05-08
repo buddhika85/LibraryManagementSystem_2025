@@ -15,6 +15,7 @@ namespace Infrastructure.Data
                 IAuthorRepository authorRepository,
                 IUserRepository userRepository,
                 IBorrowalsRepository borrowalsRepository,
+                IBorrowalReturnsRepository borrowalReturnsRepository,
                 IGenericRepository<Address> addressRepository)
         {
             this.context = context;
@@ -23,6 +24,7 @@ namespace Infrastructure.Data
             UserRepository = userRepository;
             AddressRepository = addressRepository;
             BorrowalsRepository = borrowalsRepository;
+            BorrowalReturnsRepository = borrowalReturnsRepository;
         }
 
         public IBooksRepository BookRepository { get; }
@@ -30,6 +32,7 @@ namespace Infrastructure.Data
         public IAuthorRepository AuthorRepository { get; }
         public IUserRepository UserRepository { get; }
         public IBorrowalsRepository BorrowalsRepository { get; }
+        public IBorrowalReturnsRepository BorrowalReturnsRepository { get; }
 
         public IGenericRepository<Address> AddressRepository { get; }
 

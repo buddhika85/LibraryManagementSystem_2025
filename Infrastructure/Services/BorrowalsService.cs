@@ -3,6 +3,7 @@ using Core.DTOs;
 using Core.Entities;
 using Core.Enums;
 using Core.Interfaces;
+using Infrastructure.Data;
 using Infrastructure.Helpers;
 
 namespace Infrastructure.Services
@@ -12,6 +13,7 @@ namespace Infrastructure.Services
         private readonly IUnitOfWork unitOfWork;
         private readonly IMapper mapper;
         private readonly IBorrowalsRepository borrowalsRepository;
+        private readonly IBorrowalReturnsRepository borrowalReturnsRepository;
         private readonly IUserRepository userRepository;
         private readonly IBooksRepository booksRepository;
        
@@ -21,6 +23,7 @@ namespace Infrastructure.Services
             this.unitOfWork = unitOfWork;
             this.mapper = mapper;
             borrowalsRepository = unitOfWork.BorrowalsRepository;
+            borrowalReturnsRepository = unitOfWork.BorrowalReturnsRepository;
             userRepository = unitOfWork.UserRepository;
             booksRepository = unitOfWork.BookRepository;
         }
@@ -313,16 +316,107 @@ namespace Infrastructure.Services
 
         public async Task<ReturnResultDto> ReturnBookAsync(ReturnsAcceptDto returnsAcceptDto)
         {
-            var staffMember = await userRepository.GetUserByRoleAndEmailAsync(returnsAcceptDto.Email, UserRoles.Staff);
-            if (staffMember == null)
+            var dto = new ReturnResultDto();
+
+            // payment validation
+            var errorMessage = ValidatePayment(returnsAcceptDto);
+            if (errorMessage != null)
             {
-                return new ReturnResultDto { ErrorMessage = $"Staff member with email {returnsAcceptDto.Email} does not exist." };
+                dto.ErrorMessage = errorMessage;
+                return dto;
             }
 
-            return null;
+            // fetch DB records needed
+            var (staffMember, borrowal) = await FetchReturnEntities(returnsAcceptDto.Email, returnsAcceptDto.BorrowalId);
+
+            // validate DB entities
+            errorMessage = ValidateBorrowReturnEntities(returnsAcceptDto.Email, returnsAcceptDto.BorrowalId, staffMember, borrowal);
+            if (errorMessage != null)
+            {
+                dto.ErrorMessage = errorMessage;
+                return dto;
+            }
+
+            var transactionSuccessful = await ProcessReturnTransaction(returnsAcceptDto, borrowal!, staffMember!);       // 2 params will never be null here
+            if (!transactionSuccessful)
+            {
+                dto.ErrorMessage = "Saving borrowal transaction failed";                
+            }
+
+            return dto;
         }
 
-       
+        private string? ValidateBorrowReturnEntities(string staffEmail, int borrowalId, AppUser? staffMember, Borrowals? borrowal)
+        {
+            if (staffMember == null)
+                return $"Staff member with email {staffEmail} does not exists";
+            if (borrowal == null)
+                return $"Borrowal with Id {borrowalId} does not exists";
+            return null;
+        }        
+
+        private async Task<(AppUser?, Borrowals?)> FetchReturnEntities(string staffEmail, int borrowalId)
+        {
+            // get staff, if not admin user with email provided
+            var staffMember = await userRepository.GetUserByRoleAndEmailAsync(staffEmail, UserRoles.Staff)
+                             ?? await userRepository.GetUserByRoleAndEmailAsync(staffEmail, UserRoles.Admin);
+
+            // borrowal record along with book navigation property
+            var borrowal = await borrowalsRepository.GetAllBorrowalWithNavPropsAsync(borrowalId);
+
+            return (staffMember, borrowal);
+        }
+
+        private async Task<bool> ProcessReturnTransaction(ReturnsAcceptDto returnsAcceptDto, Borrowals borrowal, AppUser staffMember)
+        {
+            // starting transaction
+            await unitOfWork.BeginTransactionAsync();
+            try
+            {
+                // 1. insert borrowalReturn record
+                var borrowalsReturn = new BorrowalReturn
+                { 
+                    AppUser = staffMember,
+                    AppUserId = staffMember.Id,
+                    Borrowals = borrowal,
+                    BorrowalsId = borrowal.Id,
+                    AmountAccepted = returnsAcceptDto.AmountAccepted,
+                    WasPaid = returnsAcceptDto.Paid,
+                    WasOverdue = returnsAcceptDto.IsOverdue
+                };
+                borrowalReturnsRepository.Add(borrowalsReturn);
+
+                // 2. update borrowalStatus of Borrowals table
+                borrowal.BorrowalStatus = BorrowalStatus.Returned;
+                borrowalsRepository.Update(borrowal);
+
+                // 3. update book isAvailable to true
+                borrowal.Book.IsAvailable = true;
+                borrowalsRepository.Update(borrowal);
+
+                // save to local DBSet
+                await unitOfWork.SaveAllAsync();
+
+                // commit to DB
+                await unitOfWork.CommitTransactionAsync();
+                return true;
+            }
+            catch
+            {
+                // rolling back the transtion if failure
+                await unitOfWork.RollbackTransactionAsync();
+                return false;
+            }
+        }
+
+        private string? ValidatePayment(ReturnsAcceptDto returnsAcceptDto)
+        {
+            if (returnsAcceptDto.IsOverdue && !returnsAcceptDto.Paid)
+            {
+                return $"Staff member with email {returnsAcceptDto.Email} has not accepted the payment.";
+            }
+            return null;
+        }
         #endregion return book
     }
 }

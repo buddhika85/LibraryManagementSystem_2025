@@ -8,7 +8,6 @@ using Infrastructure.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
-using System.Runtime;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,6 +28,7 @@ builder.Services.AddScoped<IAuthorRepository, AuthorRepository>();
 builder.Services.AddScoped<IBooksRepository, BooksRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>(); 
 builder.Services.AddScoped<IBorrowalsRepository, BorrowalsRepository>();
+builder.Services.AddScoped<IBorrowalReturnsRepository, BorrowalReturnsRepository>();
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
