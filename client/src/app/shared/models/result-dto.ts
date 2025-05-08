@@ -8,3 +8,8 @@ export interface InsertResultDto extends ResultDto
 {
     EntityId: number;
 }
+
+export interface ReturnResultDto extends ResultDto
+{
+
+}

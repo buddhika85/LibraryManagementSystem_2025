@@ -17,6 +17,7 @@ import { BorrowalReturnInfoDto } from '../../../shared/models/borrowal-return-in
 import { SnackBarService } from '../../../core/services/snack-bar.service';
 import { AccountService } from '../../../core/services/account.service';
 import { ReturnsAcceptDto } from '../../../shared/models/returns-accept-dto';
+import { ReturnResultDto } from '../../../shared/models/result-dto';
 
 @Component({
   selector: 'app-return-book-dialog',
@@ -105,7 +106,10 @@ export class ReturnBookDialogComponent implements OnInit
   }
 
   onSubmit(): void 
-  {  
+  {      
+    if (this.returnForm.disabled)
+      this.returnForm.enable();     // if disabled enable form 
+
     if (!this.returnForm.valid)
     {
       this.errorMessage = 'Please fill the form, if overdue accept the due payment.'
@@ -119,7 +123,27 @@ export class ReturnBookDialogComponent implements OnInit
       this.errorMessage = 'It is overdue accept the due payment, and select Paid YES.'
       return;
     }
-    //console.log(dto);
+    
+    this.returnForm.disable();    // avoid edits
+
+    this.borrowalService.returnBook(dto).subscribe({
+      next: (data: ReturnResultDto) => {        
+        if (data.isSuccess)
+        {
+          this.snackBarService.success("Book returned successfully");
+          this.dialogRef.close(true);
+        }
+        else
+        {
+          this.snackBarService.error(`Book return error ${data.errorMessage}`);
+        }
+      },
+      error: (error) => {
+        this.snackBarService.error(`Book return error ${error}`);
+      },
+      complete: () => {        
+      }
+    });
     
   }
 

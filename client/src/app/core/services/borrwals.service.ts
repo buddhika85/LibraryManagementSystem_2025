@@ -8,6 +8,8 @@ import { BookWithAuthorListDto } from '../../shared/models/book-with-author-list
 import { BookFilterDto } from '../../shared/models/book-filter-dto';
 import { BookBorrowRequestDto, BorrowResultDto } from '../../shared/models/book-borrow-request-dto';
 import { BorrowalReturnInfoDto } from '../../shared/models/borrowal-return-info-dto';
+import { ReturnsAcceptDto } from '../../shared/models/returns-accept-dto';
+import { ReturnResultDto } from '../../shared/models/result-dto';
 
 @Injectable({
   providedIn: 'root'
@@ -41,4 +43,10 @@ export class BorrwalsService {
   {
     return this.http.get<BorrowalReturnInfoDto>(this.baseUrl + `borrowal-return-info/${borrowalId}`);
   }
+
+  returnBook(dto: ReturnsAcceptDto): Observable<ReturnResultDto>
+  {
+    return this.http.post<ReturnResultDto>(this.baseUrl + 'return-book', dto);
+  }
+  
 }
