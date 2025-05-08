@@ -9,6 +9,7 @@ namespace Infrastructure.Config
         public void Configure(EntityTypeBuilder<BorrowalReturn> builder)
         {
             builder.Property(x => x.AmountAccepted).HasColumnType("decimal(18,2)");
+            builder.Property(x => x.PerDayLateFeeDollars).HasColumnType("decimal(18,2)");
 
             builder.HasOne(br => br.AppUser)
                 .WithMany()
