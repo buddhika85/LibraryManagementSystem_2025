@@ -295,7 +295,6 @@ namespace Infrastructure.Services
             {                
                 dto.LateDays = gapDays;
                 dto.IsOverdue = true;
-                dto.PerDayLateFeeDollars = gapDays * perDayLateFeeDollars;
             }            
         }
 

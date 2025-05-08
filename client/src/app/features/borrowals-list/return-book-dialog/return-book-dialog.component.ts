@@ -125,7 +125,7 @@ export class ReturnBookDialogComponent implements OnInit
     }
     
     this.returnForm.disable();    // avoid edits
-
+    
     this.borrowalService.returnBook(dto).subscribe({
       next: (data: ReturnResultDto) => {        
         if (data.isSuccess)
@@ -149,12 +149,14 @@ export class ReturnBookDialogComponent implements OnInit
 
   createReturnsAcceptDto(): ReturnsAcceptDto
   {
-    const { borrowalId, paid } = this.returnForm.getRawValue();
+    const { borrowalId, paid, lateDays } = this.returnForm.getRawValue();
     const dto: ReturnsAcceptDto = {
       borrowalId: borrowalId,
       isOverdue: this.borrowalReturnInfoDto.isOverdue,
       paid: paid,
       email: this.accountService.currentUser()?.email || '',
+      lateDays: lateDays,
+      perDayLateFeeDollars: this.borrowalReturnInfoDto.perDayLateFeeDollars,
       amountAccepted: this.borrowalReturnInfoDto.amountDue
     };
     return dto;

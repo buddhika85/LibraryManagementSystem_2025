@@ -4,7 +4,9 @@ export type ReturnsAcceptDto = {
     isOverdue: boolean;
     paid: boolean;
     amountAccepted: number;
-
+    
+    lateDays: number;
+    perDayLateFeeDollars: number;
     // accepted user
     email: string;
     
