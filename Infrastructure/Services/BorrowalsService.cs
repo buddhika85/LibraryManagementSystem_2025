@@ -423,7 +423,10 @@ namespace Infrastructure.Services
                     BorrowalsId = borrowal.Id,
                     AmountAccepted = returnsAcceptDto.AmountAccepted,
                     WasPaid = returnsAcceptDto.Paid,
-                    WasOverdue = returnsAcceptDto.IsOverdue
+                    WasOverdue = returnsAcceptDto.IsOverdue,
+                    LateDays = returnsAcceptDto.LateDays,
+                    PerDayLateFeeDollars = returnsAcceptDto.PerDayLateFeeDollars,
+                    LmsOwnerGivenMoney = false
                 };
                 borrowalReturnsRepository.Add(borrowalsReturn);
 
