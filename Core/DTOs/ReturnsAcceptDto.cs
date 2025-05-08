@@ -12,6 +12,9 @@ namespace Core.DTOs
         // Accepted user
         [Required]
         public string Email { get; set; } = string.Empty;
+
+        public int LateDays { get; set; }
+        public decimal PerDayLateFeeDollars { get; set; }
     }
 
 }

@@ -24,7 +24,7 @@ namespace Core.Entities
         public required AppUser AppUser { get; set; }
 
 
-        public int lateDays { get; set; }
+        public int LateDays { get; set; }
         public decimal PerDayLateFeeDollars { get; set; }
 
         public bool LmsOwnerGivenMoney { get; set; }                        // staff has to give/deposit money to LMS bank account
