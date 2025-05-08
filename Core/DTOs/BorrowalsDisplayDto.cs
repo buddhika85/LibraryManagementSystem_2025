@@ -8,6 +8,7 @@ namespace Core.DTOs
         public string BorrowalDateStr => BorrowalDate.ToShortDateString();
 
         public required DateOnly DueDate { get; set; }
+        public bool IsDelayed => DueDate < DateOnly.FromDateTime(DateTime.Today);
         public string DueDateStr => DueDate.ToShortDateString();
 
         public required BorrowalStatus BorrowalStatus { get; set; }
