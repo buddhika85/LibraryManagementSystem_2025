@@ -80,6 +80,11 @@
     <th mat-header-cell *matHeaderCellDef mat-sort-header> Due? </th>
     <td mat-cell *matCellDef="let row"> {{row.dueDateStr}} </td>
   </ng-container>
+
+  <ng-container matColumnDef="isDelayed">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> Delayed? </th>
+    <td mat-cell *matCellDef="let row"> {{row.isDelayed ? 'Yes' : 'No'}} </td>
+  </ng-container>
   
   <ng-container matColumnDef="borrowalStatusStr">
     <th mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>

@@ -8,6 +8,7 @@ export interface BorrowalsDisplayDto extends BaseDto {
     borrowalDateStr: string;
     
     dueDate: string;
+    isDelayed: boolean;
     dueDateStr: string;
   
     borrowalStatus: BorrowalStatus;

@@ -31,7 +31,7 @@ export class BorrowalsListComponent implements OnInit
 
   // Mat-table 
   displayedColumns: string[] = ['id', 'bookDisplayStr', 'bookPictureUrl', 'memberName', 'memberEmail', 
-      'borrowalDateStr', 'dueDateStr', 'borrowalStatusStr', 'return'];
+      'borrowalDateStr', 'dueDateStr', 'isDelayed', 'borrowalStatusStr', 'return'];
   dataSource!: MatTableDataSource<BorrowalsDisplayDto>;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
