@@ -310,10 +310,14 @@ namespace Infrastructure.Services
 
         #endregion get borrowal return info
 
-
-
         #region return book
 
+        /// <summary>
+        /// Ochestrator method for book return.
+        /// Calls multiple methods for validations, DB record retrieval, transaction processing on DB
+        /// </summary>
+        /// <param name="returnsAcceptDto">Book return information</param>
+        /// <returns>result of returning book</returns>
         public async Task<ReturnResultDto> ReturnBookAsync(ReturnsAcceptDto returnsAcceptDto)
         {
             var dto = new ReturnResultDto();
@@ -346,6 +350,28 @@ namespace Infrastructure.Services
             return dto;
         }
 
+        /// <summary>
+        /// Validate whether payment was accepted by staff member or not
+        /// </summary>
+        /// <param name="returnsAcceptDto">Book return information</param>
+        /// <returns>if error an error message else null</returns>
+        private string? ValidatePayment(ReturnsAcceptDto returnsAcceptDto)
+        {
+            if (returnsAcceptDto.IsOverdue && !returnsAcceptDto.Paid)
+            {
+                return $"Staff member with email {returnsAcceptDto.Email} has not accepted the payment.";
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// Validate borrowal return related enities 
+        /// </summary>
+        /// <param name="staffEmail">staff member associated with return</param>
+        /// <param name="borrowalId">borrowal record ID</param>
+        /// <param name="staffMember">staff member record</param>
+        /// <param name="borrowal">original borrowal record</param>
+        /// <returns></returns>
         private string? ValidateBorrowReturnEntities(string staffEmail, int borrowalId, AppUser? staffMember, Borrowals? borrowal)
         {
             if (staffMember == null)
@@ -353,8 +379,14 @@ namespace Infrastructure.Services
             if (borrowal == null)
                 return $"Borrowal with Id {borrowalId} does not exists";
             return null;
-        }        
+        }
 
+        /// <summary>
+        /// Fetch borrowal return entities from DB
+        /// </summary>
+        /// <param name="staffMember">staff member record</param>
+        /// <param name="borrowalId">borrowal record ID</param>
+        /// <returns>Task<(AppUser?, Borrowals?)></returns>
         private async Task<(AppUser?, Borrowals?)> FetchReturnEntities(string staffEmail, int borrowalId)
         {
             // get staff, if not admin user with email provided
@@ -367,6 +399,16 @@ namespace Infrastructure.Services
             return (staffMember, borrowal);
         }
 
+        /// <summary>
+        /// Book return transaction processing and commiting changes to DB. 3 steps to either all succeed of all fail.
+        ///     1. insert borrowalReturn record
+        ///     2. update borrowalStatus of Borrowals table
+        ///     3. update book isAvailable to true
+        /// </summary>
+        /// <param name="returnsAcceptDto">return related information</param>
+        /// <param name="borrowal">original borrowal record</param>
+        /// <param name="staffMember">staff member record</param>
+        /// <returns>true if transaction successful, else false if transaction is not successful</returns>
         private async Task<bool> ProcessReturnTransaction(ReturnsAcceptDto returnsAcceptDto, Borrowals borrowal, AppUser staffMember)
         {
             // starting transaction
@@ -408,15 +450,7 @@ namespace Infrastructure.Services
                 return false;
             }
         }
-
-        private string? ValidatePayment(ReturnsAcceptDto returnsAcceptDto)
-        {
-            if (returnsAcceptDto.IsOverdue && !returnsAcceptDto.Paid)
-            {
-                return $"Staff member with email {returnsAcceptDto.Email} has not accepted the payment.";
-            }
-            return null;
-        }
+               
         #endregion return book
     }
 }
