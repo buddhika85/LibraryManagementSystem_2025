@@ -1,8 +1,12 @@
+import { BookGenre } from "./book-genre";
+import { BorrowalStatus } from "./borrowal-status-enum";
+
 export interface BorrowalSummaryDto {
     borrowalsId: number;
     borrowalDate: string; // Converted DateTime to string for serialization
     dueDate: string;
-    borrowalStatus: string;
+    borrowalStatus: BorrowalStatus;
+    borrowalStatusStr: string;
 
     // Payment Information
     wasPaid: boolean;
@@ -15,8 +19,9 @@ export interface BorrowalSummaryDto {
     bookId: number;
     bookTitle: string;
     bookPic: string;
-    bookGenre: string;
-
+    bookGenre: BookGenre;
+    bookGenreStr: string;
+    
     // Borrower Details
     borrowerEmail: string;
     borrowerName: string;
