@@ -6,6 +6,7 @@ using Core.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using System.Security.Claims;
 
 namespace API.Controllers
 {
@@ -97,6 +98,18 @@ namespace API.Controllers
         public async Task<ActionResult<BorrowalSummaryListDto>> GetBorrowalSummaryForMember(string memberEmail)
         {
             var dto = await borrowalsService.GetBorrowalSummaryForMemberAsync(memberEmail);
+            return Ok(dto);
+        }
+
+        [Authorize(Roles = "Member")]                       // only member users allowed
+        [HttpGet("borrowal-summary-logged-member")]
+        public async Task<ActionResult<BorrowalSummaryListDto>> GetBorrowalSummaryForMember()
+        {
+            var loggedInMemberEmail = User.FindFirst(ClaimTypes.Name)?.Value;           
+            if (loggedInMemberEmail == null)
+                return Unauthorized();
+ 
+            var dto = await borrowalsService.GetBorrowalSummaryForMemberAsync(loggedInMemberEmail);
             return Ok(dto);
         }
     }
