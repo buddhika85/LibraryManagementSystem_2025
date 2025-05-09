@@ -6,7 +6,11 @@ namespace Core.DTOs
     {
         public int BorrowalsId { get; set; }
         public DateTime BorrowalDate { get; set; }
+        public string BorrowalDateStr => BorrowalDate.ToShortDateString();
+
         public DateTime DueDate { get; set; }
+        public string DueDateStr => DueDate.ToShortDateString();
+
         public BorrowalStatus BorrowalStatus { get; set; }
         public string BorrowalStatusStr => BorrowalStatus.ToString();
 

@@ -1,10 +1,15 @@
 import { BookGenre } from "./book-genre";
 import { BorrowalStatus } from "./borrowal-status-enum";
 
-export interface BorrowalSummaryDto {
+export interface BorrowalSummaryDto 
+{
     borrowalsId: number;
-    borrowalDate: string; // Converted DateTime to string for serialization
-    dueDate: string;
+    borrowalDate: Date; 
+    borrowalDateStr: string;
+
+    dueDate: Date;
+    dueDateStr: string;
+
     borrowalStatus: BorrowalStatus;
     borrowalStatusStr: string;
 
