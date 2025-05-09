@@ -452,7 +452,19 @@ namespace Infrastructure.Services
                 return false;
             }
         }
-               
+
         #endregion return book
+
+        #region member borrowals history
+
+        public async Task<BorrowalSummaryListDto> GetBorrowalSummaryForMemberAsync(string memberEmail)
+        {
+            return new BorrowalSummaryListDto
+            {
+                BorrowalSummaries = await borrowalsRepository.GetBorrowalSummaryForMemberAsync(memberEmail)
+            };
+        }
+
+        #endregion member borrowals history
     }
 }

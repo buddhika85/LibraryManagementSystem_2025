@@ -91,5 +91,13 @@ namespace API.Controllers
             var dto = await borrowalsService.ReturnBookAsync(returnsAcceptDto);
             return Ok(dto);
         }
+
+        [Authorize(Roles = "Admin,Staff,Member")]
+        [HttpGet("borrowal-summary-member")]
+        public async Task<ActionResult<BorrowalSummaryListDto>> GetBorrowalSummaryForMember(string memberEmail)
+        {
+            var dto = await borrowalsService.GetBorrowalSummaryForMemberAsync(memberEmail);
+            return Ok(dto);
+        }
     }
 }

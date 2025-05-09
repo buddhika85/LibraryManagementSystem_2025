@@ -8,5 +8,7 @@ namespace Core.Interfaces
         Task<BorrowalsDisplayListDto> GetAllBorrowalsAsync();
         Task<BorrowalReturnInfoDto> GetBorrowalReturnInfoDto(int borrowalId, decimal perDayLateFeeDollars);
         Task<ReturnResultDto> ReturnBookAsync(ReturnsAcceptDto returnsAcceptDto);
+
+        Task<BorrowalSummaryListDto> GetBorrowalSummaryForMemberAsync(string memberEmail);
     }
 }

@@ -1,4 +1,5 @@
-﻿using Core.Entities;
+﻿using Core.DTOs;
+using Core.Entities;
 using Core.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
@@ -18,6 +19,14 @@ namespace Infrastructure.Data
         public async Task<Borrowals?> GetAllBorrowalWithNavPropsAsync(int borrowalId)
         {
             return await context.Borrowals.Where(x => x.Id == borrowalId).Include(x => x.Book).Include(x => x.Book.Authors).Include(x => x.AppUser).SingleOrDefaultAsync();
+        }
+
+        public async Task<IReadOnlyCollection<BorrowalSummaryDto>> GetBorrowalSummaryForMemberAsync(string memberEmail)
+        {
+            return await context.BorrowalSummaryDtos
+                .FromSqlInterpolated($"EXEC GetBorrowalSummaryByMember {memberEmail}")                  // FromSqlInterpolated prevents sql injection    
+                .AsNoTracking()
+                .ToListAsync();
         }
     }
 }

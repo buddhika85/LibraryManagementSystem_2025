@@ -1,4 +1,5 @@
-﻿using Core.Entities;
+﻿using Core.DTOs;
+using Core.Entities;
 
 namespace Core.Interfaces
 {
@@ -7,5 +8,7 @@ namespace Core.Interfaces
         Task<IReadOnlyList<Borrowals>> GetAllBorrowalsWithNavPropsAsync();
 
         Task<Borrowals?> GetAllBorrowalWithNavPropsAsync(int borrowalId);
+        
+        Task<IReadOnlyCollection<BorrowalSummaryDto>> GetBorrowalSummaryForMemberAsync(string memberEmail);
     }
 }
