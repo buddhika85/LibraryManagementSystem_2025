@@ -13,6 +13,7 @@ import { ChangePasswordComponent } from './features/account/change-password/chan
 import { MemberListComponent } from './features/member-list/member-list.component';
 import { StaffListComponent } from './features/staff-list/staff-list.component';
 import { BorrowalsListComponent } from './features/borrowals-list/borrowals-list.component';
+import { MemberBorrowalsHistoryComponent } from './features/borrowals-list/member-borrowals-history/member-borrowals-history.component';
 
 
 export const routes: Routes = [
@@ -38,6 +39,8 @@ export const routes: Routes = [
     { path: 'manageStaff', component: StaffListComponent, canActivate: [authGuard]  },
 
     { path: 'manageBorrowals', component: BorrowalsListComponent, canActivate: [authGuard]  },
+
+    { path: 'memberBorrowals', component: MemberBorrowalsHistoryComponent, canActivate: [authGuard]  },
   
     { path: '**', redirectTo: 'not-found', pathMatch: 'full' } // Redirect to not found for any unknown routes   
 ];
