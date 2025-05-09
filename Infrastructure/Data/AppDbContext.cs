@@ -3,7 +3,6 @@ using Core.Entities;
 using Infrastructure.Config;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using System.Reflection.Emit;
 
 
 // dotnet-ef migrations add InitialCreate -s API -p Infrastructure 
@@ -57,6 +56,8 @@ namespace Infrastructure.Data
 
         private void ConfigureStoredProcedureResultSets(ModelBuilder modelBuilder)
         {
+            // HasNoKey() - Do not track or store this DTO as an actual table
+            // EF will skip this as it does not have any key
             modelBuilder.Entity<BorrowalSummaryDto>().HasNoKey();               // No primary key - Used with 'GetBorrowalsSummarySP' Stored Procedure
         }
     }
