@@ -20,7 +20,7 @@ BEGIN
 	select 
 		b.Id 'BorrowalsId', x.BorrowalDate, x.DueDate, x.BorrowalStatus,
 		r.WasPaid, r.WasOverdue, r.AmountAccepted 'AmountPaid', r.LateDays 'LateDaysOnPayment', concat(u2.FirstName, ' ',  u2.LastName) 'PaymentAcceptedBy',
-		x.BookId, b.Title 'BookId', b.PictureUrl 'BookPic', b.Genre 'BookGenre',
+		x.BookId 'BookId', b.Title 'BookTitle', b.PictureUrl 'BookPic', b.Genre 'BookGenre',
 		u.Email 'BorrowerEmail', concat(u.FirstName, ' ', u.LastName) 'BorrowerName'
 
 		from Borrowals x 

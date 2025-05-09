@@ -10,6 +10,7 @@ import { BookBorrowRequestDto, BorrowResultDto } from '../../shared/models/book-
 import { BorrowalReturnInfoDto } from '../../shared/models/borrowal-return-info-dto';
 import { ReturnsAcceptDto } from '../../shared/models/returns-accept-dto';
 import { ReturnResultDto } from '../../shared/models/result-dto';
+import { BorrowalSummaryListDto } from '../../shared/models/borrowal-summary-dto';
 
 @Injectable({
   providedIn: 'root'
@@ -49,4 +50,8 @@ export class BorrwalsService {
     return this.http.post<ReturnResultDto>(this.baseUrl + 'return-book', dto);
   }
   
+  getBorrowalSummaryForMember(): Observable<BorrowalSummaryListDto>
+  {
+    return this.http.get<BorrowalSummaryListDto>(this.baseUrl + 'borrowal-summary-logged-member');
+  }
 }

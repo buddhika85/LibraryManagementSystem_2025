@@ -1,11 +1,14 @@
-﻿namespace Core.DTOs
+﻿using Core.Enums;
+
+namespace Core.DTOs
 {
     public class BorrowalSummaryDto
     {
         public int BorrowalsId { get; set; }
         public DateTime BorrowalDate { get; set; }
         public DateTime DueDate { get; set; }
-        public string BorrowalStatus { get; set; } = string.Empty;
+        public BorrowalStatus BorrowalStatus { get; set; }
+        public string BorrowalStatusStr => BorrowalStatus.ToString();
 
         // Payment Information
         public bool WasPaid { get; set; }
@@ -18,7 +21,8 @@
         public int BookId { get; set; }
         public string BookTitle { get; set; } = string.Empty;
         public string BookPic { get; set; } = string.Empty;
-        public string BookGenre { get; set; } = string.Empty;
+        public BookGenre BookGenre { get; set; }
+        public string BookGenreStr => BookGenre.ToString();
 
 
         // Borrower Details

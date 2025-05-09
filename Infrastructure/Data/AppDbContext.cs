@@ -44,9 +44,9 @@ namespace Infrastructure.Data
         // null ness ...etc
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(modelBuilder);
-
             ConfigureStoredProcedureResultSets(modelBuilder);
+
+            base.OnModelCreating(modelBuilder);            
 
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(AuthorConfigurations).Assembly);
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(BookConfigurations).Assembly);

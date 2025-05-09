@@ -24,7 +24,7 @@ namespace Infrastructure.Data
         public async Task<IReadOnlyCollection<BorrowalSummaryDto>> GetBorrowalSummaryForMemberAsync(string memberEmail)
         {
             return await context.BorrowalSummaryDtos
-                .FromSqlInterpolated($"EXEC GetBorrowalSummaryByMember {memberEmail}")                  // FromSqlInterpolated prevents sql injection    
+                .FromSqlInterpolated($"EXEC GetBorrowalsSummarySP {memberEmail}")                  // FromSqlInterpolated prevents sql injection    
                 .AsNoTracking()
                 .ToListAsync();
         }
