@@ -21,14 +21,15 @@ export interface BorrowalSummaryDto {
     bookPic: string;
     bookGenre: BookGenre;
     bookGenreStr: string;
-    
+
     // Borrower Details
     borrowerEmail: string;
     borrowerName: string;
 }
 
 
-export interface BorrowalSummaryListDto {
-    borrowalSummaries: ReadonlyArray<BorrowalSummaryDto>;
+export interface BorrowalSummaryListDto 
+{
+    borrowalSummaries: BorrowalSummaryDto[];
     count: number;
 }

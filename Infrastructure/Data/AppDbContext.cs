@@ -43,10 +43,10 @@ namespace Infrastructure.Data
         // exact precision of data type
         // null ness ...etc
         protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            ConfigureStoredProcedureResultSets(modelBuilder);
+        {           
+            base.OnModelCreating(modelBuilder);
 
-            base.OnModelCreating(modelBuilder);            
+            ConfigureStoredProcedureResultSets(modelBuilder);
 
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(AuthorConfigurations).Assembly);
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(BookConfigurations).Assembly);
