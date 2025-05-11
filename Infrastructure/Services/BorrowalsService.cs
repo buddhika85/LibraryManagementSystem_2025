@@ -3,7 +3,6 @@ using Core.DTOs;
 using Core.Entities;
 using Core.Enums;
 using Core.Interfaces;
-using Infrastructure.Data;
 using Infrastructure.Helpers;
 
 namespace Infrastructure.Services
@@ -30,7 +29,7 @@ namespace Infrastructure.Services
         
         public async Task<BorrowalsDisplayListDto> GetAllBorrowalsAsync()
         {
-            var allBrrowals = await borrowalsRepository.GetAllBorrowalsWithNavPropsAsync();
+            var allBrrowals = await borrowalsRepository.GetAllBorrowalsWithNavPropsAsync();            
             return new BorrowalsDisplayListDto
             {
                 BorrowalsList = mapper.Map<IReadOnlyList<BorrowalsDisplayDto>>(allBrrowals)
@@ -466,5 +465,6 @@ namespace Infrastructure.Services
         }
 
         #endregion member borrowals history
+
     }
 }
