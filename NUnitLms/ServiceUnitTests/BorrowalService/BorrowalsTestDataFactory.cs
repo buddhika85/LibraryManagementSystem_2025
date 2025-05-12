@@ -14,7 +14,7 @@ namespace NUnitLms.ServiceUnitTests.BorrowalService
             };
         }
 
-        public static AppUser? GetTestMemberUser(string email)
+        public static AppUser GetTestMemberUser(string email)
         {
             return new AppUser
             {
@@ -24,7 +24,7 @@ namespace NUnitLms.ServiceUnitTests.BorrowalService
             };
         }
 
-        internal static Book? GetTestBook(int id, bool isAvailable = true, string title = "Test Book")
+        internal static Book GetTestBook(int id, bool isAvailable = true, string title = "Test Book")
         {
             return new Book
             {

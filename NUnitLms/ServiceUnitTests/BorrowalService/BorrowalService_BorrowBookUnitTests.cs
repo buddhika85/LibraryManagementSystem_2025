@@ -95,7 +95,7 @@ namespace NUnitLms.ServiceUnitTests.BorrowalService
                 Assert.That(result.IsSuccess, Is.Not.True);
                 Assert.That(result.ErrorMessage, Is.Not.Null);
                 Assert.That(result.ErrorMessage, Is.EqualTo($"A book with {request.BookId} does not exist"));
-            });            
+            });
         }
 
         [Test]
@@ -145,6 +145,59 @@ namespace NUnitLms.ServiceUnitTests.BorrowalService
                 Assert.That(result.IsSuccess, Is.Not.True);
                 Assert.That(result.ErrorMessage, Is.Not.Null);
                 Assert.That(result.ErrorMessage, Is.EqualTo($"Book {request.BookId} - {testBookTitle} is currently unavailable"));
+            });
+        }
+
+        /// Processes borrowal as a single transaction.
+        /// Transaction has 2 steps.
+        ///     1. Insert borrowal record
+        ///     2. Update book record to make isAvailable = false
+        /// If one of these steps fail entire transaction will be rollbacked.
+        [Test]
+        public async Task BorrowBook_ShallReturnErrorMessage_IfBorroTransctionFails()
+        {
+            // arrange            
+            var request = BorrowalsTestDataFactory.GetTestValidBorrowRequest();            
+            uowMock.Setup(uow => uow.UserRepository.GetUserByRoleAndEmailAsync(request.Email, UserRoles.Member))
+                    .Returns(Task.FromResult<AppUser?>(BorrowalsTestDataFactory.GetTestMemberUser(request.Email)));
+
+            var testBook = BorrowalsTestDataFactory.GetTestBook(request.BookId);
+            uowMock.Setup(uow => uow.BookRepository.GetBookByIdAsync(request.BookId))
+                    .Returns(Task.FromResult<Book?>(testBook));
+            uowMock.Setup(uow => uow.BookRepository.Update(testBook)).Throws(new Exception("Book update fails"));
+
+            uowMock.Setup(uow => uow.BorrowalsRepository.Add(It.IsAny<Borrowals>()));
+
+            cut = new BorrowalsService(uowMock.Object, mapperMock.Object);
+
+            // act
+            var result = await cut.BorrowBook(request);
+
+            // assert
+            //// BeginTransactionAsync() method called only once
+            uowMock.Verify(mock => mock.BeginTransactionAsync(), Times.Exactly(1));
+
+            //// BorrowalsRepository.Add method called only once
+            uowMock.Verify(mock => mock.BorrowalsRepository.Add(It.IsAny<Borrowals>()), Times.Exactly(1));
+
+            //// BookRepository.Update method called only once
+            uowMock.Verify(mock => mock.BookRepository.Update(testBook), Times.Exactly(1));           
+
+            //// SaveAllAsync() method never called 
+            uowMock.Verify(mock => mock.SaveAllAsync(), Times.Never);
+
+            //// CommitTransactionAsync() method never called 
+            uowMock.Verify(mock => mock.CommitTransactionAsync(), Times.Never);
+
+            //// RollbackTransactionAsync() method never called 
+            uowMock.Verify(mock => mock.RollbackTransactionAsync(), Times.Exactly(1));
+
+            Assert.Multiple(() =>
+            {               
+                Assert.That(result, Is.Not.Null);
+                Assert.That(result.IsSuccess, Is.Not.True);
+                Assert.That(result.ErrorMessage, Is.Not.Null);
+                Assert.That(result.ErrorMessage, Is.EqualTo("Saving borrowal transaction failed"));
             });
         }
     }
