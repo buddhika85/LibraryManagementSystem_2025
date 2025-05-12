@@ -1,4 +1,5 @@
-﻿using Core.Entities;
+﻿using Core.DTOs;
+using Core.Entities;
 
 namespace NUnitLms.ServiceUnitTests.BorrowalService
 {
@@ -10,6 +11,50 @@ namespace NUnitLms.ServiceUnitTests.BorrowalService
             {
                 CreateTestBorrowalDue(),
                 //CreateTestBorrowalUnDue()
+            };
+        }
+
+        public static AppUser? GetTestMemberUser(string email)
+        {
+            return new AppUser
+            {
+                Email = email
+            };
+        }
+
+        internal static Book? GetTestBook(int id)
+        {
+            return new Book
+            {
+                Id = id,
+                Authors = new List<Author>
+                    {
+                        new Author
+                        {
+                            Id = 1,
+                            Biography = string.Empty,
+                            Books = new List<Book>(),
+                            Country = string.Empty,
+                            Name = string.Empty,
+                            DateOfBirth = DateTime.Today.AddYears(-40)
+                        }
+                    },
+                Genre = Core.Enums.BookGenre.None,
+                IsAvailable = false,
+                PictureUrl = string.Empty,
+                PublishedDate = DateTime.Today.AddYears(-20),
+                Title = "Test Book"
+            };
+        }
+
+        public static BookBorrowRequestDto GetTestValidBorrowRequest()
+        {
+            return new BookBorrowRequestDto
+            {
+                BookId = 1,
+                Email = "testUser@lms.com",
+                EndDate = DateTime.Today.AddDays(7),
+                StartDate = DateTime.Today
             };
         }
 
