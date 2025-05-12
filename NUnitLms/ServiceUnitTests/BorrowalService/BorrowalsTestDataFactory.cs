@@ -18,11 +18,13 @@ namespace NUnitLms.ServiceUnitTests.BorrowalService
         {
             return new AppUser
             {
-                Email = email
+                Email = email,
+                FirstName = "Test User first name",
+                LastName = "Test User lasy name"
             };
         }
 
-        internal static Book? GetTestBook(int id)
+        internal static Book? GetTestBook(int id, bool isAvailable = true, string title = "Test Book")
         {
             return new Book
             {
@@ -35,15 +37,15 @@ namespace NUnitLms.ServiceUnitTests.BorrowalService
                             Biography = string.Empty,
                             Books = new List<Book>(),
                             Country = string.Empty,
-                            Name = string.Empty,
+                            Name = "Test Author 1",
                             DateOfBirth = DateTime.Today.AddYears(-40)
                         }
                     },
                 Genre = Core.Enums.BookGenre.None,
-                IsAvailable = false,
+                IsAvailable = isAvailable,
                 PictureUrl = string.Empty,
                 PublishedDate = DateTime.Today.AddYears(-20),
-                Title = "Test Book"
+                Title = title
             };
         }
 
