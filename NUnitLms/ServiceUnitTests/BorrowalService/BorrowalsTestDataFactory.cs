@@ -10,7 +10,7 @@ namespace NUnitLms.ServiceUnitTests.BorrowalService
             return new List<Borrowals>
             {
                 CreateTestBorrowalDue(),
-                //CreateTestBorrowalUnDue()
+                CreateTestBorrowalUnDue()
             };
         }
 
