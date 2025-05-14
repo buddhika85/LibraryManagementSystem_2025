@@ -3,6 +3,7 @@ use LMS;
 SELECT * from [Authors];
 
 SELECT * from Books;
+--update Books set PictureUrl = ''
 
 select * from AuthorBook;
 

@@ -14,7 +14,7 @@ import { UploadBookImageRequest } from '../../shared/models/upload-book-image-dt
 })
 export class BookService {
 
-  baseUrl = environment.apiBaseUrl; //'https://localhost:5001/api/';
+  baseUrl = environment.apiBaseUrl; 
   private http = inject(HttpClient);
   
   getAllBooksWithAuthors() : Observable<BookWithAuthorListDto> 

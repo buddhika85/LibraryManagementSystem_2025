@@ -104,7 +104,7 @@ namespace API.Controllers
                 return BadRequest("No file uploaded.");
             }
 
-            var uploadPath = Path.Combine("wwwroot", "images", "booksImgs");
+            var uploadPath = Path.Combine("wwwroot", "apiImages", "booksImgs");
             Directory.CreateDirectory(uploadPath);
 
             var fileName = Guid.NewGuid() + Path.GetExtension(requestDto.File.FileName);

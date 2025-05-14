@@ -11,7 +11,8 @@ export const loadingInterceptor: HttpInterceptorFn = (req, next) => {
   busyService.busy();
 
   return next(req).pipe(
-    (environment.production ? identity : delay(500)),
+    // (environment.production ? delay(0) : delay(500)),
+    (environment.production ? identity : delay(500)),         // Simulate network delay in development mode
     finalize(() => busyService.idle())
   )
 };
