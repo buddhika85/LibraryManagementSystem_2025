@@ -1,4 +1,7 @@
-﻿using Core.Entities;
+﻿using AutoMapper;
+using Core.DTOs;
+using Core.Entities;
+using Core.Enums;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -26,10 +29,11 @@ namespace Infrastructure.Data
             var booksSeedJson = path + @"/Data/SeedData/books.json";
 
             appDbContext = context;
-            await SeedAsyncHelper(context.Authors, authorsSeedJson);
+            if (!await context.Authors.AnyAsync())
+                await SeedAsyncHelper(context.Authors, authorsSeedJson);
            
-            if (await context.Authors.AnyAsync()) 
-                await SeedAsyncHelper(context.Books, booksSeedJson);            
+            if (await context.Authors.AnyAsync() && !await context.Books.AnyAsync()) 
+                await SeedAsyncHelper(context.Books, booksSeedJson);
         }
 
 
@@ -78,11 +82,63 @@ namespace Infrastructure.Data
         #region IdentitySeeding
 
         private static RoleManager<IdentityRole> roleManager = null!;
+        private static UserManager<AppUser> userManager = null!;
+        private static readonly (AppUser, UserRoles)[] usersToSeed =
+        [
+            (new AppUser
+            {
+                FirstName = "Admin",
+                LastName = "User",
+                Email = "admin@lms.com",
+                PhoneNumber = "1234567891",
+                UserName = "admin@lms.com",
+                Address = new Address { Line1 = "1", Line2 = "First Lane", City = "Sunny City", State = "NSW", Postcode = "2000", Country = "Australia" }
+            }, UserRoles.Admin),
+            (new AppUser
+            {
+                FirstName = "Staff",
+                LastName = "User 1",
+                Email = "staff1@lms.com",
+                PhoneNumber = "1234567891",
+                UserName = "staff1@lms.com",
+                Address = new Address { Line1 = "2", Line2 = "Second Lane", City = "Rainy City", State = "NSW", Postcode = "2001", Country = "Australia" }
+            }, UserRoles.Staff),
+            (new AppUser
+            {
+                FirstName = "Staff",
+                LastName = "User 2",
+                Email = "staff2lms.com",
+                PhoneNumber = "54321098761",
+                UserName = "staff2@lms.com",
+                Address = new Address { Line1 = "5", Line2 = "Fifth Lane", City = "Snowy City", State = "NSW", Postcode = "2004", Country = "Australia" }
+            }, UserRoles.Staff),
+            (new AppUser
+            {
+                FirstName = "John",
+                LastName = "Smith",
+                Email = "john@lms.com",
+                PhoneNumber = "98765432101",
+                UserName = "john@lms.com",
+                Address = new Address { Line1 = "3", Line2 = "Third Lane", City = "Summer City", State = "NSW", Postcode = "2002", Country = "Australia" }
+            }, UserRoles.Member),
+            (new AppUser
+            {
+                FirstName = "Jane",
+                LastName = "Smith",
+                Email = "jame@lms.com",
+                PhoneNumber = "98765432101",
+                UserName = "jane@lms.com",
+                Address = new Address { Line1 = "4", Line2 = "Fourth Lane", City = "Winter City", State = "NSW", Postcode = "2003", Country = "Australia" }
+            }, UserRoles.Member),
+        ];
+        private const string defaultPassword = "Pass#Word1";
 
-        public static async Task SeedIdentiyAsync(RoleManager<IdentityRole> roleMngr)
+        public static async Task SeedIdentiyAsync(RoleManager<IdentityRole> roleMngr, UserManager<AppUser> userMngr)
         {
             roleManager = roleMngr;
+            userManager = userMngr;
             await SeedRoles();
+            await SeedUsers();
         }
 
         private static async Task SeedRoles()
@@ -99,6 +155,21 @@ namespace Infrastructure.Data
                 }
             }
         }
+
+        private static async Task SeedUsers()
+        {
+            if (!await userManager.Users.AnyAsync() && await roleManager.Roles.AnyAsync())
+            {
+                foreach (var user in usersToSeed)
+                {
+                    var result = await userManager.CreateAsync(user.Item1, defaultPassword);
+                    if (result.Succeeded)
+                    {
+                        await userManager.AddToRoleAsync(user.Item1, UserRoles.Admin.ToString());
+                    }
+                }
+            }
+        }       
         #endregion
     }
 }

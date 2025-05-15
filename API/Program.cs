@@ -92,12 +92,12 @@ if (app.Environment.IsDevelopment())
 // either before the request reaches the application logic,
 // or after the response leaves the application.
 app.UseHttpsRedirection();
+app.UseStaticFiles();     // expose angular files, and  wwwroot apiImages content - https://localhost:5001/images/booksImgs/7154e61d-19af-49ee-afc8-1b2c8df19bd4.png
+app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.UseDefaultFiles();
-app.UseStaticFiles();
 
 app.UseMiddleware<ExceptionMiddleware>();
 
@@ -115,7 +115,7 @@ app.UseCors(x =>
 app.MapControllers();
 
 app.UseDefaultFiles();
-app.UseStaticFiles();     // expose angular files, and  wwwroot apiImages content - https://localhost:5001/images/booksImgs/7154e61d-19af-49ee-afc8-1b2c8df19bd4.png
+
 
 app.MapFallbackToController("Index", "Fallback");       // execute FallbackController's Index endpoint - This controller redirect initial request comes to API to angulars Index.html file
 
@@ -131,7 +131,8 @@ try
     await LmsContextSeed.SeedAsync(context);
 
     var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
-    await LmsContextSeed.SeedIdentiyAsync(roleManager);
+    var userManager = services.GetRequiredService<UserManager<AppUser>>();
+    await LmsContextSeed.SeedIdentiyAsync(roleManager, userManager);
 }
 catch (Exception ex)
 {
