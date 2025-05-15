@@ -165,7 +165,7 @@ namespace Infrastructure.Data
                     var result = await userManager.CreateAsync(user.Item1, defaultPassword);
                     if (result.Succeeded)
                     {
-                        await userManager.AddToRoleAsync(user.Item1, UserRoles.Admin.ToString());
+                        await userManager.AddToRoleAsync(user.Item1, user.Item2.ToString());
                     }
                 }
             }
