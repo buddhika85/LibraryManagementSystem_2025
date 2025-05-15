@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.IO;
+using System.Reflection;
 using System.Text.Json;
 
 
@@ -9,14 +11,20 @@ namespace Infrastructure.Data
 {
     public class LmsContextSeed
     {
-        private const string authorsSeedJson = "../Infrastructure/Data/SeedData/authors.json";
-        private const string booksSeedJson = "../Infrastructure/Data/SeedData/books.json";
+        // below only works with development
+        //private const string authorsSeedJson = "../Infrastructure/Data/SeedData/authors.json";
+        //private const string booksSeedJson = "../Infrastructure/Data/SeedData/books.json";
+                
 
         private static AppDbContext appDbContext = null!;
 
         #region BusinessDomainSeeding
         public static async Task SeedAsync(AppDbContext context)
         {
+            var path = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            var authorsSeedJson = path + @"/Data/SeedData/authors.json";
+            var booksSeedJson = path + @"/Data/SeedData/books.json";
+
             appDbContext = context;
             await SeedAsyncHelper(context.Authors, authorsSeedJson);
            

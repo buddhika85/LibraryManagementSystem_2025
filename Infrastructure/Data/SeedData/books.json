@@ -12,9 +12,10 @@
       }
     ],
     "PublishedDate": "1957-03-12",
-    "PictureUrl": ""
+    "PictureUrl": "",
+    "IsAvailable": true
   },
-  {    
+  {
     "Title": "Green Eggs and Ham",
     "Genre": 1,
     "Authors": [
@@ -27,9 +28,10 @@
       }
     ],
     "PublishedDate": "1960-08-12",
-    "PictureUrl": ""
+    "PictureUrl": "",
+    "IsAvailable": true
   },
-  {   
+  {
     "Title": "Charlie and the Chocolate Factory",
     "Genre": 4,
     "Authors": [
@@ -42,9 +44,10 @@
       }
     ],
     "PublishedDate": "1964-01-01",
-    "PictureUrl": ""
+    "PictureUrl": "",
+    "IsAvailable": true
   },
-  {  
+  {
     "Title": "Matilda",
     "Genre": 6,
     "Authors": [
@@ -57,9 +60,10 @@
       }
     ],
     "PublishedDate": "1988-01-01",
-    "PictureUrl": ""
+    "PictureUrl": "",
+    "IsAvailable": true
   },
-  {   
+  {
     "Title": "The Famous Five: Five on a Treasure Island",
     "Genre": 4,
     "Authors": [
@@ -72,9 +76,10 @@
       }
     ],
     "PublishedDate": "1942-01-01",
-    "PictureUrl": ""
+    "PictureUrl": "",
+    "IsAvailable": true
   },
-  {  
+  {
     "Title": "The Secret Seven",
     "Genre": 8,
     "Authors": [
@@ -87,9 +92,10 @@
       }
     ],
     "PublishedDate": "1949-01-01",
-    "PictureUrl": ""
+    "PictureUrl": "",
+    "IsAvailable": true
   },
-  {  
+  {
     "Title": "The Very Hungry Caterpillar",
     "Genre": 1,
     "Authors": [
@@ -102,9 +108,10 @@
       }
     ],
     "PublishedDate": "1969-06-03",
-    "PictureUrl": ""
+    "PictureUrl": "",
+    "IsAvailable": true
   },
-  {  
+  {
     "Title": "Brown Bear, Brown Bear, What Do You See?",
     "Genre": 1,
     "Authors": [
@@ -117,7 +124,8 @@
       }
     ],
     "PublishedDate": "1967-01-01",
-    "PictureUrl": ""
+    "PictureUrl": "",
+    "IsAvailable": true
   },
   {
     "Title": "The Gruffalo",
@@ -132,7 +140,8 @@
       }
     ],
     "PublishedDate": "1999-03-23",
-    "PictureUrl": ""
+    "PictureUrl": "",
+    "IsAvailable": true
   },
   {
     "Title": "Room on the Broom",
@@ -147,6 +156,7 @@
       }
     ],
     "PublishedDate": "2001-01-01",
-    "PictureUrl": ""
+    "PictureUrl": "",
+    "IsAvailable": true
   }
 ]

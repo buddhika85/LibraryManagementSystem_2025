@@ -96,6 +96,9 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 
+app.UseDefaultFiles();
+app.UseStaticFiles();
+
 app.UseMiddleware<ExceptionMiddleware>();
 
 var allowedOrigins = builder.Configuration
@@ -110,6 +113,11 @@ app.UseCors(x =>
 
 
 app.MapControllers();
+
+app.UseDefaultFiles();
+app.UseStaticFiles();     // expose angular files, and  wwwroot apiImages content - https://localhost:5001/images/booksImgs/7154e61d-19af-49ee-afc8-1b2c8df19bd4.png
+
+app.MapFallbackToController("Index", "Fallback");       // execute FallbackController's Index endpoint - This controller redirect initial request comes to API to angulars Index.html file
 
 // seeding
 try
@@ -131,6 +139,5 @@ catch (Exception ex)
     throw;
 }
 
-app.UseStaticFiles();     // expose wwwroot content - https://localhost:5001/images/booksImgs/7154e61d-19af-49ee-afc8-1b2c8df19bd4.png
 
 app.Run();
