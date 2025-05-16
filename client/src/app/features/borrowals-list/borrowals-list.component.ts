@@ -15,12 +15,13 @@ import { BorrowalsDisplayDto } from '../../shared/models/borrowals-display-dto';
 import { environment } from '../../../environments/environment';
 import { BorrowBookDialogComponent } from './borrow-book-dialog/borrow-book-dialog.component';
 import { ReturnBookDialogComponent } from './return-book-dialog/return-book-dialog.component';
+import { BorrowalsSearchComponent } from "./borrowals-search/borrowals-search.component";
 
 @Component({
   selector: 'app-borrowals-list',
   standalone: true,
-  imports: [MatFormFieldModule, MatInputModule, MatTableModule, MatSortModule, MatPaginatorModule, 
-        MatDividerModule, MatButtonModule, MatIcon],
+  imports: [MatFormFieldModule, MatInputModule, MatTableModule, MatSortModule, MatPaginatorModule,
+    MatDividerModule, MatButtonModule, MatIcon, BorrowalsSearchComponent],
   templateUrl: './borrowals-list.component.html',
   styleUrl: './borrowals-list.component.scss'
 })
