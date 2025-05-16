@@ -14,8 +14,11 @@ import {MatExpansionModule} from '@angular/material/expansion';
 import {MatIconModule} from '@angular/material/icon';
 
 import { AuthorDto } from '../../../shared/models/author-dto';
+import { BorrowalsSearchDto } from '../../../shared/models/borrowals-search-dto';
 import { BookGenre } from '../../../shared/models/book-genre';
 import { BorrowalStatus } from '../../../shared/models/borrowal-status-enum';
+import { LibraryService } from '../../../core/services/library.service';
+import { SnackBarService } from '../../../core/services/snack-bar.service';
 @Component({
   selector: 'app-borrowals-search',
   standalone: true,
@@ -31,6 +34,8 @@ import { BorrowalStatus } from '../../../shared/models/borrowal-status-enum';
 })
 export class BorrowalsSearchComponent implements OnInit
 {
+  private libraryService = inject(LibraryService);
+  private snackBarService = inject(SnackBarService);
   private formBuilder = inject(FormBuilder);
   searchForm!: FormGroup;
 
@@ -51,26 +56,49 @@ export class BorrowalsSearchComponent implements OnInit
   authors: AuthorDto[] = [];
 
   ngOnInit(): void {
-    this.createForm();
+    this.libraryService.getAllAuthors().subscribe({
+      next: (data) => {
+        this.authors = data;
+        this.createForm();
+      },
+      error: (error) => {
+        this.snackBarService.error('Error in loading all authors');
+      },
+      complete: () => {}
+    });
+    
   }
 
   private createForm(): void 
   {
     this.searchForm = this.formBuilder.group({
       bookName: [''],
-      author: [''],
-      genre: [BookGenre.None],
+      authorIds: [],
+      genres: [],   // {value: [BookGenre.None]}
       memberName: [''],
       memberEmail: ['', Validators.email],
       borrowedOn: [],
       dueOn: [new Date()],
-      status: [BorrowalStatus.Out],
+      statuses: [[BorrowalStatus.Out]],   // BorrowalStatus.Out
       delayed: [0]          // 0, 1 or 2
     });
   }
 
   onSubmit(): void
-  {}
+  {
+    const searchParams: BorrowalsSearchDto = {
+        bookName: this.searchForm.value.bookName,
+        authorIds: this.searchForm.value.authorIds,
+        genres: this.searchForm.value.genres,
+        memberName: this.searchForm.value.memberName,
+        memberEmail: this.searchForm.value.memberEmail,
+        borrowedOn: new Date(this.searchForm.value.borrowedOn), // Ensure type correctness
+        dueOn: new Date(this.searchForm.value.dueOn),
+        statuses: this.searchForm.value.statuses,
+        delayed: this.searchForm.value.delayed
+    };
+    console.log(searchParams);
+  }
 
   clearForm(): void
   {

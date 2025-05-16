@@ -4,7 +4,7 @@
  
 
 
-    <div class="container">
+    <div class="container bg-white">
         <form [formGroup]="searchForm" (ngSubmit)="onSubmit()" 
             class="mx-auto">
 
@@ -18,16 +18,20 @@
                         </mat-form-field>
 
                         <mat-form-field appearance="outline" class="w-full">
-                            <mat-label>Author</mat-label>
-                            <input matInput formControlName="author" type="text" placeholder="Enid Blyton">
+                            <mat-label>Authors</mat-label>
+                            <mat-select formControlName="authorIds" multiple>
+                                <mat-option *ngFor="let author of authors" [value]="author.id">
+                                    {{ author.name }}
+                                </mat-option>
+                            </mat-select>
                         </mat-form-field>
 
                         <mat-form-field appearance="outline" class="w-full">
                             <mat-label>Genre</mat-label>        
-                            <mat-select formControlName="genre">
-                            <mat-option *ngFor="let genre of genres" [value]="genre.value">
-                                {{ genre.label }}
-                            </mat-option>
+                            <mat-select formControlName="genres" multiple>
+                                <mat-option *ngFor="let genre of genres" [value]="genre.value">
+                                    {{ genre.label }}
+                                </mat-option>
                             </mat-select>     
                         </mat-form-field>
 
@@ -57,7 +61,7 @@
 
                         <mat-form-field appearance="outline" class="w-full">
                             <mat-label>Status</mat-label>        
-                            <mat-select formControlName="status">
+                            <mat-select formControlName="statuses" multiple>
                                 <mat-option *ngFor="let status of statuses" [value]="status.value">
                                     {{ status.label }}
                                 </mat-option>
@@ -86,10 +90,10 @@
                 <!-- Buttons -->
                 <div class="flex justify-end space-x-3 mt-6">
                     <button mat-stroked-button type="button" (click)="clearForm()" class="text-gray-700 border-gray-500">
-                        Clear
+                        <mat-icon class="mr-1">refresh</mat-icon> Clear Filters
                     </button>
-                    <button mat-flat-button color="accent" type="submit" [disabled]="searchForm.invalid">
-                        Search
+                    <button mat-flat-button color="warn" type="submit" [disabled]="searchForm.invalid">
+                        <mat-icon class="mr-1">search</mat-icon> Apply Filters
                     </button>
                 </div>
 
