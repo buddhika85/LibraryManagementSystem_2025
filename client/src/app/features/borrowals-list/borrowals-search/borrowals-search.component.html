@@ -1,1 +1,98 @@
-<p>borrowals-search works!</p>
+@if(this.searchForm)
+{
+
+ 
+
+
+    <div class="container">
+        <form [formGroup]="searchForm" (ngSubmit)="onSubmit()" 
+            class="mx-auto">
+
+                <section class="mb-8 border-l-4 pl-4">
+                
+                    <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
+
+                        <mat-form-field appearance="outline" class="w-full">
+                            <mat-label>Book title</mat-label>
+                            <input matInput formControlName="bookName" type="text" placeholder="Famous Five">
+                        </mat-form-field>
+
+                        <mat-form-field appearance="outline" class="w-full">
+                            <mat-label>Author</mat-label>
+                            <input matInput formControlName="author" type="text" placeholder="Enid Blyton">
+                        </mat-form-field>
+
+                        <mat-form-field appearance="outline" class="w-full">
+                            <mat-label>Genre</mat-label>        
+                            <mat-select formControlName="genre">
+                            <mat-option *ngFor="let genre of genres" [value]="genre.value">
+                                {{ genre.label }}
+                            </mat-option>
+                            </mat-select>     
+                        </mat-form-field>
+
+                        <mat-form-field appearance="outline" class="w-full">
+                            <mat-label>Member name</mat-label>
+                            <input matInput formControlName="memberName" type="text" placeholder="John Smith">
+                        </mat-form-field>
+
+                        <mat-form-field appearance="outline" class="w-full">
+                            <mat-label>Member Email</mat-label>
+                            <input matInput formControlName="memberEmail" type="text" placeholder="john@lms.com">
+                        </mat-form-field>
+
+                        <mat-form-field appearance="outline" class="w-full">
+                            <mat-label>Borrowal Date</mat-label>
+                            <input matInput [matDatepicker]="borrowalDate" formControlName="borrowedOn" />
+                            <mat-datepicker-toggle matSuffix [for]="borrowalDate"></mat-datepicker-toggle>
+                            <mat-datepicker #borrowalDate></mat-datepicker>
+                        </mat-form-field>
+
+                        <mat-form-field appearance="outline" class="w-full">
+                            <mat-label>Due Date</mat-label>
+                            <input matInput [matDatepicker]="dueDate" formControlName="dueOn" />
+                            <mat-datepicker-toggle matSuffix [for]="dueDate"></mat-datepicker-toggle>
+                            <mat-datepicker #dueDate></mat-datepicker>
+                        </mat-form-field>
+
+                        <mat-form-field appearance="outline" class="w-full">
+                            <mat-label>Status</mat-label>        
+                            <mat-select formControlName="status">
+                                <mat-option *ngFor="let status of statuses" [value]="status.value">
+                                    {{ status.label }}
+                                </mat-option>
+                            </mat-select>     
+                        </mat-form-field>
+
+                        <mat-form-field appearance="outline" class="w-full">
+                            <mat-label>Delayed</mat-label>        
+                            <mat-select formControlName="delayed">
+                                <mat-option [value]=0>
+                                    All
+                                </mat-option>
+                                <mat-option [value]=1>
+                                    Yes
+                                </mat-option>
+                                 <mat-option [value]=2>
+                                    No
+                                </mat-option>
+
+                            </mat-select>     
+                        </mat-form-field>
+
+                    </div>
+                </section>
+
+                <!-- Buttons -->
+                <div class="flex justify-end space-x-3 mt-6">
+                    <button mat-stroked-button type="button" (click)="clearForm()" class="text-gray-700 border-gray-500">
+                        Clear
+                    </button>
+                    <button mat-flat-button color="accent" type="submit" [disabled]="searchForm.invalid">
+                        Search
+                    </button>
+                </div>
+
+        </form>
+    </div>  
+}

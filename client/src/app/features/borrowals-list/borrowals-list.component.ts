@@ -17,11 +17,16 @@ import { BorrowBookDialogComponent } from './borrow-book-dialog/borrow-book-dial
 import { ReturnBookDialogComponent } from './return-book-dialog/return-book-dialog.component';
 import { BorrowalsSearchComponent } from "./borrowals-search/borrowals-search.component";
 
+import {MatExpansionModule} from '@angular/material/expansion';
+import {MatIconModule} from '@angular/material/icon';
+
 @Component({
   selector: 'app-borrowals-list',
   standalone: true,
   imports: [MatFormFieldModule, MatInputModule, MatTableModule, MatSortModule, MatPaginatorModule,
-    MatDividerModule, MatButtonModule, MatIcon, BorrowalsSearchComponent],
+    MatDividerModule, MatButtonModule, MatIcon, BorrowalsSearchComponent,
+    MatExpansionModule,
+      MatIconModule,],
   templateUrl: './borrowals-list.component.html',
   styleUrl: './borrowals-list.component.scss'
 })
