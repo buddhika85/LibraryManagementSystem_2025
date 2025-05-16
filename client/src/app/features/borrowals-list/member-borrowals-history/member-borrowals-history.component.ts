@@ -17,7 +17,7 @@ import { environment } from '../../../../environments/environment';
   selector: 'app-member-borrowals-history',
   standalone: true,
   imports: [MatFormFieldModule, MatInputModule, MatTableModule, MatSortModule, MatPaginatorModule, 
-    MatDividerModule, MatButtonModule, MatIcon],
+    MatDividerModule, MatButtonModule],
   templateUrl: './member-borrowals-history.component.html',
   styleUrl: './member-borrowals-history.component.scss'
 })

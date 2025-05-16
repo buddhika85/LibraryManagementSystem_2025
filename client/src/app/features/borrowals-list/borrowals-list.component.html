@@ -6,7 +6,7 @@
   </div>
   
   <div class="text-right">
-    <button mat-flat-button class="action-button" (click)="borroBook()">
+    <button mat-flat-button class="action-button" (click)="borrowBook()">
       <mat-icon class="mr-1">add</mat-icon> Borrow
     </button>
   </div>
@@ -21,7 +21,7 @@
         </mat-panel-description>
       </mat-expansion-panel-header>
 
-      <app-borrowals-search />
+      <app-borrowals-search (searchParamsEmitter)="onSearchParamUpdate($event)" />
     </mat-expansion-panel>
   </div>
   

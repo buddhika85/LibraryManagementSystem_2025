@@ -1,4 +1,4 @@
-import {  Component, inject, OnInit } from '@angular/core';
+import {  Component, inject, OnInit, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -38,6 +38,9 @@ export class BorrowalsSearchComponent implements OnInit
   private snackBarService = inject(SnackBarService);
   private formBuilder = inject(FormBuilder);
   searchForm!: FormGroup;
+
+  // to pass search params to parent component
+  @Output() searchParamsEmitter = new EventEmitter<BorrowalsSearchDto>();
 
   genres = Object.keys(BookGenre)
       .filter(key => isNaN(Number(key))) // filter out numeric keys
@@ -95,13 +98,21 @@ export class BorrowalsSearchComponent implements OnInit
         borrowedOn: new Date(this.searchForm.value.borrowedOn), // Ensure type correctness
         dueOn: new Date(this.searchForm.value.dueOn),
         statuses: this.searchForm.value.statuses,
-        delayed: this.searchForm.value.delayed
+        delayed: this.searchForm.value.delayed,
+        applyFilters: true
     };
-    console.log(searchParams);
+    //console.log(searchParams);
+
+    // passing search params to parent component
+    this.searchParamsEmitter.emit(searchParams);
   }
 
   clearForm(): void
   {
     this.createForm();
+    const searchParams: BorrowalsSearchDto = {      
+        applyFilters: false
+    };
+    this.searchParamsEmitter.emit(searchParams);
   }
 }
