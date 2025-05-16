@@ -21,7 +21,7 @@ select * from Addresses;
 select * from AspNetRoles;
 
 select * from AspNetUsers;
---select * from AspNetUserRoles;
+select * from AspNetUserRoles;
 
 select t.UserName, r.[Name] as 'Role', a.Id 'Address ID', a.Line1 'Address Line 1', t.IsActive from AspNetUsers t 
 	left join AspNetUserRoles ur on t.Id = ur.UserId
