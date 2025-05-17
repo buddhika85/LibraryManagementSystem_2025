@@ -131,13 +131,15 @@ export class BorrowalsListComponent implements OnInit
     if (borrowalsSearchParams.applyFilters)
     {
       this.borrowalsService.searchBorrowals(borrowalsSearchParams).subscribe({
-        next: (data) =>  {        
+        next: (data) =>  {      
+            
           this.borrowals = data;
           this.dataSource = new MatTableDataSource(this.borrowals.borrowalsList);
           this.dataSource.paginator = this.paginator;
           this.dataSource.sort = this.sort;
         },
         error: () =>  {
+          debugger
           this.snackBarService.error('Unable search and load borrowals');
         },
         complete: () => {}

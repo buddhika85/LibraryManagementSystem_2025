@@ -27,7 +27,7 @@ namespace Core.DTOs
 
 
         public required UserInfoDto AppUser { get; set; }
-        public string MemberName => $"{AppUser.FirstName} {AppUser.Email}";
+        public string MemberName => $"{AppUser.FirstName} {AppUser.LastName}";
         public string MemberEmail => $"{AppUser.Email}";
     }
 

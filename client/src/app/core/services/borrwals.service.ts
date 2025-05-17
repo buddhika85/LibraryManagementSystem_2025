@@ -28,7 +28,7 @@ export class BorrwalsService {
 
   searchBorrowals(borrowalsSearchParams: BorrowalsSearchDto): Observable<BorrowalsDisplayListDto>
   {
-    return this.http.get<BorrowalsDisplayListDto>(this.baseUrl + 'search-borrowals');
+    return this.http.post<BorrowalsDisplayListDto>(this.baseUrl + 'search-borrowals', borrowalsSearchParams);
   }
 
   getBorrowFormData(): Observable<BorrowFormDto>
