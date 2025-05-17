@@ -10,6 +10,7 @@ import { BookBorrowRequestDto, BorrowResultDto } from '../../shared/models/book-
 import { BorrowalReturnInfoDto } from '../../shared/models/borrowal-return-info-dto';
 import { ReturnsAcceptDto } from '../../shared/models/returns-accept-dto';
 import { ReturnResultDto } from '../../shared/models/result-dto';
+import { BorrowalsSearchDto } from '../../shared/models/borrowals-search-dto';
 import { BorrowalSummaryListDto } from '../../shared/models/borrowal-summary-dto';
 
 @Injectable({
@@ -23,6 +24,11 @@ export class BorrwalsService {
   getAllBorrowals(): Observable<BorrowalsDisplayListDto>
   {
     return this.http.get<BorrowalsDisplayListDto>(this.baseUrl + 'all-borrowals');
+  }
+
+  searchBorrowals(borrowalsSearchParams: BorrowalsSearchDto): Observable<BorrowalsDisplayListDto>
+  {
+    return this.http.get<BorrowalsDisplayListDto>(this.baseUrl + 'search-borrowals');
   }
 
   getBorrowFormData(): Observable<BorrowFormDto>

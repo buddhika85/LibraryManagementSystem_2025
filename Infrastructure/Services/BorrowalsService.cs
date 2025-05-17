@@ -36,6 +36,16 @@ namespace Infrastructure.Services
             };
         }
 
+        public async Task<BorrowalsDisplayListDto> SearchBorrowals(BorrowalsSearchDto searchDto)
+        {
+            var filteredBrrowals = await borrowalsRepository.SearchBorrowalsWithNavPropsAsync(searchDto);
+            return new BorrowalsDisplayListDto
+            {
+                BorrowalsList = mapper.Map<IReadOnlyList<BorrowalsDisplayDto>>(filteredBrrowals)
+            };
+        }
+
+
         #region borrow book
 
         //public async Task<BorrowResultDto> BorrowBook(BookBorrowRequestDto bookBorrowRequest)

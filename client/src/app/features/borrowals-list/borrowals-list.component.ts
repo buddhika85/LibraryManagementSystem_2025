@@ -129,10 +129,23 @@ export class BorrowalsListComponent implements OnInit
   onSearchParamUpdate(borrowalsSearchParams: BorrowalsSearchDto)
   {
     if (borrowalsSearchParams.applyFilters)
-      console.log(borrowalsSearchParams);
+    {
+      this.borrowalsService.searchBorrowals(borrowalsSearchParams).subscribe({
+        next: (data) =>  {        
+          this.borrowals = data;
+          this.dataSource = new MatTableDataSource(this.borrowals.borrowalsList);
+          this.dataSource.paginator = this.paginator;
+          this.dataSource.sort = this.sort;
+        },
+        error: () =>  {
+          this.snackBarService.error('Unable search and load borrowals');
+        },
+        complete: () => {}
+      });
+    }
     else
     {
-      console.log('clear form');
+      //console.log('clear form');
       this.loadGridData();
     }
   }

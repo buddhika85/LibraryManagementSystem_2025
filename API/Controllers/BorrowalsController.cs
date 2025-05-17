@@ -37,6 +37,14 @@ namespace API.Controllers
         }
 
         [Authorize(Roles = "Admin,Staff")]
+        [HttpGet("search-borrowals")]
+        public async Task<ActionResult<BorrowalsDisplayListDto>> SearchBorrowals(BorrowalsSearchDto searchDto)
+        {
+            var dto = await borrowalsService.SearchBorrowals(searchDto);
+            return Ok(dto);
+        }
+
+        [Authorize(Roles = "Admin,Staff")]
         [HttpGet("borrow-form-data")]
         public async Task<ActionResult<BorrowFormDto>> GetBorrowFormData()
         {

@@ -10,5 +10,6 @@ namespace Core.Interfaces
         Task<ReturnResultDto> ReturnBookAsync(ReturnsAcceptDto returnsAcceptDto);
 
         Task<BorrowalSummaryListDto> GetBorrowalSummaryForMemberAsync(string memberEmail);
+        Task<BorrowalsDisplayListDto> SearchBorrowals(BorrowalsSearchDto searchDto);
     }
 }

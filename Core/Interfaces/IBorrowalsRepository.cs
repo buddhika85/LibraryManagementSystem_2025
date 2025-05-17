@@ -7,8 +7,10 @@ namespace Core.Interfaces
     {
         Task<IReadOnlyList<Borrowals>> GetAllBorrowalsWithNavPropsAsync();
 
+        Task<IReadOnlyList<Borrowals>> SearchBorrowalsWithNavPropsAsync(BorrowalsSearchDto searchDto);
+
         Task<Borrowals?> GetAllBorrowalWithNavPropsAsync(int borrowalId);
         
-        Task<IReadOnlyCollection<BorrowalSummaryDto>> GetBorrowalSummaryForMemberAsync(string memberEmail);
+        Task<IReadOnlyCollection<BorrowalSummaryDto>> GetBorrowalSummaryForMemberAsync(string memberEmail);        
     }
 }
