@@ -82,8 +82,7 @@ namespace API.Controllers
 
         [Authorize(Roles = "Admin,Staff")]
         [HttpPost("borrow-book")]
-        public async Task<ActionResult<BorrowResultDto>> BorrowBook(BookBorrowRequestDto bookFilterDto,
-            [FromServices] IHubContext<NotificationHub> hubContext)
+        public async Task<ActionResult<BorrowResultDto>> BorrowBook(BookBorrowRequestDto bookFilterDto, [FromServices] ISignalRHelper signalRHelper)
         {
             bookFilterDto.StartDate = bookFilterDto.StartDate.ToLocalTime();
             bookFilterDto.EndDate = bookFilterDto.EndDate.ToLocalTime();
@@ -91,7 +90,7 @@ namespace API.Controllers
             if (result.IsSuccess)
             {
                 // Notify all connected clients about the status change
-                await hubContext.Clients.All.SendAsync("BookStatusUpdated", result.BookId);
+                await signalRHelper.BroadcastMessageToAllConnectedClientsAsync("BookStatusUpdated", result.BookId);
             }
             return Ok(result);
         }
@@ -112,7 +111,7 @@ namespace API.Controllers
             if (dto.IsSuccess)
             {
                 // Notify all connected clients about the status change
-                await signalRHelper.BroadcastMessageToAllConnectedClientsAsync("BookStatusUpdated", dto.ReturnedBookId, null);
+                await signalRHelper.BroadcastMessageToAllConnectedClientsAsync("BookStatusUpdated", dto.ReturnedBookId);
             }
             return Ok(dto);
         }

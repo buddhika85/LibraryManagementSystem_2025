@@ -24,7 +24,7 @@ export class SignalRService
     this.hubConnection.start().catch(error => console.log("Error SignalR - " + error));
 
     this.hubConnection.on('BookStatusUpdated', (bookId: number) => {
-      console.log('Book status updated of book Id ' + bookId);
+      console.log('Signal R Notification: Book status updated for book Id ' + bookId);
     });
   }
 
