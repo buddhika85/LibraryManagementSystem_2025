@@ -160,9 +160,13 @@ namespace Infrastructure.Services
                 return dto;
             }
 
+            dto.BookId = book.Id;
             dto.MemberFullName = $"{user.FirstName} {user.LastName}";
+            dto.MemberEmail = $"{user.Email}";
             dto.BookTitle = book.Title;
             dto.BookAuthors = string.Join(", ", book.Authors.Select(x => x.Name));
+            dto.StartDate = bookBorrowRequest.StartDate;
+            dto.EndDate = bookBorrowRequest.EndDate;
 
             if (!book.IsAvailable)
             {
