@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, ViewChild } from '@angular/core';
+import { Component, effect, inject, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
@@ -13,6 +13,7 @@ import { MatIcon } from '@angular/material/icon';
 import { MatDialog } from '@angular/material/dialog';
 import { AddEditBookDialogComponent } from './add-edit-book-dialog/add-edit-book-dialog.component';
 import { environment } from '../../../environments/environment';
+import { SignalRService } from '../../core/services/signal-r.service';
 
 @Component({
   selector: 'app-book-list',
@@ -38,6 +39,7 @@ export class BookListComponent implements OnInit {
 
   // for data fetching
   private bookService = inject(BookService);
+  signalRService = inject(SignalRService);
   booksWithAuthorList: BookWithAuthorListDto = {
     bookWithAuthorList: [], 
     count: 0
@@ -45,6 +47,20 @@ export class BookListComponent implements OnInit {
 
   // dialog
   readonly dialog = inject(MatDialog);
+
+  // make effect() continuously listens for changes in bookStatusUpdateSignal
+  constructor() 
+  {    
+    // Watch for book status updates
+    effect(() => {
+      if (this.signalRService.bookStatusUpdateSignal()) 
+      {
+        console.log("Signal R - book statues change notification recieved. refreshing grid to show updated data....");
+        this.loadGridData();
+      }
+    });
+
+  }
 
   ngOnInit(): void 
   {
