@@ -355,6 +355,7 @@ namespace Infrastructure.Services
                 dto.ErrorMessage = "Saving borrowal transaction failed";                
             }
 
+            dto.ReturnedBookId = borrowal?.BookId;
             return dto;
         }
 

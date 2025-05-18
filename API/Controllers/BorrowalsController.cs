@@ -1,10 +1,13 @@
 ﻿
 using API.Helpes;
+using API.SignalR;
 using Core.DTOs;
 using Core.Enums;
 using Core.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using System.Security.Claims;
 
@@ -79,11 +82,17 @@ namespace API.Controllers
 
         [Authorize(Roles = "Admin,Staff")]
         [HttpPost("borrow-book")]
-        public async Task<ActionResult<BorrowResultDto>> BorrowBook(BookBorrowRequestDto bookFilterDto)
+        public async Task<ActionResult<BorrowResultDto>> BorrowBook(BookBorrowRequestDto bookFilterDto,
+            [FromServices] IHubContext<NotificationHub> hubContext)
         {
             bookFilterDto.StartDate = bookFilterDto.StartDate.ToLocalTime();
             bookFilterDto.EndDate = bookFilterDto.EndDate.ToLocalTime();
             var result = await borrowalsService.BorrowBook(bookFilterDto);
+            if (result.IsSuccess)
+            {
+                // Notify all connected clients about the status change
+                await hubContext.Clients.All.SendAsync("BookStatusUpdated", result.BookId, BorrowalStatus.Out);
+            }
             return Ok(result);
         }
 
@@ -97,9 +106,14 @@ namespace API.Controllers
 
         [Authorize(Roles = "Admin,Staff")]
         [HttpPost("return-book")]
-        public async Task<ActionResult<ReturnResultDto>> ReturnBook(ReturnsAcceptDto returnsAcceptDto)
+        public async Task<ActionResult<ReturnResultDto>> ReturnBook(ReturnsAcceptDto returnsAcceptDto, [FromServices] ISignalRHelper signalRHelper)
         {
             var dto = await borrowalsService.ReturnBookAsync(returnsAcceptDto);
+            if (dto.IsSuccess)
+            {
+                // Notify all connected clients about the status change
+                await signalRHelper.BroadcastMessageToAllConnectedClients("BookStatusUpdated", dto.ReturnedBookId, BorrowalStatus.Returned);
+            }
             return Ok(dto);
         }
 

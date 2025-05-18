@@ -1,5 +1,6 @@
 using API.Helpes;
 using API.Middleware;
+using API.SignalR;
 using Core.Entities;
 using Core.Interfaces;
 using Infrastructure.Data;
@@ -32,6 +33,8 @@ builder.Services.AddScoped<IBorrowalReturnsRepository, BorrowalReturnsRepository
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
+builder.Services.AddScoped<ISignalRHelper, SignalRHelper>();
+
 //// Identity services
 builder.Services.AddAuthorization();
 builder.Services.AddIdentity<AppUser, IdentityRole>()
@@ -48,6 +51,8 @@ builder.Services.ConfigureApplicationCookie(options =>
     };
 });
 
+// signalR
+builder.Services.AddSignalR();
 
 //// services
 builder.Services.AddAutoMapper(typeof(AutoMapperProfiles).Assembly);
@@ -113,6 +118,8 @@ app.UseCors(x =>
 
 
 app.MapControllers();
+
+app.MapHub<NotificationHub>("/hub/notifications");
 
 app.UseDefaultFiles();
 
