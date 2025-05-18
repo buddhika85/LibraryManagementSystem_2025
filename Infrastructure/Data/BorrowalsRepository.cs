@@ -40,8 +40,8 @@ namespace Infrastructure.Data
                         || (string.IsNullOrWhiteSpace(x.AppUser.FirstName) || x.AppUser.FirstName.Contains(searchDto.MemberName))
                         || (string.IsNullOrWhiteSpace(x.AppUser.LastName) || x.AppUser.LastName.Contains(searchDto.MemberName)))
                     && (string.IsNullOrWhiteSpace(searchDto.MemberEmail) || string.IsNullOrWhiteSpace(x.AppUser.Email) || x.AppUser.Email.Contains(searchDto.MemberEmail))
-                    //&& ((searchDto.BorrowedOn == null || x.BorrowalDate >= DateOnly.FromDateTime(searchDto.BorrowedOn.Value))       // >= BorrowalDate 
-                    //    && (searchDto.DueOn == null || x.DueDate <= DateOnly.FromDateTime(searchDto.DueOn.Value)))                 // && <= DueDate
+                    && ((searchDto.BorrowedOn == null || x.BorrowalDate >= DateOnly.FromDateTime(searchDto.BorrowedOn.Value))       // >= BorrowalDate 
+                        && (searchDto.DueOn == null || x.DueDate <= DateOnly.FromDateTime(searchDto.DueOn.Value)))                 // && <= DueDate
                     //&& (searchDto.Statuses == null || !searchDto.Statuses.Any() || searchDto.Statuses.Contains(x.BorrowalStatus))
                     //&& (searchDto.Delayed == null
                     //    || (searchDto.Delayed == 0)

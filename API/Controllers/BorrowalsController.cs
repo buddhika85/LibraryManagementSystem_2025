@@ -40,6 +40,8 @@ namespace API.Controllers
         [HttpPost("search-borrowals")]
         public async Task<ActionResult<BorrowalsDisplayListDto>> SearchBorrowals(BorrowalsSearchDto searchDto)
         {
+            searchDto.BorrowedOn = searchDto.BorrowedOn?.ToLocalTime();
+            searchDto.DueOn = searchDto.DueOn?.ToLocalTime();
             var dto = await borrowalsService.SearchBorrowals(searchDto);
             return Ok(dto);
         }
