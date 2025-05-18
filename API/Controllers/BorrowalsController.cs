@@ -90,7 +90,7 @@ namespace API.Controllers
             if (result.IsSuccess)
             {
                 // Notify all connected clients about the status change
-                await signalRHelper.BroadcastMessageToAllConnectedClientsAsync("BookStatusUpdated", result.BookId);
+                await signalRHelper.BroadcastToAllConnectedClientsAsync("BookStatusUpdated", result.BookId);
             }
             return Ok(result);
         }
@@ -111,7 +111,7 @@ namespace API.Controllers
             if (dto.IsSuccess)
             {
                 // Notify all connected clients about the status change
-                await signalRHelper.BroadcastMessageToAllConnectedClientsAsync("BookStatusUpdated", dto.ReturnedBookId);
+                await signalRHelper.BroadcastToAllConnectedClientsAsync("BookStatusUpdated", dto.ReturnedBookId);
             }
             return Ok(dto);
         }
