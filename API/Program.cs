@@ -98,13 +98,9 @@ if (app.Environment.IsDevelopment())
 // or after the response leaves the application.
 app.UseHttpsRedirection();
 app.UseStaticFiles();     // expose angular files, and  wwwroot apiImages content - https://localhost:5001/images/booksImgs/7154e61d-19af-49ee-afc8-1b2c8df19bd4.png
+
+
 app.UseRouting();
-
-app.UseAuthentication();
-app.UseAuthorization();
-
-
-app.UseMiddleware<ExceptionMiddleware>();
 
 var allowedOrigins = builder.Configuration
     .GetSection("AllowedCorsClients")
@@ -113,8 +109,14 @@ var allowedOrigins = builder.Configuration
 app.UseCors(x =>
     x.AllowAnyHeader()
      .AllowAnyMethod()
-     .AllowCredentials()                                // accepting identity cookie from these clients
+     .AllowCredentials()             // accepting identity cookie from these clients
      .WithOrigins(allowedOrigins));
+
+app.UseAuthentication();
+app.UseAuthorization();
+
+app.UseMiddleware<ExceptionMiddleware>();
+
 
 
 app.MapControllers();

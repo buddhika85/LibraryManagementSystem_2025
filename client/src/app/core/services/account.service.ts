@@ -1,13 +1,14 @@
 import { computed, inject, Injectable, signal } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { LoginResponseDto, UserInfoDto } from '../../shared/models/user-info-dto';
+import { UserInfoDto } from '../../shared/models/user-info-dto';
 import { LoginRequestDto } from '../../shared/models/login-request-dto';
-import { MemberRegisterDto, RegisterDto } from '../../shared/models/register-dto';
-import { map, Observable } from 'rxjs';
+import { MemberRegisterDto } from '../../shared/models/register-dto';
+import { map, Observable, tap } from 'rxjs';
 import { UserRoles } from '../../shared/models/user-roles-enum';
 import { UserUpdateDto } from '../../shared/models/user-update-dto';
 import { ChangePasswordDto } from '../../shared/models/change-password-dto';
+import { SignalRService } from './signal-r.service';
 
 @Injectable({
   providedIn: 'root'
@@ -16,6 +17,8 @@ export class AccountService
 {
 
   private http = inject(HttpClient);
+  private signalRService = inject(SignalRService);
+  
   baseUrl = environment.apiBaseUrl + 'account';
   
   currentUser = signal<UserInfoDto | null>(null);
@@ -47,12 +50,20 @@ export class AccountService
   {
     let params = new HttpParams();
     params = params.append('useCookies', true);
-    return this.http.post<any>(this.baseUrl + '/login', loginRequest, { params });
+    return this.http.post<any>(this.baseUrl + '/login', loginRequest, { params }).pipe(
+          tap(() => {
+              this.signalRService.createHubConnection();                      // connect to signal R Hub at API
+          })
+        );
   }
 
   logout()
   {
-    return this.http.post(this.baseUrl + '/logout', {});
+    return this.http.post(this.baseUrl + '/logout', {}).pipe(
+          tap(() => {
+              this.signalRService.stopHubConnection();                        // disconnect from signal R Hub at API
+          })
+        );
   }
 
   // guest and any role can execute below method

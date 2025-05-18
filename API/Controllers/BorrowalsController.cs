@@ -91,7 +91,7 @@ namespace API.Controllers
             if (result.IsSuccess)
             {
                 // Notify all connected clients about the status change
-                await hubContext.Clients.All.SendAsync("BookStatusUpdated", result.BookId, BorrowalStatus.Out);
+                await hubContext.Clients.All.SendAsync("BookStatusUpdated", result.BookId);
             }
             return Ok(result);
         }
@@ -112,7 +112,7 @@ namespace API.Controllers
             if (dto.IsSuccess)
             {
                 // Notify all connected clients about the status change
-                await signalRHelper.BroadcastMessageToAllConnectedClients("BookStatusUpdated", dto.ReturnedBookId, BorrowalStatus.Returned);
+                await signalRHelper.BroadcastMessageToAllConnectedClientsAsync("BookStatusUpdated", dto.ReturnedBookId, null);
             }
             return Ok(dto);
         }

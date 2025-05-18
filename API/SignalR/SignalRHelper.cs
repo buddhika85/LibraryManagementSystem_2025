@@ -12,12 +12,12 @@ namespace API.SignalR
             this.hubContext = hubContext;
         }
 
-        public async Task BroadcastMessageToAllConnectedClients(string message, object? arg1, object? arg2)
+        public async Task BroadcastMessageToAllConnectedClientsAsync(string message, object? arg1, object? arg2 = null)
         {
             await hubContext.Clients.All.SendAsync(message, arg1, arg2);
         }
 
-        public async Task BroadcastMessageToSpecificClient(string email, string message, object? arg1, object? arg2)
+        public async Task BroadcastMessageToSpecificClientAsync(string email, string message, object? arg1, object? arg2 = null)
         {
             var connectionId = NotificationHub.GetConnectionIdByEmail(email);
             if (connectionId != null)
