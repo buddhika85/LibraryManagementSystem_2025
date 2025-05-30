@@ -31,7 +31,11 @@ namespace Infrastructure.Data
 
         public async Task<IReadOnlyList<Borrowals>> SearchBorrowalsWithNavPropsAsync(BorrowalsSearchDto searchDto)
         {
-            var query = context.Borrowals.Include(x => x.Book).Include(x => x.Book.Authors).Include(x => x.AppUser)
+            // laxy loading - building complex query first 
+            var query = context.Borrowals.AsNoTracking()
+                 .Include(x => x.Book).AsNoTracking()
+                 .Include(x => x.Book.Authors).AsNoTracking()
+                 .Include(x => x.AppUser).AsNoTracking()
                 .Where(x =>
                         (string.IsNullOrWhiteSpace(searchDto.BookName) || x.Book.Title.Contains(searchDto.BookName))
                         && (searchDto.AuthorIds == null || !searchDto.AuthorIds.Any() || x.Book.Authors.Any(author => searchDto.AuthorIds.Contains(author.Id)))
@@ -41,14 +45,12 @@ namespace Infrastructure.Data
                         || (string.IsNullOrWhiteSpace(x.AppUser.LastName) || x.AppUser.LastName.Contains(searchDto.MemberName)))
                     && (string.IsNullOrWhiteSpace(searchDto.MemberEmail) || string.IsNullOrWhiteSpace(x.AppUser.Email) || x.AppUser.Email.Contains(searchDto.MemberEmail))
                     && ((searchDto.BorrowedOn == null || x.BorrowalDate >= DateOnly.FromDateTime(searchDto.BorrowedOn.Value))       // >= BorrowalDate 
-                        && (searchDto.DueOn == null || x.DueDate <= DateOnly.FromDateTime(searchDto.DueOn.Value)))                 // && <= DueDate
-                    //&& (searchDto.Statuses == null || !searchDto.Statuses.Any() || searchDto.Statuses.Contains(x.BorrowalStatus))
-                    //&& (searchDto.Delayed == null
-                    //    || (searchDto.Delayed == 0)
-                    //    || (searchDto.Delayed == 1 && x.BorrowalStatus == Core.Enums.BorrowalStatus.Out && x.DueDate < DateOnly.FromDateTime(DateTime.Today))       // delayed
-                    //    || (searchDto.Delayed == 2 && x.BorrowalStatus == Core.Enums.BorrowalStatus.Out && x.DueDate >= DateOnly.FromDateTime(DateTime.Today)))      // not delayed
+                        && (searchDto.DueOn == null || x.DueDate <= DateOnly.FromDateTime(searchDto.DueOn.Value)))                 // && <= DueDate                  
                     );
-            var searchResult = await query.ToListAsync();
+
+            // after building query, query the DB only once
+            var searchResult = await query.AsNoTracking().ToListAsync();
+
             return searchResult;
         }
     }

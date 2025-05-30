@@ -23,7 +23,7 @@ namespace Infrastructure.Data
 
         public async Task<IList<Book>> GetBooksIncludingAuthorsAsync()
         {
-            return await context.Books.Include(x => x.Authors).ToListAsync();
+            return await context.Books.AsNoTracking().Include(x => x.Authors).AsNoTracking().ToListAsync();
         }
 
         public async Task<IList<Book>> GetBooksIncludingAuthorsAsync(BookFilterDto bookFilterDto, bool isAvailable)
