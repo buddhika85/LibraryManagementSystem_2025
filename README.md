@@ -1,3 +1,29 @@
+# Technologies Stack
+•	ASP.NET Core 
+•	C#
+•	ASP.NET identity 
+•	Entity Framework Code First
+•	Specification Pattern
+•	Repository Pattern
+
+•	SQL Server
+
+•	GitHub
+•	GitHub Actions 
+
+•	Angular
+•	Typescript 
+•	SCSS (use @Mixins, built in functions like lighted/darken…etc, programmer defined variables, nested styles which are not possible with CSS)
+•	Tailwind CSS	- for styling 
+•	Angular Material  - Angular UI components 
+
+•	Test Cases – Nunit
+
+•	Logging 
+•	Azure Deployment
+
+
+
 # Sprints
 
 ## Sprint 1: Project Setup and Basic Framework
