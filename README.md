@@ -5,6 +5,8 @@ The Library Management System is a modern, scalable, and feature-rich demo appli
 
 ### Backend Development (Powered by ASP.NET Core & C#)
 - Implements ASP.NET Identity for secure authentication and role-based access control.
+  - .NET 9.0
+  - Angular 18
 - Uses Entity Framework Core (Code First) with SQL Server for seamless database management and optimized queries.
 - Follows Specification & Repository Patterns to maintain a clean and modular data access layer.
   
