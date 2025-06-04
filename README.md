@@ -1,27 +1,25 @@
-# Technologies Stack
-•	ASP.NET Core 
-•	C#
-•	ASP.NET identity 
-•	Entity Framework Code First
-•	Specification Pattern
-•	Repository Pattern
+# Library Management System
+The Library Management System is a modern, scalable, and feature-rich demo application designed to streamline book cataloging, user management, borrowing transactions, and administrative operations. Built with a robust tech stack, the system ensures high performance, security, and an intuitive user experience.
 
-•	SQL Server
+## Key Features & Architecture
 
-•	GitHub
-•	GitHub Actions 
-
-•	Angular
-•	Typescript 
-•	SCSS (use @Mixins, built in functions like lighted/darken…etc, programmer defined variables, nested styles which are not possible with CSS)
-•	Tailwind CSS	- for styling 
-•	Angular Material  - Angular UI components 
-
-•	Test Cases – Nunit
-
-•	Logging 
-•	Azure Deployment
-
+### Backend Development (Powered by ASP.NET Core & C#)
+- Implements ASP.NET Identity for secure authentication and role-based access control.
+- Uses Entity Framework Core (Code First) with SQL Server for seamless database management and optimized queries.
+- Follows Specification & Repository Patterns to maintain a clean and modular data access layer.
+  
+### Frontend Development (Built with Angular & TypeScript)
+- Designed with Angular for a dynamic and responsive UI, ensuring a smooth user experience.
+- Utilizes Tailwind CSS & SCSS (@Mixins, built-in functions like lighten/darken, nested styles) for highly customizable and maintainable styling.
+- Implements Angular Material for sleek UI components and consistency across the application.
+  
+### Continuous Integration & Deployment (CI/CD)
+- GitHub Actions automates build, test, and deployment workflows.
+- Azure Deployment ensures scalable hosting and optimized cloud performance.
+  
+### Testing & Logging
+- NUnit for comprehensive unit testing, ensuring reliability and robustness.
+- Integrated logging mechanisms for real-time monitoring and troubleshooting.
 
 
 # Sprints
